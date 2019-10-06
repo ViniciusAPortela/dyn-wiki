@@ -1,0 +1,51 @@
+#bg{
+  display: flex;
+  min-width: 100vw;
+  min-height: 100vh;
+  justify-content: center;
+}
+
+#page{
+  margin-top: 4rem;
+  width: 80vw;
+  max-width: 60rem;
+  
+  padding: 2rem;
+  
+  background-color: white;
+}
+
+#title{
+  font-size: 35px;
+}
+
+.divider{
+  margin-top: 12px !important;
+}
+
+#config-row{
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+}
+
+#config{
+  cursor: pointer;
+  width: 80%;
+  height: 3rem;
+  background-color: #eeeeee;
+  border-radius: 0.5rem;
+  margin-right: 0.7rem;
+}
+
+.config-side{
+  cursor: pointer;
+  margin: 0 0.7rem;
+  width: 8%;
+  height: 3rem;
+  background-color: #eeeeee;
+  border-radius: 0.5rem;
+
+  /* For Mobile */
+  min-width: 3.5rem;
+}
