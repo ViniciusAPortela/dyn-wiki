@@ -1,0 +1,13 @@
+.command-container{
+  display: flex;
+  align-items: center;
+  align-self: center;
+
+  width: 100%;
+  height: 2.4rem;
+  padding-left: 1rem;
+
+  background-color: #8C3A78;
+  border-radius: 2px;
+  color: white;
+}
