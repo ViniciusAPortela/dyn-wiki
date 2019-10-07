@@ -1,9 +1,10 @@
 import React from 'react';
+import './scriptlist.css';
 
 export default class ScriptList extends React.Component{
   render(){
     return(
-      <div></div>
+      <div className='script-list'>{this.props.children}</div>
     );
   }
 }

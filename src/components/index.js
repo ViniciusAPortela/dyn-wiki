@@ -4,6 +4,7 @@ import Content from './Content';
 import CommandLine from './CommandLine';
 import Image from './Image';
 import ScriptList from './ScriptList';
+import ScriptFile from './ScriptFile';
 
 export { 
   Title, 
@@ -11,5 +12,6 @@ export {
   Content,
   CommandLine,
   Image,
-  ScriptList
+  ScriptList,
+  ScriptFile
 };

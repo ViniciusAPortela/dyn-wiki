@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Divider } from '@material-ui/core';
 import './example.css';
 
-import { Title, Content, CommandLine, Image, ScriptList } from '../../components/index.js';
+import { Title, Content, CommandLine, Image, ScriptList, ScriptFile } from '../../components/index.js';
 import { Data } from '../../constants';
 import topBg from '../../assets/page/title-bg.png';
 
@@ -47,9 +47,10 @@ export default class Example extends React.Component {
 
           <Title>#Scripts</Title>
           <ScriptList>
-
+            <ScriptFile/>
+            <ScriptFile/>
+            <ScriptFile/>
           </ScriptList>
-
 
           <Title>#Perguntas Frequentes</Title>
 
