@@ -1,12 +1,10 @@
 import React from 'react';
 import { Box, Divider } from '@material-ui/core';
-
 import './example.css';
-import topBg from '../../assets/page/title-bg.png';
 
 import { Title, Content } from '../../components/index.js';
-import { Data } from '../../constatns';
-
+import { Data } from '../../constants';
+import topBg from '../../assets/page/title-bg.png';
 
 export default class Example extends React.Component {
   render(){

@@ -1,3 +1,3 @@
-export default IMAGE = {
+export default {
    
 }
