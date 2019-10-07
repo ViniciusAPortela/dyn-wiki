@@ -3,7 +3,10 @@ import { Box, Divider } from '@material-ui/core';
 
 import './example.css';
 import topBg from '../../assets/page/title-bg.png';
-import Title from '../../components/Title';
+
+import { Title, Content } from '../../components/index.js';
+import { Data } from '../../constatns';
+
 
 export default class Example extends React.Component {
   render(){
@@ -30,6 +33,7 @@ export default class Example extends React.Component {
           <Box id='feedback-space'/>
 
           <Title>#1 Adicionar Repositório</Title>
+          <Content>{Data.t1}</Content>
         </Box>
       </Box>
     );
