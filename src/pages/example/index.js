@@ -11,7 +11,7 @@ export default class Example extends React.Component {
     return(
       <Box id='bg'>
         <span id='project-name'>Dyn-Wiki</span>
-        <img src={topBg} id='top-bg'/>
+        <img alt='' src={topBg} id='top-bg'/>
 
         <Box boxShadow={1} id='page'>
           <span id='title'>Atualizando o Kernel do Linux</span>

@@ -26,6 +26,9 @@
 }
 
 #page{
+  display: flex;
+  flex-direction: column;
+  
   margin-top: 10rem;
   width: 80vw;
   max-width: 60rem;
@@ -78,7 +81,7 @@
   align-items: center;
 
   position: absolute;
-  margin-top: 20px;
+  margin-top: 9rem;
   
   left: 50%;
   transform: translateX(-50%);
