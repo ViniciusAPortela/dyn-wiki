@@ -5,6 +5,7 @@ import CommandLine from './CommandLine';
 import Image from './Image';
 import ScriptList from './ScriptList';
 import ScriptFile from './ScriptFile';
+import TopWiki from './TopWiki';
 
 export { 
   Title, 
@@ -13,5 +14,6 @@ export {
   CommandLine,
   Image,
   ScriptList,
-  ScriptFile
+  ScriptFile,
+  TopWiki
 };
