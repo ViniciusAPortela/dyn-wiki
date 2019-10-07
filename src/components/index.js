@@ -6,6 +6,7 @@ import Image from './Image';
 import ScriptList from './ScriptList';
 import ScriptFile from './ScriptFile';
 import TopWiki from './TopWiki';
+import PageRender from './PageRender';
 
 export { 
   Title, 
@@ -15,5 +16,6 @@ export {
   Image,
   ScriptList,
   ScriptFile,
-  TopWiki
+  TopWiki,
+  PageRender
 };

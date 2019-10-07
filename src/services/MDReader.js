@@ -1,29 +1,27 @@
-import { throwError } from "rxjs";
-
 /*
     MARKDOWN READER
     Reads and Render the MD files of Wiki Pages, also reads the additional stuff 
     that isn't in default markdown language
 */
 
-export default class MDReader {
-
-  constructor(){}
+export default new class MDReader{
 
   /* 
-    Reads the 
+    Reads the page
   */
-  read(){
-
+  read(page){
+    
   }
 
   /*
-    Read all the File and Render
+    Generate The JSX Structure that will be read by the PageRender
   */
   render(page){
-    if(typeof page != undefined) throwError(`${page} not found!`);
+    if(typeof page === undefined) throw `${page} not exists`;
 
-    this.read();
+    this.read(page);
+
+    return(null);
   }
 
 }
