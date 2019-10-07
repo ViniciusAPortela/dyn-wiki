@@ -5,22 +5,20 @@ import './topwiki.css';
 export default class TopWiki extends React.Component{
   render(){
     return(
-      <>
-        <span id='title'>Atualizando o Kernel do Linux</span>
-
-        <Box id='config-row'>
-          <Box id='config'></Box>
-          <Box id='version' className='config-side'></Box>
-          <Box id='language' className='config-side'></Box>
-        </Box>
+      <div id='topwiki-bg'>
+        <div id='topwiki-container'>
+          <span id='title'>{this.props.title}</span>
+          <Box id='config-row'>
+            <Box id='config' boxShadow={1}></Box>
+            <Box id='version' boxShadow={1} className='config-side'></Box>
+            <Box id='language' boxShadow={1} className='config-side'></Box>
+          </Box>
+        </div>
 
         <Box id='feedback-col'>
           <span id='solutions-t'>Solução 1/3</span>
-          <Box></Box>
         </Box>
-
-        <Box id='feedback-space'/>
-      </>
+      </div>
     );
   }
 }

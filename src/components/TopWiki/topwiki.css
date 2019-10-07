@@ -1,8 +1,16 @@
-#bg{
+#topwiki-bg{
   display: flex;
-  min-width: 100vw;
-  min-height: 100vh;
-  justify-content: center;
+  flex-direction: column;
+  
+  margin-top: 10rem;
+  width: calc(80vw + 4rem);
+  max-width: calc(60rem + 1.8rem);
+  
+  background-color: #ECECEC;
+}
+
+#topwiki-container{
+  padding: 2.5rem;
 }
 
 #project-name{
@@ -10,32 +18,8 @@
   color: white;
   font-size: 1.7rem;
 
-  position: absolute;
   left: 1rem;
   top: 1rem;
-}
-
-#top-bg{
-  position: absolute;
-  z-index: -2;
-  width: 100vw;
-
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-#page{
-  display: flex;
-  flex-direction: column;
-  
-  margin-top: 10rem;
-  width: 80vw;
-  max-width: 60rem;
-  
-  padding: 0.9rem;
-  
-  background-color: white;
 }
 
 #title{
@@ -44,12 +28,8 @@
   color: #374650;
 }
 
-.divider{
-  margin-top: 12px !important;
-}
-
 #config-row{
-  margin-top: 1rem;
+  margin-top: 1.7rem;
   display: flex;
   flex-direction: row;
 }
@@ -59,7 +39,7 @@
   width: 80%;
   height: 3rem;
   background-color: #008CFF;
-  border-radius: 0.5rem;
+  border-radius: 0.3rem;
   margin-right: 0.7rem;
 }
 
@@ -69,7 +49,7 @@
   width: 8%;
   height: 3rem;
   background-color: #008CFF;
-  border-radius: 0.5rem;
+  border-radius: 0.3rem;
 
   /* For Mobile */
   min-width: 3.5rem;
@@ -78,29 +58,16 @@
 #feedback-col{
   display: flex;
   flex-direction: column;
-  align-items: center;
-  position: absolute;
-  
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: 9rem;
+  text-align: center;
 
-  max-width: 60rem;
-  margin-left: .48rem;
-  padding: 0.9rem;
-  
-  width: 80vw;
-  height: 50px;
+  width: 100%;
+  height: 5rem;
+
+  padding: 0.5rem 0rem;
+  margin-top: 1rem;
 
   background-color: #017FE6;
   color: white;
 }
 
 #solutions-t{}
-
-#feedback-space{
-  margin-top: 20px;
-  padding: 2rem;
-  height: 50px;
-  margin-bottom: -2rem;
-}
