@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Divider } from '@material-ui/core';
 import './example.css';
 
-import { Title, Content, CommandLine } from '../../components/index.js';
+import { Title, Content, CommandLine, Image } from '../../components/index.js';
 import { Data } from '../../constants';
 import topBg from '../../assets/page/title-bg.png';
 
@@ -34,6 +34,13 @@ export default class Example extends React.Component {
           <Content>{Data.t1}</Content>
 
           <CommandLine>{Data.c1}</CommandLine>
+          <CommandLine>{Data.c2}</CommandLine>
+
+          <Title>#2 Instalar ukuu</Title>
+          <CommandLine>{Data.c3}</CommandLine>
+
+          <Title>#3 Escolher Versão e Instalar</Title>
+          <Image/>
 
         </Box>
       </Box>
