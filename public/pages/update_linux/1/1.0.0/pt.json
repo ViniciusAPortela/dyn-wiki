@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "article_version": "1.0.0",
+  "title": "Como instalar xampp no Ubuntu",
+  "desc": "Aprenda como instalar o xampp no seu Ubuntu",
+  "data": {
+    "title": [
+      "Baixando o XAMPP",
+      "Instalando o XAMPP"
+    ],
+    "content": [
+      "Para instalar o xampp, basta baixar seu instalador:",
+      "Mude as permissões para permitir executá-lo:",
+      "E por fim, execute-o"
+    ],
+    "code": []
+  }
+}

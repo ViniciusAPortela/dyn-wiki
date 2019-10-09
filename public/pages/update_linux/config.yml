@@ -1,0 +1,64 @@
+# The Config Reader Version
+# For Latest Version use: latest
+version: '1.0.0'
+
+##
+## The easiest way to use the config separator is inside .md file
+##
+
+
+# default -> find the file named as article.md
+mode: default
+
+# default -> find solutions by the files named as number: 1,2,3 ...
+solutions: default
+
+# default -> find the language by the json filename: en.json, pt.json, jp.son, etc
+language: default
+
+# default -> find by the folders name and separate by the major-minor rules
+versions: default
+
+# default -> configurations inside the file
+configs: default
+
+
+##
+## Example a more complex configuration
+##
+
+
+# unique -> reads a unique file for each configuration
+mode: unique
+
+# make your self file structure
+files: {
+  solutions: {
+    
+    # First Solution
+    1: [
+      {
+        # The First Version of Article
+        version: '1.0.0',
+        # The system used by acessing the website
+        systems: [
+          {
+            system: 'linux',
+            version: * , #Here it means the Kernel Version, and * Means: any
+            distro: * , #
+            # ...
+          }
+          {}
+          {}
+          {
+            system: 'other' # If the user doesn't fit to any of last configurations
+          }
+        ]
+      }
+
+      # Second Version of Article ...
+    ]
+
+    # Second Solution ...
+  }
+}
