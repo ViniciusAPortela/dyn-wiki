@@ -6,11 +6,12 @@
 
 export default new class MDReader{
 
-  /* 
+  /*
     Reads the page
   */
   read(page){
-    
+    let file = (process.env.PUBLIC_URL + `./pages/${page}/ukuu.png`);
+    // ... Code
   }
 
   /*

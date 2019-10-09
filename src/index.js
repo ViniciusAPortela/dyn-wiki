@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './global.css';
 
-import Example from './pages/example/';
+//import Example from './pages/example/';
 import Wiki from './pages/wiki/';
 
 import * as serviceWorker from './serviceWorker';

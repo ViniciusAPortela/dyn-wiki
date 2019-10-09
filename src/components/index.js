@@ -8,7 +8,7 @@ import ScriptFile from './ScriptFile';
 import TopWiki from './TopWiki';
 import PageRender from './PageRender';
 
-export { 
+export {
   Title, 
   Flag, 
   Content,
