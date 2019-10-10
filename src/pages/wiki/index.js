@@ -8,13 +8,11 @@ import './wiki.css';
 
 export default class Example extends React.Component {
   render(){
-    let content = MDReader.render('update_linux');
-
     return(
       <div id='bg'>
         <span id='project-name'>Dyn-Wiki</span>
         <img alt='' src={topBg} id='top-bg'/>
-        <PageRender content={content}/>
+        <PageRender data={Data}/>
       </div>
     );
   }
