@@ -17,12 +17,14 @@ export default {
     },
   
     {
-      tag: 'command-sudo',
+      tag: 'command',
+      sudo: true,
       data: 'apt-add-repository ppa:teejee2008/ppa'
     },
   
     {
-      tag: 'command-sudo',
+      tag: 'command',
+      sudo: true,
       data: 'sudo apt update'
     },
   
@@ -32,7 +34,8 @@ export default {
     },
   
     {
-      tag: 'command-sudo',
+      tag: 'command',
+      sudo: true,
       data: 'apt-install-ukuu'
     },
   

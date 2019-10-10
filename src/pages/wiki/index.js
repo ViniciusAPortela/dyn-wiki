@@ -1,5 +1,4 @@
 import React from 'react';
-import MDReader from '../../services/MDReader';
 
 import { PageRender } from '../../components';
 import { Data } from '../../constants/';

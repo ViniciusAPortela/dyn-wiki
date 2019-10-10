@@ -3,10 +3,11 @@
   flex-direction: column;
   
   margin-top: 10rem;
-  width: calc(80vw + 4rem);
-  max-width: calc(60rem + 1.8rem);
+  width: calc(80vw);
+  max-width: 60rem;
   
   background-color: #ECECEC;
+  padding-right: 0.9rem;
 }
 
 #topwiki-container{
@@ -64,6 +65,8 @@
   height: 5rem;
 
   padding: 0.5rem 0rem;
+  /*padding-left: 0.9rem;*/
+  padding-right: 0.9rem;
   margin-top: 1rem;
 
   background-color: #017FE6;
