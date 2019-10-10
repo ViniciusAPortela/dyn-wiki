@@ -2,6 +2,7 @@ import React from 'react';
 import MDReader from '../../services/MDReader';
 
 import { PageRender } from '../../components';
+import { Data } from '../../constants/';
 
 import topBg from '../../assets/page/title-bg.png';
 import './wiki.css';
