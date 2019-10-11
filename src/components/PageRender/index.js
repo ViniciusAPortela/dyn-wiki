@@ -21,7 +21,7 @@ export default class PageRender extends React.Component{
 
   /** 
    *   Identify the object and return it
-  */
+   */
   getType(item){
     if(item.tag === 'title'){
       //Renders title
