@@ -38,13 +38,17 @@ class MDReader {
 
     //Read Configs and Body
     file = this.getConfigs(file);
-    
+
+    //Convert all data in a PreFinal Array
     this.result['data'] = [];
     this.getBody(file);
 
+    //Order in Correct Way
+    this.orderByIndex();
+
     /* DEBUG */
     //console.log('Result Array: ');
-    //console.log(this.result);
+    console.log(this.preData);
     /* DEBUG */
   }
 
@@ -76,7 +80,7 @@ class MDReader {
     let title = this.getByType('title', file);
     if(title.has){
       //Add data to array
-      this.result.data = this.result.data.concat(title.data);
+      this.preData = this.preData.concat(title.data);
     }
     file = title.file;
 
@@ -84,7 +88,7 @@ class MDReader {
     let cmd = this.getByType('cmd', file);
     if(cmd.has){
       //Add data to array
-      this.result.data = this.result.data.concat(cmd.data);
+      this.preData = this.preData.concat(cmd.data);
     }
     file = cmd.file;
 
@@ -95,7 +99,7 @@ class MDReader {
     let content = this.getByType('content', file);
     if(content.has){
       //Add data to array
-      this.result.data = this.result.data.concat(content.data);
+      this.preData = this.preData.concat(content.data);
     }
   }
 
@@ -161,7 +165,48 @@ class MDReader {
    */
   orderByIndex(){
     //Look for the higher, then start looking from 0 index to higher
+    let higher = -1;
+    
+    this.preData.map((item)=>{
+      if(item.index > higher) higher = item.index;
+    })
+
+    console.log(`higher: ${higher}`);
+
     //Look for the lower index
+    var length = this.preData.length;
+
+    console.log(length);
+    for(let i=0 ; i<length ; i++){
+      /* FOR DEBUG */
+      //console.log('--------------------');
+      //console.log('PEGANDO '+i+' VALOR!');
+      //console.log('AINDA FALTA: '+this.preData.length);
+      /* FOR DEBUG */
+
+      let lower = higher+1;
+      var itemIndex = -1;
+
+      //Looks for the Lower in the Array
+      this.preData.map((item, index)=>{
+        if(item.index<lower) {
+          /* FOR DEDBUG */
+          //console.log(`achado menor: ${item.index} <- ${lower} (na pos ${index})`);
+          /* FOR DEDBUG */
+          
+          lower = item.index;
+          itemIndex = index;
+        };
+      });
+
+      /* FOR DEBUG */
+      //console.log(`SUCESSO - ADICIONADO: ${this.preData[itemIndex]}`);
+      //this.preData[itemIndex].data = `[${i}][${lower}] `+this.preData[itemIndex].data
+      /* FOR DEBUG */
+
+      this.result.data.push(this.preData[itemIndex]);
+      this.preData.splice(itemIndex, 1);
+    };
   }
 
   /**
