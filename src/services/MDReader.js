@@ -46,8 +46,8 @@ class MDReader {
     this.getBody(file);
 
     /* DEBUG */
-    console.log('Result Array: ');
-    console.log(this.result);
+    //console.log('Result Array: ');
+    //console.log(this.result);
     /* DEBUG */
   }
 
@@ -81,6 +81,9 @@ class MDReader {
       if(line.type === 'title'){
         //Add title
         this.result.data.push({tag: line.type, data: line.data});
+      }else if(line.type === 'tag'){
+        //Check if has Other Tag inside
+
       }
     }while(res);
   }
@@ -98,10 +101,16 @@ class MDReader {
       return {type: 'title', data: title[1]};
     }
 
-    return {type: null};
-
     //Check for Tag
+    regex.tag.openClose.lastIndex = 0;
+    let tag = regex.tag.all.exec(line);
+    if(tag){
+      console.log(tag);
+      //match.index + ' ' + patt.lastIndex
+      //return {type: 'tag', data: tag[1]};
+    }
 
+    return {type: null};
     //Check for Content
   }
 
@@ -115,25 +124,31 @@ class MDReader {
   }
 
   /**
-   * Reads a Given File and Convert it to JSON
+   * Converts a Given File to Readable Data for PageRender
    * @param {string} file
    */
-  read(file){
+  convert(file){
     //Get the File
+    console.log(`🌀 MDReader v0.1.0 🌀`);
+    console.log(`⏳ Reading ${file} ...`);
     this.file = fs.readFileSync(file, 'utf-8');
     
     //Convert in Array
+    console.log(`⏳ Converting to Array ...`);
     this.toArray(this.file);
 
     //Create Data.js File
+    console.log(`⏳ Generating Data.js ...`);
     this.toFile(this.result);
+
+    console.log(`✔ All done! 😃`);
   }
 
 }
 
 /* TESTING AREA */
 const reader = new MDReader;
-reader.read(process.argv[2]);
+reader.convert(process.argv[2]);
 /* TESTING AREA */
 
 module.exports = MDReader;

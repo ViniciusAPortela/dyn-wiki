@@ -25,9 +25,9 @@ ${content[2]}
 
 <scripts>
 	<only32>
-		<file src='script_x86.sh' name='install_xampp.sh'>
+		</file src='script_x86.sh' name='install_xampp.sh'>
 	</only32>
 	<only64>
-		<file src='script_64.sh' name='install_xampp.sh'>
+		</file src='script_64.sh' name='install_xampp.sh'>
 	</only64>
 </scripts>
