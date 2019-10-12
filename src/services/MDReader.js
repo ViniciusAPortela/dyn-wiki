@@ -1,38 +1,48 @@
-/**
- * MARKDOWN READER
- * Reads and Render the MD files of Wiki Pages, also reads the additional stuff 
- * that isn't in default markdown language
- * 
- * This class Transform everything in a readable array for the PageRender React Component
- */
-
-//Reads the file, static file (For now)
-const readline = require('readline')
 const fs = require('fs');
+const regex = require('./regex.js');
 
+/**
+ *  @class A Custom Markdown Reader.
+ *  @author vinicius-a-portela
+ *  @version 0.1.0
+ *  Reads and Render the MD files of Wiki Pages, also reads the additional stuff 
+ *  that isn't in default markdown language
+ * 
+ *  This class Transform everything in a readable array for the PageRender React Component
+ */
 class MDReader {
 
+  /**
+   * A Custom Markdown Reader
+   * @constructor
+   */
   constructor(){
     //The final Result
     this.result = {};
 
-    //The Array needed for Reading Process
-    this.configs = [];
+    //The Arrays and Vars needed for the Reading Process
     this.body = [];
     this.content = [];
     this.openTag = [];
+    this.lastIndex = 0;
+
+    //The Readed File
+    this.file = '';
   }
   
-  /**
-   *  Transform Everything in the Final Array
-   */
-  toArray(){
-    //Transform all Configs
-    this.configs.map((item)=>{
-      this.result[item.name] = item.value
-    });
 
-    //Merge all data
+  /**
+   *  Transform the Readed File in an Array
+   *  @param {string} file - The MD String File
+   */
+  toArray(file){
+    //Erase the Array
+    this.result = {};
+
+    //Read Configs and Body
+    file = this.getConfigs(file);
+    this.getBody(file);
+
     this.result['data'] = [];
 
     /* DEBUG */
@@ -41,60 +51,74 @@ class MDReader {
     /* DEBUG */
   }
 
-  /**
-   * Get the type of the Line
-   * @param {*} line 
-   */
-  getType(line){
-    //Check if is a configuration tag
-    var configRegex = /#!(.*):(.*)/;
 
-    if(configRegex.test(line)){
-      //Get Config and return it
-      const res = configRegex.exec(line);
-      this.configs.push({name: res[1], value: res[2]});
+  /**
+   * Get all MD Configurations
+   * @param {string} file - The MD String File
+   * @return {string} - The new File (Without Configurations)
+   */
+  getConfigs(file){
+    do{
+      var res = regex.config.exec(file);
+      if(res) this.result[res[1]] = res[2];
+    }while(res);
+    let newFile = file.replace(regex.config, '');
+
+    return newFile;
+  }
+
+
+  /**
+   * Get all Body Content from MD
+   * @param {string} file - The MD String File
+   */
+  getBody(file){
+    //Get Page Titles
+    file = this.getFromType('title', file);
+    
+    //Get all Page Content
+    file = this.getFromType('content', file);
+
+    //Get all File Tags
+    this.getFromType('tag', file);
+  }
+
+
+  /**
+   * Get all Matched Content of a Specific Type
+   * @param {string} type 
+   * @param {string} file 
+   * @return The String Without the Selected Type
+   */
+  getFromType(type, file){
+    if(type === 'title'){
+      //Get titles
     }else{
-      //Anothers Types
+      //Other Types
     }
+
+    let newFile = '';
+    return newFile;
   }
+
 
   /**
-   * Transformm the Current Line to Non-Final Array
-   * @param {*} line 
+   * Reads a Given File and Convert it to JSON
+   * @param {string} file
    */
-  transformLine(line){
-    this.getType(line);
-  }
-
-  inside(){
-
-  }
-
-  hasTag(){
-
-  }
-
   read(file){
-    const data = fs.createReadStream(file);
-
-    const readInterface = readline.createInterface({
-      input: data,
-      console: false,
-    });
-
-    //Read all lines
-    readInterface.on('line', (line) => {
-      this.transformLine(line);
-    }).on('close', (line) => {
-      // EOF
-      this.toArray();
-    });
+    //Get the File
+    this.file = fs.readFileSync(file, 'utf-8');
+    
+    //Convert in Array
+    this.toArray(this.file);
   }
+
 }
 
 /* TESTING AREA */
 const reader = new MDReader;
-reader.read('article.md');
+reader.read(process.argv[2]);
 /* TESTING AREA */
 
 module.exports = MDReader;
