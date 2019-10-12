@@ -1,7 +1,7 @@
 #!version: 1.0.0
 #!article_version: 1.0.0
-#!title: Aprenda a atualizar o kernel do seu Linux
-#!desc: Atualizando o Kernel do Linux
+#!title: Como instalar o Xampp
+#!desc: Aprenda como instalar o xampp em sua máquina
 #!lang: pt
 
 # #1 ${title[0]}

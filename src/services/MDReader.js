@@ -18,13 +18,13 @@ class MDReader {
 
     //The Array needed for Reading Process
     this.configs = [];
+    this.body = [];
     this.content = [];
-    this.open_tag = [];
+    this.openTag = [];
   }
   
-  //TODO: Create the MD to Array Converter
   /**
-   * 
+   *  Transform Everything in the Final Array
    */
   toArray(){
     //Transform all Configs
@@ -33,10 +33,12 @@ class MDReader {
     });
 
     //Merge all data
-    this.result['data'] = {};
+    this.result['data'] = [];
 
+    /* DEBUG */
     console.log('Result Array: ');
     console.log(this.result);
+    /* DEBUG */
   }
 
   /**
@@ -45,22 +47,14 @@ class MDReader {
    */
   getType(line){
     //Check if is a configuration tag
-    var config_tag = line.search('#!');
-    if(config_tag !== -1){
-      //Return the configuration
-      let config = line.substr(config_tag+2);      
-      let n = config.search(':');
-      
-      //Get Config Name
-      let conf_name = config.substr(0, n);
+    var configRegex = /#!(.*):(.*)/;
 
-      //Get Config Value
-      let conf_value = config.substr(n+1);
-
-      return({type: 'config', data: {name: conf_name, value: conf_value}});
+    if(configRegex.test(line)){
+      //Get Config and return it
+      const res = configRegex.exec(line);
+      this.configs.push({name: res[1], value: res[2]});
     }else{
-      //Check if is a opening tag
-      return({});
+      //Anothers Types
     }
   }
 
@@ -69,25 +63,15 @@ class MDReader {
    * @param {*} line 
    */
   transformLine(line){
-    let res = this.getType(line);
-    //Is a Valid Array Object
-    console.log(res.type !== undefined);
-    if(res.type !== undefined){
-      console.log('addded to configs');
-      if(res.type === 'config'){
-        //Add to Config Array
-        this.configs.push(res.data);
-      }else if(res.type === ''){
-
-      }
-    //Is Content, Add to Content Array
-    }else{
-
-    }
+    this.getType(line);
   }
 
   inside(){
-    
+
+  }
+
+  hasTag(){
+
   }
 
   read(file){

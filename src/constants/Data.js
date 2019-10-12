@@ -36,7 +36,7 @@ export default {
     {
       tag: 'command',
       sudo: true,
-      data: 'apt-install-ukuu'
+      data: 'apt install ukuu'
     },
   
     {

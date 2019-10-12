@@ -15,7 +15,7 @@ export default class PageRender extends React.Component{
     content.push(<TopWiki title={this.props.data.title}/>);
     
     //Add Page Body
-    content.push(<Box boxShadow={1} id='page'>{this.insideData(this.props.data.data)}</Box>);
+    content.push(<Box boxShadow={1} id='page'>{this.inside(this.props.data)}</Box>);
     return content;
   }
 
@@ -41,20 +41,6 @@ export default class PageRender extends React.Component{
       //Renders the Script File
       return <ScriptFile/>
     }
-  }
-
-  /**
-   * Map all elements inside Data Array
-   */
-  insideData = (data) => {
-    let content = [];
-
-    data.map((item, index)=>{
-      //Get Item Type
-      content.push(this.getType(item, index));
-    });
-
-    return content;
   }
 
   /**
