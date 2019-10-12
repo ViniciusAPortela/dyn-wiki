@@ -41,9 +41,9 @@ class MDReader {
 
     //Read Configs and Body
     file = this.getConfigs(file);
-    this.getBody(file);
-
+    
     this.result['data'] = [];
+    this.getBody(file);
 
     /* DEBUG */
     console.log('Result Array: ');
@@ -73,34 +73,46 @@ class MDReader {
    * @param {string} file - The MD String File
    */
   getBody(file){
-    //Get Page Titles
-    file = this.getFromType('title', file);
-    
-    //Get all Page Content
-    file = this.getFromType('content', file);
+    //Line by Line
+    do{
+      var res = regex.lines.exec(file);
+      if(res) var line = this.getType(res[1]);
 
-    //Get all File Tags
-    this.getFromType('tag', file);
+      if(line.type === 'title'){
+        //Add title
+        this.result.data.push({tag: line.type, data: line.data});
+      }
+    }while(res);
   }
 
 
   /**
-   * Get all Matched Content of a Specific Type
-   * @param {string} type 
-   * @param {string} file 
-   * @return The String Without the Selected Type
+   * Check and Get the Type of a Line
+   * @param {string} line - Line to Read and Identify Content
    */
-  getFromType(type, file){
-    if(type === 'title'){
-      //Get titles
-    }else{
-      //Other Types
+  getType(line){
+    //Check for Title
+    regex.title.lastIndex = 0;
+    let title = regex.title.exec(line);
+    if(title){
+      return {type: 'title', data: title[1]};
     }
 
-    let newFile = '';
-    return newFile;
+    return {type: null};
+
+    //Check for Tag
+
+    //Check for Content
   }
 
+  /**
+   * Export the Object to Data.js to be read by the PageRender
+   * @param {Object} array - The Array of Objects 
+   */
+  toFile(array){
+    let content = `export default ` + JSON.stringify(array);
+    fs.writeFileSync('Data.js', content);
+  }
 
   /**
    * Reads a Given File and Convert it to JSON
@@ -112,6 +124,9 @@ class MDReader {
     
     //Convert in Array
     this.toArray(this.file);
+
+    //Create Data.js File
+    this.toFile(this.result);
   }
 
 }

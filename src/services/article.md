@@ -4,7 +4,7 @@
 #!desc: Aprenda como instalar o xampp em sua máquina
 #!lang: pt
 
-# #1 ${title[0]}
+# #1 Baixando o XAMPP
 ${content[0]}
 
 <only32>
@@ -14,7 +14,7 @@ ${content[0]}
 	<cmd>wget "https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/7.3.7/xampp-linux-x64-7.3.7-1-installer.run/download"	-O xampp-installer.run</cmd>
 </only64>
 
-# #1 ${title[1]}
+# #1 Instalando o XAMPP
 ${content[1]}
 <cmd>chmod +x xampp-installer.run</cmd>
 
