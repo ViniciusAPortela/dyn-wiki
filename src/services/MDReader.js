@@ -20,11 +20,8 @@ class MDReader {
     //The final Result
     this.result = {};
 
-    //The Arrays and Vars needed for the Reading Process
-    this.body = [];
-    this.content = [];
-    this.openTag = [];
-    this.lastIndex = 0;
+    //The information before insert into final result, items here needs reordering
+    this.preData = []
 
     //The Readed File
     this.file = '';
@@ -58,8 +55,9 @@ class MDReader {
    * @return {string} - The new File (Without Configurations)
    */
   getConfigs(file){
+    let res;
     do{
-      var res = regex.config.exec(file);
+      res = regex.config.exec(file);
       if(res) this.result[res[1]] = res[2];
     }while(res);
     let newFile = file.replace(regex.config, '');
@@ -73,45 +71,97 @@ class MDReader {
    * @param {string} file - The MD String File
    */
   getBody(file){
-    //Line by Line
-    do{
-      var res = regex.lines.exec(file);
-      if(res) var line = this.getType(res[1]);
 
-      if(line.type === 'title'){
-        //Add title
-        this.result.data.push({tag: line.type, data: line.data});
-      }else if(line.type === 'tag'){
-        //Check if has Other Tag inside
+    //Get all Title
+    let title = this.getByType('title', file);
+    if(title.has){
+      //Add data to array
+      this.result.data = this.result.data.concat(title.data);
+    }
+    file = title.file;
 
-      }
-    }while(res);
+    //Get all CMD
+    let cmd = this.getByType('cmd', file);
+    if(cmd.has){
+      //Add data to array
+      this.result.data = this.result.data.concat(cmd.data);
+    }
+    file = cmd.file;
+
+    //Get all Image (LATER)
+    //let image = this.getByType('image', file);
+
+    //Get all content (All the rest)
+    let content = this.getByType('content', file);
+    if(content.has){
+      //Add data to array
+      this.result.data = this.result.data.concat(content.data);
+    }
   }
 
+  /**
+   * Get the the Specified Type and Return it
+   * @param {string} type 
+   * @param {string} file 
+   * @return 
+   *  [0] If has the Specified Type
+   *  [1] The New File 
+   *  [2] The Data to insert into preResult
+   */
+  getByType(type, file){
+    let res = {
+      has: false,
+      file: file,
+      data: []
+    }
+
+    if(type === 'title'){
+      do{
+        var response = regex.title.exec(file);
+        if(response) {
+          //Has this Type in the MD File
+          res.has = true;
+          res.data.push({tag: 'title', data: response[1], index: response.index});
+        }
+      }while(response);
+
+      //Return the new file
+      res.file = file.replace(regex.title, '');
+    }
+
+    else if(type === 'cmd'){
+      let response = '';
+
+      let regT = regex.tag[0]+'cmd'+regex.tag[1]+'cmd'+regex.tag[2];
+      let re = new RegExp(regT, 'gm');
+
+      while(response = re.exec(file)){
+        res.data.push({tag: 'command', sudo: true, data: response[3], index: response.index})
+        res.has = true;
+      }
+
+      //Return the new file
+      res.file = file.replace(re, '');
+    }
+
+    else if(type === 'content'){
+      let response = '';
+
+      while(response = regex.content.exec(file)){
+        res.data.push({tag: 'content', data: response[1], index: response.index})
+        res.has = true;
+      }
+    }
+
+    return res;
+  }
 
   /**
-   * Check and Get the Type of a Line
-   * @param {string} line - Line to Read and Identify Content
+   *  Order all elements by Index
    */
-  getType(line){
-    //Check for Title
-    regex.title.lastIndex = 0;
-    let title = regex.title.exec(line);
-    if(title){
-      return {type: 'title', data: title[1]};
-    }
-
-    //Check for Tag
-    regex.tag.openClose.lastIndex = 0;
-    let tag = regex.tag.all.exec(line);
-    if(tag){
-      console.log(tag);
-      //match.index + ' ' + patt.lastIndex
-      //return {type: 'tag', data: tag[1]};
-    }
-
-    return {type: null};
-    //Check for Content
+  orderByIndex(){
+    //Look for the higher, then start looking from 0 index to higher
+    //Look for the lower index
   }
 
   /**
