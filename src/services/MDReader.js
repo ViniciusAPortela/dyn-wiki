@@ -1,6 +1,8 @@
 const fs = require('fs');
 const regex = require('./regex.js');
 
+//TODO: Identify Content from different languages
+
 /**
  *  @class A Custom Markdown Reader.
  *  @author vinicius-a-portela
@@ -128,8 +130,8 @@ class MDReader {
           res.data.push({tag: 'title', data: response[1], index: response.index});
 
           //Delete this from file, but mantain same space (for indexes later)
-          //regex.title.lastIndex
-          //response.index
+          //TODO: create a function to do that
+          //TODO: maybe find another way to do that
           file = 
             file.substr(0, response.index) + 
             `\u0000`.repeat(regex.title.lastIndex-response.index) + 
@@ -232,6 +234,10 @@ class MDReader {
     let content = `export default ` + JSON.stringify(array);
     fs.writeFileSync('Data.js', content);
   }
+
+  //TODO: Create the SystemOnly reader (as only32 / only64)
+  //Just Identify and Erase what is not supported in the user system
+  //Then is the Common Process
 
   /**
    * Converts a Given File to Readable Data for PageRender
