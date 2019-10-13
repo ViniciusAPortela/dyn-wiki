@@ -126,11 +126,20 @@ class MDReader {
           //Has this Type in the MD File
           res.has = true;
           res.data.push({tag: 'title', data: response[1], index: response.index});
+
+          //Delete this from file, but mantain same space (for indexes later)
+          //regex.title.lastIndex
+          //response.index
+          file = 
+            file.substr(0, response.index) + 
+            `\u0000`.repeat(regex.title.lastIndex-response.index) + 
+            file.substr(response.index + `\u0000`.repeat(regex.title.lastIndex-response.index).length);
+          console.log(file.length);
         }
       }while(response);
 
       //Return the new file
-      res.file = file.replace(regex.title, '');
+      res.file = file;
     }
 
     else if(type === 'cmd'){
@@ -142,10 +151,16 @@ class MDReader {
       while(response = re.exec(file)){
         res.data.push({tag: 'command', sudo: true, data: response[3], index: response.index})
         res.has = true;
+
+        file = 
+          file.substr(0, response.index) + 
+          `\u0000`.repeat(re.lastIndex-response.index) + 
+          file.substr(response.index + `\u0000`.repeat(re.lastIndex-response.index).length);
+        console.log(file.length);
       }
 
       //Return the new file
-      res.file = file.replace(re, '');
+      res.file = file;
     }
 
     else if(type === 'content'){
@@ -193,7 +208,7 @@ class MDReader {
           /* FOR DEDBUG */
           //console.log(`achado menor: ${item.index} <- ${lower} (na pos ${index})`);
           /* FOR DEDBUG */
-          
+
           lower = item.index;
           itemIndex = index;
         };

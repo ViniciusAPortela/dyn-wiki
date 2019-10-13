@@ -3,7 +3,7 @@ module.exports = regex = {
   config: /#!(.*):(?: )?(.*)/gm,
   title: /# (.*)/gm,
   lines: /(.+)+/gm,
-  content: /([^\n\t].*)$/gm,
+  content: /([^\n\t \u0000].*)$/gm,
   tag: {
     open: /<[^/]+?>/gm,
     close: /<\/.+?>/gm,
