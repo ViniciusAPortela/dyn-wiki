@@ -27,8 +27,11 @@ class MDReader {
 
     //The Readed File
     this.file = '';
+
+    //The User Configuration
+    this.userConfig = {}
   }
-  
+
 
   /**
    *  Transform the Readed File in an Array
@@ -50,10 +53,11 @@ class MDReader {
 
     /* DEBUG */
     //console.log('Result Array: ');
-    console.log(this.preData);
+    //console.log(this.preData);
     /* DEBUG */
   }
 
+  
 
   /**
    * Get all MD Configurations
@@ -94,6 +98,7 @@ class MDReader {
     }
     file = cmd.file;
 
+    //TODO: Add Images
     //Get all Image (LATER)
     //let image = this.getByType('image', file);
 
@@ -136,7 +141,7 @@ class MDReader {
             file.substr(0, response.index) + 
             `\u0000`.repeat(regex.title.lastIndex-response.index) + 
             file.substr(response.index + `\u0000`.repeat(regex.title.lastIndex-response.index).length);
-          console.log(file.length);
+          //(file.length);
         }
       }while(response);
 
@@ -158,7 +163,7 @@ class MDReader {
           file.substr(0, response.index) + 
           `\u0000`.repeat(re.lastIndex-response.index) + 
           file.substr(response.index + `\u0000`.repeat(re.lastIndex-response.index).length);
-        console.log(file.length);
+        //console.log(file.length);
       }
 
       //Return the new file
@@ -188,12 +193,12 @@ class MDReader {
       if(item.index > higher) higher = item.index;
     })
 
-    console.log(`higher: ${higher}`);
+    //console.log(`higher: ${higher}`);
 
     //Look for the lower index
     var length = this.preData.length;
 
-    console.log(length);
+    //console.log(length);
     for(let i=0 ; i<length ; i++){
       /* FOR DEBUG */
       //console.log('--------------------');
@@ -241,9 +246,13 @@ class MDReader {
 
   /**
    * Converts a Given File to Readable Data for PageRender
-   * @param {string} file
+   * @param {string} file - The Markdown File to Read
+   * @param {Object} userConfig - The User configuration
    */
-  convert(file){
+  convert(file, userConfig){
+    //Set UserConfig
+    this.userConfig = userConfig;
+
     //Get the File
     console.log(`🌀 MDReader v0.1.0 🌀`);
     console.log(`⏳ Reading ${file} ...`);
@@ -264,7 +273,7 @@ class MDReader {
 
 /* TESTING AREA */
 const reader = new MDReader;
-reader.convert(process.argv[2]);
+reader.convert(process.argv[2], require('./userConfig.js'));
 /* TESTING AREA */
 
 module.exports = MDReader;
