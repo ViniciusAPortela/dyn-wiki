@@ -2,6 +2,7 @@ const fs = require('fs');
 const regex = require('./regex.js');
 
 //TODO: Identify Content from different languages
+//TODO: Delete all 'file' param, or unecessary Params
 
 /**
  *  @class A Custom Markdown Reader.
@@ -32,7 +33,6 @@ class MDReader {
     this.userConfig = {}
   }
 
-
   /**
    *  Transform the Readed File in an Array
    *  @param {string} file - The MD String File
@@ -57,7 +57,12 @@ class MDReader {
     /* DEBUG */
   }
 
-  
+  /**
+   * Get just UserConfig
+   */
+  justUserConfig(){
+
+  }
 
   /**
    * Get all MD Configurations
@@ -237,7 +242,7 @@ class MDReader {
    */
   toFile(array){
     let content = `export default ` + JSON.stringify(array);
-    fs.writeFileSync('Data.js', content);
+    fs.writeFileSync('data.js', content);
   }
 
   //TODO: Create the SystemOnly reader (as only32 / only64)
@@ -273,7 +278,7 @@ class MDReader {
 
 /* TESTING AREA */
 const reader = new MDReader;
-reader.convert(process.argv[2], require('./userConfig.js'));
+reader.convert(process.argv[2], require('./userSys.config.js/index.js.js.js'));
 /* TESTING AREA */
 
 module.exports = MDReader;
