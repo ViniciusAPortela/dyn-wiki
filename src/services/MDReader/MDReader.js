@@ -123,7 +123,18 @@ class MDReader {
             break;
           }else{
             //COMPATIBLE
-            //Mantain inside content but exclude 
+            //Mantain inside content but exclude tags
+            const regexT2 = regex.tag[3] + prop + regex.tag[4];
+            let re2 = new RegExp(regexT2, 'gm');
+            
+            re2.lastIndex = 0;
+            let response = '';
+            while(response = re2.exec(file)){
+              file = 
+                file.substr(0, response.index) + 
+                `\u0000`.repeat(re2.lastIndex-response.index) + 
+                file.substr(response.index + `\u0000`.repeat(re2.lastIndex-response.index).length);
+            }
           }
         }
       }
@@ -323,6 +334,9 @@ class MDReader {
    * @param {Object} userConfig - The User configuration
    */
   convert(file, userConfig){
+    //To meansure Process Time
+    let start = process.hrtime();
+
     //Get console Args and set UserConfig
     this.setEnv(process.argv, userConfig);
     const { verbose, silent } = this.cmd;
@@ -340,6 +354,10 @@ class MDReader {
     if(!silent) console.log(`⏳ Generating Data.js ...`);
     this.toFile(this.result);
 
+    //To meansure Process Time
+    let end = process.hrtime(start);
+    if(!silent) console.log(`🕓 All work done in ${end[1]/1000000}ms`);
+   
     if(!silent) console.log(`✔ All done! 😃`);
   }
 
