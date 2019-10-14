@@ -62,7 +62,7 @@ class MDReader {
 
     /* DEBUG */
     //console.log('Result Array: ');
-    //console.log(this.preData);
+    console.log(this.result);
     /* DEBUG */
   }
 
@@ -182,10 +182,6 @@ class MDReader {
     }
     file = cmd.file;
 
-    //TODO: Add Images
-    //Get all Image (LATER)
-    //let image = this.getByType('image', file);
-
     //Get Scripts
     let scripts = this.getByType('scripts', file);
     if(scripts.has){
@@ -193,6 +189,14 @@ class MDReader {
       this.preData = this.preData.concat(scripts.data);
     }
     file = scripts.file;
+
+    //Get all Image
+    let image = this.getByType('image', file);
+    if(image.has){
+      //Add data to array
+      this.preData = this.preData.concat(image.data);
+    }
+    file = image.file;
 
     //Get all content (All the rest)
     let content = this.getByType('content', file);
@@ -262,6 +266,37 @@ class MDReader {
       res.file = file;
     }
 
+    else if(type === 'image'){
+      let response = '';
+
+      console.log(file);
+
+      //Get all Files
+      while(response = regex.tag.selfClose.exec(file)){
+        res.has = true;
+        //Get tag attributes
+        let response2 = '';
+        let attrs = {tag: 'image', index: response.index}
+
+        //For Each Attribute
+        regex.tag.attribute.lastIndex = 0;
+        while(response2 = regex.tag.attribute.exec(response[0])){
+          attrs[response2[1]] = response2[2];
+        }
+        //Add file
+        res.data.push(attrs);
+
+        file = 
+          file.substr(0, response.index) + 
+          `\u0000`.repeat(regex.tag.selfClose.lastIndex-response.index) + 
+          file.substr(response.index + `\u0000`.repeat(regex.tag.selfClose.lastIndex-response.index).length);
+      }
+      console.log(res.data);
+      //Return the new file
+      //res.data = {}
+      res.file = file;
+    }
+
     //TODO: It repeats, try to convert in just one function
     //TODO: Wrong Name, It's a File Container
     else if(type === 'scripts'){
@@ -293,6 +328,7 @@ class MDReader {
       let response = '';
 
       //Get all Files
+      regex.tag.selfClose.lastIndex = 0;
       while(response = regex.tag.selfClose.exec(file)){
         res.has = true;
         //Get tag attributes
@@ -300,6 +336,7 @@ class MDReader {
         let attrs = {}
 
         //For Each Attribute
+        regex.tag.attribute.lastIndex = 0;
         while(response2 = regex.tag.attribute.exec(response[0])){
           attrs[response2[1]] = response2[2];
         }
