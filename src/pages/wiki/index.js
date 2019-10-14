@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { PageRender } from '../../components';
-import Data from '../../services/data';
+import Data from '../../services/MDReader/data';
 
 import topBg from '../../assets/page/title-bg.png';
 import './wiki.css';
