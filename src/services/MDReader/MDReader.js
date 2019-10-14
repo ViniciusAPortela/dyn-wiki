@@ -62,7 +62,7 @@ class MDReader {
 
     /* DEBUG */
     //console.log('Result Array: ');
-    console.log(this.result);
+    //console.log(this.result);
     /* DEBUG */
   }
 
@@ -269,8 +269,6 @@ class MDReader {
     else if(type === 'image'){
       let response = '';
 
-      console.log(file);
-
       //Get all Files
       while(response = regex.tag.selfClose.exec(file)){
         res.has = true;
@@ -291,9 +289,8 @@ class MDReader {
           `\u0000`.repeat(regex.tag.selfClose.lastIndex-response.index) + 
           file.substr(response.index + `\u0000`.repeat(regex.tag.selfClose.lastIndex-response.index).length);
       }
-      console.log(res.data);
+
       //Return the new file
-      //res.data = {}
       res.file = file;
     }
 
@@ -457,7 +454,7 @@ class MDReader {
     let end = process.hrtime(start);
     if(!silent) console.log(`🕓 All work done in ${end[1]/1000000}ms`);
    
-    if(!silent) console.log(`✔ All done! 😃`);
+    if(!silent) console.log(`✔  All done! 😃`);
   }
 
   /**

@@ -2,4 +2,5 @@
   font-family: 'Roboto';
   color: #374650;
   margin-top: .7rem;
+  overflow-wrap: break-word;
 }
