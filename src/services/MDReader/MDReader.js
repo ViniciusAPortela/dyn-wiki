@@ -186,6 +186,14 @@ class MDReader {
     //Get all Image (LATER)
     //let image = this.getByType('image', file);
 
+    //Get Scripts
+    let scripts = this.getByType('scripts', file);
+    if(scripts.has){
+      //Add data to array
+      this.preData = this.preData.concat(scripts.data);
+    }
+    file = scripts.file;
+
     //Get all content (All the rest)
     let content = this.getByType('content', file);
     if(content.has){
@@ -248,6 +256,60 @@ class MDReader {
           `\u0000`.repeat(re.lastIndex-response.index) + 
           file.substr(response.index + `\u0000`.repeat(re.lastIndex-response.index).length);
         //console.log(file.length);
+      }
+
+      //Return the new file
+      res.file = file;
+    }
+
+    //TODO: It repeats, try to convert in just one function
+    //TODO: Wrong Name, It's a File Container
+    else if(type === 'scripts'){
+      let response = '';
+
+      let regT = regex.tag[0]+'scripts'+regex.tag[1]+'scripts'+regex.tag[2];
+      let re = new RegExp(regT, 'gm');
+
+      while(response = re.exec(file)){
+        //First, get all inside files to put in data array
+        let files = this.getByType('file', response[3]);
+        if(files.has){
+          //Add data to array
+          res.data.push({tag: 'scripts', data: files.data, index: response.index})
+          res.has = true;
+        }
+
+        file = 
+          file.substr(0, response.index) + 
+          `\u0000`.repeat(re.lastIndex-response.index) + 
+          file.substr(response.index + `\u0000`.repeat(re.lastIndex-response.index).length);
+      }
+
+      //Return the new file
+      res.file = file;
+    }
+
+    else if(type === 'file'){
+      let response = '';
+
+      //Get all Files
+      while(response = regex.tag.selfClose.exec(file)){
+        res.has = true;
+        //Get tag attributes
+        let response2 = '';
+        let attrs = {}
+
+        //For Each Attribute
+        while(response2 = regex.tag.attribute.exec(response[0])){
+          attrs[response2[1]] = response2[2];
+        }
+        //Add file
+        res.data = res.data.concat(attrs);
+
+        /*file = 
+          file.substr(0, response.index) + 
+          `\u0000`.repeat(regex.tag.selfClose.lastIndex-response.index) + 
+          file.substr(response.index + `\u0000`.repeat(regex.tag.selfClose.lastIndex-response.index).length);*/
       }
 
       //Return the new file
