@@ -1,5 +1,5 @@
 const fs = require('fs');
-const regex = require('./regex.js');
+const regex = require('./regex');
 
 //TODO: Identify Content from different languages
 //TODO: Delete all 'file' param, or unecessary Params
@@ -31,6 +31,12 @@ class MDReader {
 
     //The User Configuration
     this.userConfig = {}
+
+    //Console Modes
+    this.cmd = {
+      verbose: false,
+      silent: false,
+    }
   }
 
   /**
@@ -40,6 +46,9 @@ class MDReader {
   toArray(file){
     //Erase the Array
     this.result = {};
+
+    //First Erase all Content that is not Compatible with UserConfig
+    file = this.justUserConfig(file);
 
     //Read Configs and Body
     file = this.getConfigs(file);
@@ -59,9 +68,68 @@ class MDReader {
 
   /**
    * Get just UserConfig
+   * @param {string} file - The Markdown File
    */
-  justUserConfig(){
+  justUserConfig(file){
+    //Get all MD Config Tags
+    //Read the tags.config.js
+    //Use Content Regex [0][1][2]
+    let tags = require('./tags.config');
+    for(const prop in tags){
+      //First Look for this Tag in Markdown File
+      const { verbose } = this.cmd
+      if(verbose) console.log(`[V] Looking for ${prop}`);
 
+      let regexT = regex.tag[0] + prop + regex.tag[1] + prop + regex.tag[2];
+      let re = new RegExp(regexT, 'gm');
+
+      re.lastIndex = 0;
+      let has = re.test(file);
+      if(verbose) console.log(`[V] ⤷ Has? ${has}`);
+      if(has){
+        //Check if is compatible with user
+        //Get all inside Configs and Compare One-By-One Inside Array Items
+        let ok = false;
+
+        //Get all tag Needed Configuration
+        for(const config in tags[prop]){
+          ok = false;
+          if(verbose) console.log(`[V] Getting [${config}] configuration`);
+          //So, transform in for(); to use break;
+          let index = 0;
+          for(const item in tags[prop][config]){
+            if(verbose) console.log(`[V] Possibility ${index}: ${tags[prop][config][item]}`);
+            if(this.userConfig[config] === tags[prop][config][item]){
+              ok = true;
+              if(verbose) console.log(`[V] ✔️ Is Compatible`);
+              break;
+            }
+          };
+          
+          if(!ok){
+            //NOT COMPATIBLE
+            //Dont read the rest and delete from file
+            if(verbose) console.log(`[V] ❌ Not Compatible`);
+
+            re.lastIndex = 0;
+            let response = '';
+            while(response = re.exec(file)){
+              file = 
+                file.substr(0, response.index) + 
+                `\u0000`.repeat(re.lastIndex-response.index) + 
+                file.substr(response.index + `\u0000`.repeat(re.lastIndex-response.index).length);
+            }
+
+            break;
+          }else{
+            //COMPATIBLE
+            //Mantain inside content but exclude 
+          }
+        }
+      }
+    };
+
+    return file;
   }
 
   /**
@@ -255,30 +323,42 @@ class MDReader {
    * @param {Object} userConfig - The User configuration
    */
   convert(file, userConfig){
-    //Set UserConfig
-    this.userConfig = userConfig;
+    //Get console Args and set UserConfig
+    this.setEnv(process.argv, userConfig);
+    const { verbose, silent } = this.cmd;
 
     //Get the File
-    console.log(`🌀 MDReader v0.1.0 🌀`);
-    console.log(`⏳ Reading ${file} ...`);
+    if(!silent) console.log(`🌀 MDReader v0.1.0 🌀`);
+    if(!silent) console.log(`⏳ Reading ${file} ...`);
     this.file = fs.readFileSync(file, 'utf-8');
     
     //Convert in Array
-    console.log(`⏳ Converting to Array ...`);
+    if(!silent) console.log(`⏳ Converting to Array ...`);
     this.toArray(this.file);
 
     //Create Data.js File
-    console.log(`⏳ Generating Data.js ...`);
+    if(!silent) console.log(`⏳ Generating Data.js ...`);
     this.toFile(this.result);
 
-    console.log(`✔ All done! 😃`);
+    if(!silent) console.log(`✔ All done! 😃`);
+  }
+
+  /**
+   * Set the Class Environment
+   * Get all CMD args
+   */
+  setEnv(args, config){
+    this.userConfig = config;
+    
+    this.cmd.silent = args.includes('-silent');
+    this.cmd.verbose = args.includes('-verbose');
   }
 
 }
 
 /* TESTING AREA */
 const reader = new MDReader;
-reader.convert(process.argv[2], require('./userSys.config.js/index.js.js.js'));
+reader.convert(process.argv[2], require('./userConfig'));
 /* TESTING AREA */
 
 module.exports = MDReader;

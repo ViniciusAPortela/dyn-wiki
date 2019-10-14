@@ -15,15 +15,15 @@
  */
 
 module.exports = {
-    'only64': {
+    only64: {
         arch: [
             'x64',
             '64',
             'amd64'
-        ]
+        ],
     },
 
-    'only32': {
+    only32: {
         arch: [
             'x86',
             '32',
@@ -31,13 +31,13 @@ module.exports = {
         ]
     },
 
-    'onlyLinux': {
+    onlyLinux: {
         os: [
             'linux'
         ]
     },
 
-    'onlyWindows': {
+    onlyWindows: {
         os: [
             'linux'
         ]
