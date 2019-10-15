@@ -428,6 +428,7 @@ class MDReader {
    * Converts a Given File to Readable Data for PageRender
    * @param {string} file - The Markdown File to Read
    * @param {Object} userConfig - The User configuration
+   * @returns - An Object With all Content
    */
   convert(file, userConfig){
     //To meansure Process Time
@@ -453,8 +454,11 @@ class MDReader {
     //To meansure Process Time
     let end = process.hrtime(start);
     if(!silent) console.log(`🕓 All work done in ${end[1]/1000000}ms`);
-   
     if(!silent) console.log(`✔  All done! 😃`);
+
+    //Return the Array
+    //It'll be readed by Node Server and 
+    return(this.result);
   }
 
   /**
