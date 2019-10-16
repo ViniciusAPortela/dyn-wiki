@@ -2,9 +2,9 @@
  *   NEXTJS CONFIG FILE
 */
 
+const withImage = require('next-images');
 const withCSS = require('@zeit/next-css');
-const withImages = require('next-images');
 
-module.exports = withCSS(withImages({
-  cssModules: true
+module.exports = withCSS(withImage({
+  useFileSystemPublicRoutes: true, // Change to False, to don't read pages/
 }));

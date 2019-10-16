@@ -1,6 +1,0 @@
-# Disallow to acess user inserted Pages & images
-# Just Accept the React Pages
-
-User-agent: *
-Disallow: /pages/*
-Disallow: /images/*
