@@ -1,33 +1,25 @@
 #!version: 1.0.0
 #!article_version: 1.0.0
-#!title: Como instalar o Xampp
-#!desc: Aprenda como instalar o xampp em sua máquina
+#!title: Como atualizar o kernel linux
+#!desc: Aprenda como atualizar o kernel do seu linux
 #!lang: pt
 
-# #1 Baixando o XAMPP
-Para instalar o xampp, basta baixar seu instalador:
+# #1 Adicionar Repositório
 
-<only32>
-	<cmd>wget https://ufpr.dl.sourceforge.net/project/xampp/XAMPP%20Linux/7.0.8/xampp-linux-7.0.8-0-installer.run -O xampp-installer.run</cmd>
-</only32>
-<only64>
-	<cmd>wget "https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/7.3.7/xampp-linux-x64-7.3.7-1-installer.run/download"	-O xampp-installer.run</cmd>
-</only64>
+A forma mais fácil de atualizar o kernel do linux é com o software ukuu, para instalá-lo, basta adicionar o repositório:
 
-# #2 Instalando o XAMPP
-Mude as permissões para permitir executá-lo:
-<cmd>chmod +x xampp-installer.run</cmd>
+<cmd>apt-add-repository ppa:teejee2008/ppa</cmd>
 
-E por fim, execute-o:
-<cmd sudo>./xampp-installer.run</cmd>
+<cmd>sudo apt update</cmd>
 
-</img src='xampp.png'>
+# #2 Instalar ukuu
+<cmd>apt install ukuu</cmd>
+
+# #3 Escolher Versão e Instalar
+</img src='ukuu.png'>
+
+Após abrir o programa, basta clicar na versão que deseja instalar e apertar em <i>"Install"</i>
 
 <scripts>
-	<only32>
-		</file tag='script-file' src='script_x86.sh' name='install_xampp.sh'>
-	</only32>
-	<only64>
-		</file tag='script-file' src='script_64.sh' name='install_xampp.sh'>
-	</only64>
+	</file tag='script-file' src='ukuu_install.sh' name='ukuu_install.sh'>
 </scripts>

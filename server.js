@@ -18,26 +18,12 @@ app.prepare().then(()=>{
   //server.use(bodyParser.urlencoded({extended: true}));
 
   //Redirect Test
-  server.get('/wiki', (req, res) => {
-    return app.render(req, res, '/wiki', req.query)
-  });
-
   server.get('/', (req, res) => {
-    return app.render(req, res, '/index', req.query)
-  });
-
-  /*server.get('/getApi', (req, res) => {
-    return app.render(req, res, '/getApi', req.query)
-  });
-
-  server.get('/google3af1ff7b04f1bf61.html', (req, res) => {
-    fs.readFile('/google3af1ff7b04f1bf61.html', 'utf8', (err, text) => {
-        res.send(text);
-    });
+    return app.render(req, res, '/', req.query)
   });
 
   server.get('/api', (req, res) => {
-    const data = require('./data');
+    const data = require('./constants/data');
     return res.send(data);
   });
 
@@ -45,7 +31,6 @@ app.prepare().then(()=>{
     //Check if exits
     fs.access(`articles/${req.params.article}/${req.params.version}/article.${req.params.lang}.md`, error => {
       if(!error){
-        //Exits, Check if Lang Version Exists
         req.url = `/wiki/article/${req.params.article}`;
         console.log(req.url);
         console.log('ok');
@@ -56,7 +41,7 @@ app.prepare().then(()=>{
         return app.render(req, res, '/_error', req.query)
       }
     });
-  });*/
+  });
 
   server.all('*', (req, res) => {
     res.status(404);

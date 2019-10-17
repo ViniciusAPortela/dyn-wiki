@@ -1,6 +1,4 @@
-import React from 'react';
-
-export default {
+module.exports = {
   title: 'Atualizando o Kernel do Linux',
   desc: 'Aprenda a atualizar o kernel do seu Linux',
   lang: 'pt',
@@ -51,7 +49,7 @@ export default {
   
     {
       tag: 'content',
-      data: <>Após abrir o programa, basta clicar na versão que deseja instalar e apertar em <i>"Install"</i></>
+      data: '<>Após abrir o programa, basta clicar na versão que deseja instalar e apertar em <i>"Install"</i></>'
     },
   
     {

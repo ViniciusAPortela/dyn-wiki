@@ -416,7 +416,7 @@ class MDReader {
    * @param {Object} array - The Array of Objects 
    */
   toFile(array){
-    let content = `export default ` + JSON.stringify(array);
+    let content = `module.exports = ` + JSON.stringify(array);
     fs.writeFileSync('data.js', content);
   }
 
@@ -475,8 +475,8 @@ class MDReader {
 }
 
 /* TESTING AREA */
-const reader = new MDReader;
-reader.convert(process.argv[2], require('./userConfig'));
+//const reader = new MDReader;
+//reader.convert(process.argv[2], require('./userConfig'));
 /* TESTING AREA */
 
-module.exports = MDReader;
+module.exports = new MDReader;
