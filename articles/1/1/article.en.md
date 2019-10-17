@@ -15,7 +15,7 @@ Para instalar o xampp, basta baixar seu instalador:
 </only64>
 
 # #2 Installing XAMPP
-Change the permissions to allow executeing
+Change the permissions to allow executing
 <cmd>chmod +x xampp-installer.run</cmd>
 
 Finally, execute it:

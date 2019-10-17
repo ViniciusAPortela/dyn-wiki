@@ -73,4 +73,13 @@
   color: white;
 }
 
-#solutions-t{}
+/* MOBILE ONLY */
+@media only screen and (max-width: 768px){
+  #topwiki-bg{
+    margin-top: 5rem;
+  }
+
+  #topwiki-container{
+    padding: 1rem;
+  }
+}

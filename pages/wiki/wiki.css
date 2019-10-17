@@ -10,6 +10,13 @@
   padding-bottom: 4.5rem;
 }
 
+/* MOBILE ONLY */
+@media only screen and (max-width: 768px){
+  #bg{
+    padding-bottom: 2rem;
+  }
+}
+
 #project-name{
   font-family: 'Lobster';
   color: white;
