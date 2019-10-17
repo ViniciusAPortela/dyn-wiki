@@ -24,9 +24,11 @@ export default class Index extends React.Component{
 							return <li>{res2}<ul>{version.langs.map(lang => {
 								console.log(lang);
 								return(
-                                    <Link href={`/wiki/${res}/${res2}/${lang}`}>
+                                    <Link href={`/wiki/${res}/${res2}/${lang.abr}`}>
                                         <a>
-                                            <li>{lang}</li>
+                                            <li>{lang.title} [{lang.abr}]<br/>
+                                                {lang.desc}
+                                            </li>
                                         </a>
                                     </Link>
 								);

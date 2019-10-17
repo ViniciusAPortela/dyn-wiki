@@ -1,8 +1,8 @@
+import reader from '../MDReader/MDReader';
 const fs = require('fs');
 
 /**
  * @class Article
- * 
  * Manipulate article info, directory, etc
  */
 class Article {
@@ -42,7 +42,11 @@ class Article {
                 langs.forEach(lang => {
                     let curLang = /(?:[.])(.*?)(?:[.])/gm.exec(lang);
 
-                    res[article_index].versions[version_index].langs.push(curLang[1]);
+                    //res[article_index].versions[version_index].langs.push(curLang[1]);
+                    let title = reader.config(folder+article+'/'+version+'/'+lang, 'title');
+                    let desc = reader.config(folder+article+'/'+version+'/'+lang, 'desc');
+                    console.log(title, desc);
+                    res[article_index].versions[version_index].langs.push({abr:curLang[1],title, desc});
                 });
             });
         });

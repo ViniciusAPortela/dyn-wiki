@@ -493,9 +493,9 @@ class MDReader {
 }
 
 /* TESTING AREA */
-const reader = new MDReader;
+//const reader = new MDReader;
 //reader.convert(process.argv[2], require('./userConfig'));
-console.log(reader.config('article.md','desc'));
+//console.log(reader.config('article.md','desc'));
 /* TESTING AREA */
 
 module.exports = new MDReader;
