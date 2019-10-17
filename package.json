@@ -16,13 +16,9 @@
     "react-dom": "^16.10.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "dev": "node server.js",
-    "next_build": "next build",
-    "next_start": "NODE_ENV=production node server.js"
+    "start": "NODE_ENV=production node server.js",
+    "build": "next build",
+    "dev": "node server.js"
   },
   "eslintConfig": {
     "extends": "react-app"

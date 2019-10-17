@@ -419,8 +419,7 @@ class MDReader {
     let content = `module.exports = ` + JSON.stringify(array);
     fs.writeFileSync('data.js', content);
   }
-
-  //TODO: Create the SystemOnly reader (as only32 / only64)
+  
   //Just Identify and Erase what is not supported in the user system
   //Then is the Common Process
 
@@ -465,18 +464,38 @@ class MDReader {
    * Set the Class Environment
    * Get all CMD args
    */
-  setEnv(args, config){
+  setEnv(args=[], config={}){
     this.userConfig = config;
     
     this.cmd.silent = args.includes('-silent');
     this.cmd.verbose = args.includes('-verbose');
   }
 
+  /**
+   * Get a Certain Config from MD File
+   * @param {String} filename - The name of file to Read
+   * @param {String} config - The Configuration Name to Get from MD File
+   * @param {Array} args - The CMD Args (verbose, silent ...)
+   * @return - The Value of Choosed Config (If has)
+   */
+  config(filename, config, args=[]){
+    this.setEnv(args);
+    let file = fs.readFileSync(filename, 'utf-8');
+
+    let res = '';
+    regex.config.lastIndex = 0;
+    while(res = regex.config.exec(file)){
+      if(res[1] === config) return res[2];
+    }
+    return false;
+  }
+
 }
 
 /* TESTING AREA */
-//const reader = new MDReader;
+const reader = new MDReader;
 //reader.convert(process.argv[2], require('./userConfig'));
+console.log(reader.config('article.md','desc'));
 /* TESTING AREA */
 
 module.exports = new MDReader;

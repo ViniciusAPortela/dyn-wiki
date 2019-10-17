@@ -12,7 +12,10 @@ export default class Wiki extends React.Component {
     //Get content of requested article
     const reader = require('../../services/MDReader/MDReader');
 
-    const data = await reader.convert(`articles/${query.article}/${query.version}/article.${query.lang}.md`,'services/MDReader/userConfig.js');
+    const userConfig = require('../../services/MDReader/userConfig.js')
+    
+
+    const data = await reader.convert(`articles/${query.article}/${query.version}/article.${query.lang}.md`,userConfig);
     //const d = require('../../services/MDReader/data');
     //const data = d.default;
     return{ data, query }
