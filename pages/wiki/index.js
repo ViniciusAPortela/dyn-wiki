@@ -8,16 +8,15 @@ import topBg from '../../assets/page/title-bg.png';
 import './wiki.css';
 
 export default class Wiki extends React.Component {
-  static async getInitialProps({query}){
+  static getInitialProps({query}){
     //Get content of requested article
     const reader = require('../../services/MDReader/MDReader');
 
-    const userConfig = require('../../services/MDReader/userConfig.js')
+    const userConfig = require('../../services/MDReader/userConfig.js');
+    const file = `articles/${query.article}/${query.version}/article.${query.lang}.md`;
     
-
-    const data = await reader.convert(`articles/${query.article}/${query.version}/article.${query.lang}.md`,userConfig);
-    //const d = require('../../services/MDReader/data');
-    //const data = d.default;
+    const data = reader.convert(file, userConfig);
+    //console.log(JSON.stringify(data));
     return{ data, query }
   }
 

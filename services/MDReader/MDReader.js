@@ -150,6 +150,7 @@ class MDReader {
    */
   getConfigs(file){
     let res;
+    regex.config.lastIndex = 0;
     do{
       res = regex.config.exec(file);
       if(res) this.result[res[1]] = res[2];
@@ -237,7 +238,6 @@ class MDReader {
             file.substr(0, response.index) + 
             `\u0000`.repeat(regex.title.lastIndex-response.index) + 
             file.substr(response.index + `\u0000`.repeat(regex.title.lastIndex-response.index).length);
-          //(file.length);
         }
       }while(response);
 
@@ -259,7 +259,6 @@ class MDReader {
           file.substr(0, response.index) + 
           `\u0000`.repeat(re.lastIndex-response.index) + 
           file.substr(response.index + `\u0000`.repeat(re.lastIndex-response.index).length);
-        //console.log(file.length);
       }
 
       //Return the new file
@@ -339,11 +338,6 @@ class MDReader {
         }
         //Add file
         res.data = res.data.concat(attrs);
-
-        /*file = 
-          file.substr(0, response.index) + 
-          `\u0000`.repeat(regex.tag.selfClose.lastIndex-response.index) + 
-          file.substr(response.index + `\u0000`.repeat(regex.tag.selfClose.lastIndex-response.index).length);*/
       }
 
       //Return the new file
@@ -373,12 +367,13 @@ class MDReader {
       if(item.index > higher) higher = item.index;
     })
 
+    /* FOR DEBUG */
     //console.log(`higher: ${higher}`);
+    /* FOR DEBUG */
 
     //Look for the lower index
     var length = this.preData.length;
 
-    //console.log(length);
     for(let i=0 ; i<length ; i++){
       /* FOR DEBUG */
       //console.log('--------------------');
@@ -402,7 +397,7 @@ class MDReader {
       });
 
       /* FOR DEBUG */
-      //console.log(`SUCESSO - ADICIONADO: ${this.preData[itemIndex]}`);
+      //console.log(`SUCESS - ADDED: ${this.preData[itemIndex]}`);
       //this.preData[itemIndex].data = `[${i}][${lower}] `+this.preData[itemIndex].data
       /* FOR DEBUG */
 
@@ -456,7 +451,7 @@ class MDReader {
     if(!silent) console.log(`✔  All done! 😃`);
 
     //Return the Array
-    //It'll be readed by Node Server and 
+    //It'll be readed by Node Server and
     return(this.result);
   }
 
