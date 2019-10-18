@@ -1,5 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
+const fs = require('fs');
 
 import { PageRender } from '../../components';
 //import Data from '../../services/MDReader/data';
@@ -28,7 +30,9 @@ export default class Wiki extends React.Component {
           <title>{data.title}</title>
         </Head>
         <div id='bg'>
-          <span id='project-name'>Dyn-Wiki</span>
+          <a href="/">
+            <span id='project-name'>Dyn-Wiki</span>
+          </a>
           <img alt='' src={topBg} id='top-bg'/>
           <PageRender data={data}/>
         </div>

@@ -1,0 +1,29 @@
+64 bit MacOS + 64 bit Safari or 32 bit Chrome:
+window.navigator.platform=MacIntel
+
+32 bit windows + safari:
+window.navigator.platform=Win32
+
+64 bit Windows + 64 bit IE:
+window.navigator.platform=Win64
+window.navigator.cpuClass=x64
+
+64 bit Windows + 32 bit IE:
+window.navigator.platform=Win32
+window.navigator.cpuClass=x86
+
+64 bit Windows + 32 Firefox (or Chrome):
+window.navigator.platform=Win32
+
+32 bit linux mint (i686) + firefox:
+window.navigator.platform=Linux i686
+
+64 bit Ubuntu (x86_64) + 32 bit Chrome:
+window.navigator.platform=Linux i686
+
+64 bit Ubuntu + 64 bit Epiphany:
+window.navigator.platform=Linux x86_64
+
+deployJava.isWin64OS = function() {
+    return navigator.userAgent.indexOf('WOW64')>-1 || window.navigator.platform=='Win64';
+};
