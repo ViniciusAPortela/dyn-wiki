@@ -12,15 +12,20 @@ const app = next({ dev });
 //const handle = app.getRequestHandler();
 
 //Execute server-side rendering
-const data = articles.getArticles('./articles/');
-let content = `module.exports = ` + JSON.stringify(data);
-fs.writeFileSync('articles-data.js', content);
+//const data = articles.getArticles('./articles/');
+//let content = `module.exports = ` + JSON.stringify(data);
+//fs.writeFileSync('articles-data.js', content);
 
 setInterval(()=>{
   console.log('updating articles');
-  const data = articles.getArticles('./articles/');
-  let content = `module.exports = ` + JSON.stringify(data);
-  fs.writeFileSync('articles-data.js', content);
+  let updated_data = articles.getArticles('./articles/');
+  let updated_content = JSON.stringify(updated_data);
+  //console.log(JSON.stringify(updated_content));
+  fs.writeFile('articles-data.js', updated_content, {flag: 'w'}, (err)=>{
+    console.log(JSON.stringify(updated_data).length);
+    if(err) throw error;
+    console.log('saved!');
+  });
 }, 10000);
 
 app.prepare().then(()=>{
@@ -40,8 +45,10 @@ app.prepare().then(()=>{
   });
 
   server.get('/articles', (req, res) => {
-    const data = require('./articles-data.js');
-    return res.send(data);
+    fs.readFile("articles-data.js", "utf8", function(err, data){
+        if(err) throw err;
+        res.send(data);
+    });
   });
 
   server.get('/wiki/:article/:version/:lang', (req, res) =>{
