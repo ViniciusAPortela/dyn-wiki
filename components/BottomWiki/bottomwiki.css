@@ -1,0 +1,15 @@
+#bottomwiki{
+  margin-top: 2rem;
+  margin-bottom: .3rem;
+  display: flex;
+  justify-content: center;
+  max-width: 12rem;
+}
+
+/* MOBILE ONLY */
+@media only screen and (max-width: 768px){
+  #bottomwiki{
+    margin-top: .7rem;
+    margin-bottom: .1rem;
+  }
+}

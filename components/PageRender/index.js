@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box } from '@material-ui/core';
 
-import { TopWiki, Title, Content, CommandLine, ScriptList, ScriptFile } from '../';
+import { TopWiki, Title, Content, CommandLine, ScriptList, ScriptFile, BottomWiki } from '../';
 
 export default class PageRender extends React.Component{
   
@@ -16,6 +16,9 @@ export default class PageRender extends React.Component{
     
     //Add Page Body
     content.push(<Box boxShadow={1} id='page'>{this.inside(this.props.data)}</Box>);
+
+    //Add Bottom Page
+    content.push(<BottomWiki/>);
     return content;
   }
 

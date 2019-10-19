@@ -9,7 +9,7 @@ const dev = process.env.NODE_ENV !== 'production'
 // If is in the dev mode or production
 // It is like: app = express();
 const app = next({ dev });
-//const handle = app.getRequestHandler();
+const handle = app.getRequestHandler();
 
 //Execute server-side rendering
 //const data = articles.getArticles('./articles/');
@@ -37,6 +37,12 @@ app.prepare().then(()=>{
   //Redirect Test
   server.get('/', (req, res) => {
     return app.render(req, res, '/', req.query)
+  });
+
+  server.get('/favicon.ico', (req, res) => {
+    res.contentType('image/jpeg');
+    const data = fs.readFileSync('./favicon.ico');
+    return res.send(data);
   });
 
   server.get('/api', (req, res) => {
@@ -70,6 +76,7 @@ app.prepare().then(()=>{
   server.all('*', (req, res) => {
     res.status(404);
     return app.render(req, res, '/_error', req.query)
+    //return handle(req, res, req.query);
   });
 
   server.listen(process.env.PORT || 5000, err => {

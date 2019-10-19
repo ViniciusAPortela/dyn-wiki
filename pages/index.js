@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import fetch from 'isomorphic-unfetch'
+import Head from 'next/head';
 
 export default class Index extends React.Component{
     state = {
@@ -16,8 +17,8 @@ export default class Index extends React.Component{
         let arch = this.getArch();
 
         console.log(window.location.hostname);
-        //const res = await fetch('http://'+window.location.hostname+':5000/articles');
-        const res = await fetch('http://'+window.location.hostname+'/articles');
+        const res = await fetch('http://'+window.location.hostname+':5000/articles');
+        //const res = await fetch('http://'+window.location.hostname+'/articles');
         let data = await res.json();
         console.log('BBB: ', data);
 
@@ -60,38 +61,43 @@ export default class Index extends React.Component{
         console.log(data.length !== 0);
 
         return(
-            <div>
-                <h1>Dyn-Wiki - A dynamic Wiki for easy reading</h1>
-                Dados pelo Navegador:<br/>
-                Sistema Operacional: {this.state.os}<br/>
-                Idioma: {this.state.lang}<br/>
-                Arquitetura: {this.state.arch}
-                <br/><br/>
-				Artigos:
-                <ul>
-                {
-                    data.length !== 0 ? data.map(article =>{
-						let res = article.article;
-                        return <li>{res}<ul>{article.versions.map(version => {
-                            console.log(version);
-                            let res2 = version.version;
-							return <li>{res2}<ul>{version.langs.map(lang => {
-								console.log(lang);
-								return(
-                                    <Link href={`/wiki/${res}/${res2}/${lang.abr}`}>
-                                        <a>
-                                            <li>{lang.title} [{lang.abr}]<br/>
-                                                {lang.desc}
-                                            </li>
-                                        </a>
-                                    </Link>
-								);
-							})}</ul></li>
-                        })}</ul></li>
-                    })
-                : null } 
-                </ul>
-            </div>
+            <>
+                <Head>
+                    <title>Dyn-Wiki - A dynamic Wiki for easy reading</title>
+                </Head>
+                <div>
+                    <h1>Dyn-Wiki - A dynamic Wiki for easy reading</h1>
+                    Dados pelo Navegador:<br/>
+                    Sistema Operacional: {this.state.os}<br/>
+                    Idioma: {this.state.lang}<br/>
+                    Arquitetura: {this.state.arch}
+                    <br/><br/>
+                    Artigos:
+                    <ul>
+                    {
+                        data.length !== 0 ? data.map(article =>{
+                            let res = article.article;
+                            return <li>{res}<ul>{article.versions.map(version => {
+                                console.log(version);
+                                let res2 = version.version;
+                                return <li>{res2}<ul>{version.langs.map(lang => {
+                                    console.log(lang);
+                                    return(
+                                        <Link href={`/wiki/${res}/${res2}/${lang.abr}`}>
+                                            <a>
+                                                <li>{lang.title} [{lang.abr}]<br/>
+                                                    {lang.desc}
+                                                </li>
+                                            </a>
+                                        </Link>
+                                    );
+                                })}</ul></li>
+                            })}</ul></li>
+                        })
+                    : null } 
+                    </ul>
+                </div>
+            </>
         );
     }
 }

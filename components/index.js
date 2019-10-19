@@ -8,6 +8,7 @@ import ScriptFile from './ScriptFile';
 import TopWiki from './TopWiki';
 import PageRender from './PageRender';
 import Dropdown from './Dropdown';
+import BottomWiki from './BottomWiki';
 
 export {
   Title, 
@@ -20,4 +21,5 @@ export {
   TopWiki,
   PageRender,
   Dropdown,
+  BottomWiki
 };
