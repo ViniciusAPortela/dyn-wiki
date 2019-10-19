@@ -1,10 +1,8 @@
 import React from 'react';
 import Head from 'next/head';
-import Link from 'next/link';
-const fs = require('fs');
 
 import { PageRender } from '../../components';
-//import Data from '../../services/MDReader/data';
+import articles from '../../services/Articles/Articles';
 
 import topBg from '../../assets/page/title-bg.png';
 import './wiki.css';
@@ -18,9 +16,16 @@ export default class Wiki extends React.Component {
     const file = `articles/${query.article}/${query.version}/article.${query.lang}.md`;
     
     const data = reader.convert(file, userConfig);
-    //console.log(JSON.stringify(data));
+    const versions = articles.getVersions(`articles/${query.article}/`);
+    const langs = articles.getLangs(`articles/${query.article}/${query.version}/`);
+
+    data.versions = versions;
+    data.langs = langs; 
+
+    console.log(versions, langs);
+
     return{ data, query }
-  }
+    }
 
   render(){
     const { data } = this.props;

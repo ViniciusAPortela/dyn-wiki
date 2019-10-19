@@ -11,6 +11,39 @@ class Article {
     }
 
     /**
+     * Get all versions available of a article
+     * @param {String} folder - Path to Folder 
+     * @return {Array} - List of Versions
+     */
+    getVersions(folder){
+        let res = [];
+
+        let versions = fs.readdirSync(folder);
+        versions.forEach((version)=>{
+            res.push(version);
+        });
+        
+        return res;
+    }
+
+    /**
+     * Get all languages of a specific article version
+     * @param {String} folder - Path to Folder
+     * @return {Array} - List of Languages
+     */
+    getLangs(folder){
+        let res = [];
+
+        let langs = fs.readdirSync(folder);
+        langs.forEach((lang)=>{
+            let curLang = /(?:[.])(.*?)(?:[.])/gm.exec(lang);
+            res.push(curLang[1]);
+        });
+        
+        return res;
+    }
+
+    /**
      * Get all articles inside a folder
      * @return Array with all Articles
      */

@@ -7,6 +7,7 @@ import ScriptList from './ScriptList';
 import ScriptFile from './ScriptFile';
 import TopWiki from './TopWiki';
 import PageRender from './PageRender';
+import Dropdown from './Dropdown';
 
 export {
   Title, 
@@ -17,5 +18,6 @@ export {
   ScriptList,
   ScriptFile,
   TopWiki,
-  PageRender
+  PageRender,
+  Dropdown,
 };
