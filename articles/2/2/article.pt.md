@@ -4,8 +4,6 @@
 #!desc: Aprenda como atualizar o kernel do seu linux
 #!lang: pt
 
-# Veja a versão atualizada :) -> http://localhost:5000/wiki/2/2/pt
-
 # #1 Adicionar Repositório
 
 A forma mais fácil de atualizar o kernel do linux é com o software ukuu, para instalá-lo, basta adicionar o repositório:

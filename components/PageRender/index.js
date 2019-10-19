@@ -12,7 +12,7 @@ export default class PageRender extends React.Component{
     let content = [];
 
     //Create the page and put it's title
-    content.push(<TopWiki data={this.props.data} title={this.props.data.title}/>);
+    content.push(<TopWiki query={this.props.query} data={this.props.data} title={this.props.data.title}/>);
     
     //Add Page Body
     content.push(<Box boxShadow={1} id='page'>{this.inside(this.props.data)}</Box>);

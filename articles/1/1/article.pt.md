@@ -1,5 +1,5 @@
 #!version: 1.0.0
-#!article_version: 1.0.0
+#!article_version: 1
 #!title: Como instalar o Xampp
 #!desc: Aprenda como instalar o xampp em sua máquina
 #!lang: pt

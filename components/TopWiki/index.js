@@ -8,8 +8,11 @@ import './topwiki.css';
 export default class TopWiki extends React.Component{
 
   goTo = (item) => {
-    console.log('goTo: ', item);
-    Router.push(`/`);
+    const { data, query } = this.props;
+
+    //Check changed version or language
+    let isNum = !isNaN(item);
+    Router.push(`/wiki/${query.article}/${isNum?item: data.article_version}/${(isNum)?query.lang:item.toLowerCase()}`);
   }
 
   render(){
@@ -27,12 +30,12 @@ export default class TopWiki extends React.Component{
           <span id='title'>{this.props.title}</span>
           <Box id='config-row'>
             <Button id='config'></Button>
-            <Dropdown action={this.goTo} className='config-side' id='version' title='1.0'>
+            <Dropdown action={this.goTo} className='config-side' id='version' title={this.props.query.version}>
               {versions.map((item)=>{
                 return <>{item}</>
               })}
             </Dropdown>
-            <Dropdown action={this.goTo} className='config-side' id='language' title='PT'>
+            <Dropdown action={this.goTo} className='config-side' id='language' title={this.props.query.lang}>
               {langs.map((item)=>{
                 return <>{item}</>
               })}

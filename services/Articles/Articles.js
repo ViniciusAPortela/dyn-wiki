@@ -1,4 +1,4 @@
-import reader from '../MDReader/MDReader';
+const reader = require('../MDReader/MDReader');
 const fs = require('fs');
 
 /**
@@ -7,7 +7,7 @@ const fs = require('fs');
  */
 class Article {
     cmd = {
-        verbose: true,
+        verbose: false,
     }
 
     /**
@@ -78,13 +78,13 @@ class Article {
                     //res[article_index].versions[version_index].langs.push(curLang[1]);
                     let title = reader.config(folder+article+'/'+version+'/'+lang, 'title');
                     let desc = reader.config(folder+article+'/'+version+'/'+lang, 'desc');
-                    console.log(title, desc);
+                    //console.log(title, desc);
                     res[article_index].versions[version_index].langs.push({abr:curLang[1],title, desc});
                 });
             });
         });
 
-        console.log(JSON.stringify(res));
+        //console.log(JSON.stringify(res));
         return(res);
     }
 }

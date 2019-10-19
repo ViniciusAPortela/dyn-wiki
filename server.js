@@ -1,7 +1,7 @@
+const articles = require('./services/Articles/Articles');
 const express = require('express');
 const next = require('next');
 const fs = require('fs');
-//var bodyParser = require('body-parser');
 
 // Get NODE_ENV
 const dev = process.env.NODE_ENV !== 'production'
@@ -10,6 +10,18 @@ const dev = process.env.NODE_ENV !== 'production'
 // It is like: app = express();
 const app = next({ dev });
 //const handle = app.getRequestHandler();
+
+//Execute server-side rendering
+const data = articles.getArticles('./articles/');
+let content = `module.exports = ` + JSON.stringify(data);
+fs.writeFileSync('articles-data.js', content);
+
+setInterval(()=>{
+  console.log('updating articles');
+  const data = articles.getArticles('./articles/');
+  let content = `module.exports = ` + JSON.stringify(data);
+  fs.writeFileSync('articles-data.js', content);
+}, 10000);
 
 app.prepare().then(()=>{
   const server = express();
@@ -24,6 +36,11 @@ app.prepare().then(()=>{
 
   server.get('/api', (req, res) => {
     const data = require('./constants/data');
+    return res.send(data);
+  });
+
+  server.get('/articles', (req, res) => {
+    const data = require('./articles-data.js');
     return res.send(data);
   });
 

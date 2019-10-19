@@ -25,10 +25,10 @@ export default class Wiki extends React.Component {
     console.log(versions, langs);
 
     return{ data, query }
-    }
+  }
 
   render(){
-    const { data } = this.props;
+    const { data, query } = this.props;
     return(
       <>
         <Head>
@@ -39,7 +39,7 @@ export default class Wiki extends React.Component {
             <span id='project-name'>Dyn-Wiki</span>
           </a>
           <img alt='' src={topBg} id='top-bg'/>
-          <PageRender data={data}/>
+          <PageRender data={data} query={query}/>
         </div>
       </>
     );

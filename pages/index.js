@@ -1,25 +1,25 @@
 import React from 'react';
 import Link from 'next/link';
+import fetch from 'isomorphic-unfetch'
 
 export default class Index extends React.Component{
     state = {
         os: <></>,
         lang: <></>,
         arch: <></>,
+        data: [],
     }
 
-    static getInitialProps(){
-        const articles = require('../services/Articles/Articles');
-        const data = articles.getArticles('articles/');
-        return { data };
-    }
+    async componentDidMount(){
+        let os = this.getOS();
+        let lang = navigator.language || navigator.userLanguage
+        let arch = this.getArch();
 
-    componentDidMount(){
-          let os = this.getOS();
-          let lang = navigator.language || navigator.userLanguage
-          let arch = this.getArch();
+        const res = await fetch('http://localhost:5000/articles');
+        let data = await res.json();
+        console.log('BBB: ', data);
 
-        this.setState({os, lang, arch});
+        this.setState({os, lang, arch, data});
     }
 
     getOS() {
@@ -52,7 +52,11 @@ export default class Index extends React.Component{
     }
 
     render(){
-        const { data } = this.props;
+        const { data } = this.state;
+
+        console.log(data);
+        console.log(data.length !== 0);
+
         return(
             <div>
                 <h1>Dyn-Wiki - A dynamic Wiki for easy reading</h1>
@@ -64,7 +68,7 @@ export default class Index extends React.Component{
 				Artigos:
                 <ul>
                 {
-                    data.map(article =>{
+                    data.length !== 0 ? data.map(article =>{
 						let res = article.article;
                         return <li>{res}<ul>{article.versions.map(version => {
                             console.log(version);
@@ -83,7 +87,7 @@ export default class Index extends React.Component{
 							})}</ul></li>
                         })}</ul></li>
                     })
-                }
+                : null } 
                 </ul>
             </div>
         );
