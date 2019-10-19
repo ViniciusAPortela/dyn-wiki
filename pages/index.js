@@ -8,7 +8,7 @@ export default class Index extends React.Component{
         arch: <></>,
     }
 
-    static async getInitialProps(){
+    static getInitialProps(){
         const articles = require('../services/Articles/Articles');
         const data = articles.getArticles('articles/');
         return { data };

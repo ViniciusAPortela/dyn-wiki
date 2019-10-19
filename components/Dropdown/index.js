@@ -10,8 +10,14 @@ export default function Dropdown(props) {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose = (item) => {
     setAnchorEl(null);
+
+    Object.values(item).forEach((item)=>{
+      if(item instanceof Object) 
+        if(Object.keys(item).indexOf('children') !== -1)
+          props.action(item.children);
+    });
   };
 
   return (
@@ -26,7 +32,9 @@ export default function Dropdown(props) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>{props.children}</MenuItem>
+        {props.children ? props.children.map((item) => {
+          return <MenuItem onClick={()=>{handleClose(item)}}>{item}</MenuItem>
+        }) : null}
       </Menu>
     </div>
   );
