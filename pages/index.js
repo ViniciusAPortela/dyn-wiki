@@ -15,7 +15,8 @@ export default class Index extends React.Component{
         let lang = navigator.language || navigator.userLanguage
         let arch = this.getArch();
 
-        const res = await fetch('http://localhost:5000/articles');
+        console.log(window.location.hostname);
+        const res = await fetch('http://'+window.location.hostname+':5000/articles');
         let data = await res.json();
         console.log('BBB: ', data);
 
