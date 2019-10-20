@@ -1,8 +1,9 @@
 /**
  * A simple function for copying strings to clipboard
  * @param {String} text - The text to copy to clipboard
+ * @param {Function} changeOpen - Change the Open for Snackbar
  */
-export default function copyToClip(text) {
+export default function copyToClip(text, changeOpen) {
   let textEl = document.createElement("textarea");
   textEl.value = text;
   document.body.appendChild(textEl);
@@ -11,6 +12,7 @@ export default function copyToClip(text) {
   try{
     document.execCommand('copy');
     console.log('copied to clipboard');
+    changeOpen(true);
   }catch(e){console.error(e)}
 
   document.body.removeChild(textEl);

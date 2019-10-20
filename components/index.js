@@ -9,6 +9,7 @@ import TopWiki from './TopWiki';
 import PageRender from './PageRender';
 import Dropdown from './Dropdown';
 import BottomWiki from './BottomWiki';
+import BasicSnackbar from './Snackbar/Basic';
 
 export {
   Title, 
@@ -21,5 +22,6 @@ export {
   TopWiki,
   PageRender,
   Dropdown,
-  BottomWiki
+  BottomWiki,
+  BasicSnackbar
 };
