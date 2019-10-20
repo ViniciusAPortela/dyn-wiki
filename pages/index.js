@@ -15,8 +15,13 @@ export default class Index extends React.Component{
         let os = this.getOS();
         let lang = navigator.language || navigator.userLanguage
         let arch = this.getArch();
+        let res = [];
 
-        const res = await fetch('http://'+window.location.hostname+':5000/articles');
+        //Check if is in development or production
+        '_self' in React.createElement('div') ? 
+        res = await fetch('http://'+window.location.hostname+':5000/articles') :
+        res = await fetch('http://'+window.location.hostname+'/articles');
+
         //const res = await fetch('http://'+window.location.hostname+'/articles');
         let data = await res.json();
 
