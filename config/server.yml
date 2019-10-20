@@ -1,0 +1,3 @@
+# Time in ms of cooldown to update article list 
+# 25000 = 25 seg
+updateArticleList: 25000

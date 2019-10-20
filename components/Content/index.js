@@ -4,7 +4,8 @@ import './content.css';
 export default class Content extends React.Component{
   render(){
     return(
-      <span className='content'>{this.props.children}</span>
+      <span className='content' dangerouslySetInnerHTML={{__html: 
+        this.props.children}}></span>
     );
   }
 }

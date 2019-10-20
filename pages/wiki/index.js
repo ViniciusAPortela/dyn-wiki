@@ -21,9 +21,7 @@ export default class Wiki extends React.Component {
     const langs = articles.getLangs(`articles/${query.article}/${query.version}/`);
 
     data.versions = versions;
-    data.langs = langs; 
-
-    console.log(versions, langs);
+    data.langs = langs;
 
     return{ data, query }
   }

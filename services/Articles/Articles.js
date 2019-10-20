@@ -19,6 +19,11 @@ class Article {
         let res = [];
 
         let versions = fs.readdirSync(folder);
+        
+        //Remove Images Folder
+        if(versions.indexOf('images') !== -1)
+        versions.splice(versions.indexOf('images'), 1);
+
         versions.forEach((version)=>{
             res.push(version);
         });
@@ -64,6 +69,10 @@ class Article {
             let versions = fs.readdirSync(folder+article+'/');
             if(verbose) console.log(`[V] Found ${versions.length} Versions inside ${article}`);
 
+            //Remove Images Folder
+            if(versions.indexOf('images') !== -1)
+                versions.splice(versions.indexOf('images'), 1);
+
             versions.forEach((version, version_index) => {
                 res[article_index].versions.push({version, langs: []});
 
@@ -75,16 +84,14 @@ class Article {
                 langs.forEach(lang => {
                     let curLang = /(?:[.])(.*?)(?:[.])/gm.exec(lang);
 
-                    //res[article_index].versions[version_index].langs.push(curLang[1]);
                     let title = reader.config(folder+article+'/'+version+'/'+lang, 'title');
                     let desc = reader.config(folder+article+'/'+version+'/'+lang, 'desc');
-                    //console.log(title, desc);
+
                     res[article_index].versions[version_index].langs.push({abr:curLang[1],title, desc});
                 });
             });
         });
 
-        //console.log(JSON.stringify(res));
         return(res);
     }
 }

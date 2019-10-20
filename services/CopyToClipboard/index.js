@@ -11,7 +11,6 @@ export default function copyToClip(text, changeOpen) {
 
   try{
     document.execCommand('copy');
-    console.log('copied to clipboard');
     changeOpen(true);
   }catch(e){console.error(e)}
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box } from '@material-ui/core';
 
-import { TopWiki, Title, Content, CommandLine, ScriptList, ScriptFile, BottomWiki } from '../';
+import { TopWiki, Title, Content, CommandLine, ScriptList, ScriptFile, BottomWiki, Image } from '../';
 
 export default class PageRender extends React.Component{
   
@@ -34,9 +34,10 @@ export default class PageRender extends React.Component{
       return <Content>{item.data}</Content>
     }else if(item.tag === 'command'){
       //Renders the CommandLine With/Without the Sudo Preffix
-      //NOTE: it not has SudoPreffix for now
-      //TODO: SudoPreffix
       return <CommandLine sudo={item.sudo}>{item.data}</CommandLine>
+    }else if(item.tag === 'image'){
+      //Renders a Image
+      return <Image query={this.props.query} src={item.src}/>
     }else if(item.tag === 'scripts'){
       //Renders the Script List
       return <ScriptList>{this.inside(item)}</ScriptList>

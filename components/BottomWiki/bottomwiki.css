@@ -3,7 +3,7 @@
   margin-bottom: .3rem;
   display: flex;
   justify-content: center;
-  max-width: 12rem;
+  max-width: 10rem;
 }
 
 /* MOBILE ONLY */
@@ -11,5 +11,6 @@
   #bottomwiki{
     margin-top: .7rem;
     margin-bottom: .1rem;
+    max-width: 8rem;
   }
 }

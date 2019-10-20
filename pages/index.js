@@ -16,11 +16,9 @@ export default class Index extends React.Component{
         let lang = navigator.language || navigator.userLanguage
         let arch = this.getArch();
 
-        console.log(window.location.hostname);
         const res = await fetch('http://'+window.location.hostname+':5000/articles');
         //const res = await fetch('http://'+window.location.hostname+'/articles');
         let data = await res.json();
-        console.log('BBB: ', data);
 
         this.setState({os, lang, arch, data});
     }
@@ -57,9 +55,6 @@ export default class Index extends React.Component{
     render(){
         const { data } = this.state;
 
-        console.log(data);
-        console.log(data.length !== 0);
-
         return(
             <>
                 <Head>
@@ -78,10 +73,8 @@ export default class Index extends React.Component{
                         data.length !== 0 ? data.map(article =>{
                             let res = article.article;
                             return <li>{res}<ul>{article.versions.map(version => {
-                                console.log(version);
                                 let res2 = version.version;
                                 return <li>{res2}<ul>{version.langs.map(lang => {
-                                    console.log(lang);
                                     return(
                                         <Link href={`/wiki/${res}/${res2}/${lang.abr}`}>
                                             <a>

@@ -1,5 +1,6 @@
 const fs = require('fs');
 const regex = require('./regex');
+const React = require('react');
 
 //TODO: Identify Content from different languages
 //TODO: Delete all 'file' param, or unecessary Params
@@ -35,7 +36,7 @@ class MDReader {
     //Console Modes
     this.cmd = {
       verbose: false,
-      silent: false,
+      silent: true,
     }
   }
 
@@ -429,7 +430,7 @@ class MDReader {
     let start = process.hrtime();
 
     //Get console Args and set UserConfig
-    this.setEnv(process.argv, userConfig);
+    this.setEnv(process.argv.length>2 || ['-silent'], userConfig);
     const { verbose, silent } = this.cmd;
 
     //Get the File
