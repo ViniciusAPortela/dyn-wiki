@@ -17,8 +17,8 @@ export default class Index extends React.Component{
         let arch = this.getArch();
 
         console.log(window.location.hostname);
-        //const res = await fetch('http://'+window.location.hostname+':5000/articles');
-        const res = await fetch('http://'+window.location.hostname+'/articles');
+        const res = await fetch('http://'+window.location.hostname+':5000/articles');
+        //const res = await fetch('http://'+window.location.hostname+'/articles');
         let data = await res.json();
         console.log('BBB: ', data);
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 
 import { PageRender } from '../../components';
 import articles from '../../services/Articles/Articles';
@@ -35,9 +36,11 @@ export default class Wiki extends React.Component {
           <title>{data.title}</title>
         </Head>
         <div id='bg'>
-          <a href="/">
-            <span id='project-name'>Dyn-Wiki</span>
-          </a>
+          <Link href="/">
+            <a>
+              <span id='project-name'>{'< '}Dyn-Wiki</span>
+            </a>
+          </Link>
           <img alt='' src={topBg} id='top-bg'/>
           <PageRender data={data} query={query}/>
         </div>
