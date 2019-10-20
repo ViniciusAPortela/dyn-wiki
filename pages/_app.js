@@ -21,7 +21,7 @@ class MyApp extends App {
       return(
         <>
           <Head>
-            <link href="https://fonts.googleapis.com/css?family=Belgrano|Lobster|Righteous|Roboto&display=swap" rel="stylesheet"/>
+            <link href="https://fonts.googleapis.com/css?family=Belgrano|Lobster|Righteous|Roboto:300,400&display=swap" rel="stylesheet"/>
           </Head>
           <Component {...pageProps} />
         </>

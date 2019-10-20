@@ -4,7 +4,7 @@
 #!desc: Aprenda como atualizar o kernel do seu linux
 #!lang: pt
 
-# Veja a versão atualizada :) -> http://localhost:5000/wiki/2/2/pt
+# Veja a versão atualizada :), mude no topo!
 
 # #1 Adicionar Repositório
 

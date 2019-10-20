@@ -22,7 +22,11 @@ class Article {
         
         //Remove Images Folder
         if(versions.indexOf('images') !== -1)
-        versions.splice(versions.indexOf('images'), 1);
+            versions.splice(versions.indexOf('images'), 1);
+
+        //Remove Scripts Folder
+        if(versions.indexOf('files') !== -1)
+            versions.splice(versions.indexOf('files'), 1);
 
         versions.forEach((version)=>{
             res.push(version);
@@ -72,6 +76,10 @@ class Article {
             //Remove Images Folder
             if(versions.indexOf('images') !== -1)
                 versions.splice(versions.indexOf('images'), 1);
+
+            //Remove Scripts Folder
+            if(versions.indexOf('files') !== -1)
+                versions.splice(versions.indexOf('files'), 1);
 
             versions.forEach((version, version_index) => {
                 res[article_index].versions.push({version, langs: []});

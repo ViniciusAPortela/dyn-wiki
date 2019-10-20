@@ -48,10 +48,17 @@ app.prepare().then(()=>{
 
   //Api for getting image
   server.get('/articles/:article/images/:img', (req, res) =>{
-    res.contentType('image/jpeg');
+    res.contentType('image/*');
     let file = `articles/${req.params.article}/images/${req.params.img}`;
     const data = fs.readFileSync(file);
     return res.send(data);
+  });
+
+  //Files to Download
+  server.get('/articles/:article/files/:file', (req, res) =>{
+    let file = `articles/${req.params.article}/files/${req.params.file}`;
+    const data = fs.readFileSync(file);
+    return res.download(file);
   });
 
   //Api for getting list of articles

@@ -43,7 +43,7 @@ export default class PageRender extends React.Component{
       return <ScriptList>{this.inside(item)}</ScriptList>
     }else if(item.tag === 'script-file'){
       //Renders the Script File
-      return <ScriptFile/>
+      return <ScriptFile query={this.props.query} src={item.src} name={item.name}/>
     }
   }
 

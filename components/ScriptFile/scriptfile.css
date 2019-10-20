@@ -1,4 +1,18 @@
+.file-container{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
 .file{
-  width: 2.4rem;
-  margin: 1rem 1rem;
+  width: 2.2rem;
+}
+
+.file-name{
+  font-size: .8rem;
+  font-family: 'Roboto';
+  font-weight: lighter;
+  color: #374650;
 }

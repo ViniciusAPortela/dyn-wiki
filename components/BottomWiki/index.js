@@ -3,7 +3,6 @@ import SimpxLogo from '../../assets/page/simpx.png';
 
 import './bottomwiki.css';
 
-
 export default class BottomWiki extends React.Component{
 
   render(){
