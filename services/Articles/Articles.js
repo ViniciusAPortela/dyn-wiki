@@ -111,15 +111,33 @@ class Article {
      * @returns - True/False Result
      */
     inCache(article, version, lang){
-        return false;
+        const inCache = fs.existsSync(`services/Articles/Articles/${article}/${version}/${lang}.json`);
+
+        if(inCache) return true; else return false;
     }
 
     /**
      * Save a file in cache
+     * @param {Object} data - The Result Object with all Data
      */
-    cache(){
+    cache(data){
+        //Get Article Metadata
+        const { article, version, lang } = data.meta;
 
+        const content = JSON.stringify(data);
+
+        //Create Dir
+        const hasArticle = fs.existsSync(`services/Articles/Articles/${article}`);
+        const hasVersion = fs.existsSync(`services/Articles/Articles/${article}/${version}`);
+        
+        if(!hasArticle) fs.mkdirSync(`services/Articles/Articles/${article}`)
+        if(!hasVersion) fs.mkdirSync(`services/Articles/Articles/${article}/${version}`)
+
+        fs.writeFile(`services/Articles/Articles/${article}/${version}/${lang}.json`, content, ()=>{console.log('saved to cache')});
     }
+    
+    //TODO: Has to import config too, so see if a article is in cache or not
+    // Because the user can have a different config that doesnt have an article in cache yet
 
     /**
      * Loads a file from cache
@@ -128,7 +146,8 @@ class Article {
      * @param {String} lang - The Article Language (PT, EN, ES, JP, DE ...)
      */
     loadFromCache(article, version, lang){
-
+        const res = fs.readFileSync(`./services/Articles/Articles/${article}/${version}/${lang}.json`);
+        return res;
     }
 
     /**
@@ -145,12 +164,19 @@ class Article {
         //First Load File (With MDReader)
         let data = reader.convert(file, userConfig);
 
+        //Add Metadata
+        data.meta = {
+            article,
+            version,
+            lang
+        }
+
         //Then Add Article Variations
         data.versions = this.getVersions(`articles/${article}/`);
         data.langs = this.getLangs(`articles/${article}/${version}/`);
 
         //Finally Add to Cache for Next Searchs
-        //this.cache();
+        this.cache(data);
 
         return data;
     }
@@ -169,6 +195,7 @@ class Article {
         if(hasInCache){
             //In cache
             let data = this.loadFromCache(article, version, lang);
+            console.log('already in cache, loading...');
 
             return data;
         }else{
