@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import { PageRender } from '../../components';
 import articles from '../../services/Articles/Articles';
+//import userConfig from '../../services/UserConfig';
 
 import topBg from '../../assets/page/title-bg.png';
 import './wiki.css';

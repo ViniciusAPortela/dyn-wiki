@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import fetch from 'isomorphic-unfetch'
 import Head from 'next/head';
+import userConfig from '../services/UserConfig';
 
 export default class Index extends React.Component{
     state = {
@@ -12,9 +13,9 @@ export default class Index extends React.Component{
     }
 
     async componentDidMount(){
-        let os = this.getOS();
-        let lang = navigator.language || navigator.userLanguage
-        let arch = this.getArch();
+        let os = userConfig.getOS();
+        let lang = userConfig.getLang();
+        let arch = userConfig.getArch();
         let res = [];
 
         //Check if is in development or production
@@ -26,35 +27,6 @@ export default class Index extends React.Component{
         let data = await res.json();
 
         this.setState({os, lang, arch, data});
-    }
-
-    getOS() {
-        var userAgent = window.navigator.userAgent,
-            platform = window.navigator.platform,
-            macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K', 'darwin'],
-            windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
-            iosPlatforms = ['iPhone', 'iPad', 'iPod'],
-            os = null;
-      
-        if (macosPlatforms.indexOf(platform) !== -1) {
-          os = 'Mac OS';
-        } else if (iosPlatforms.indexOf(platform) !== -1) {
-          os = 'iOS';
-        } else if (windowsPlatforms.indexOf(platform) !== -1) {
-          os = 'Windows';
-        } else if (/Android/.test(userAgent)) {
-          os = 'Android';
-        } else if (!os && /Linux/.test(platform)) {
-          os = 'Linux';
-        }
-      
-        return os;
-      }
-
-    getArch(){
-        let platform = window.navigator.platform;
-        let arch64 = ['Linux x86_64','x86_64', 'x86-64', 'Win64', 'x64;', 'amd64', 'AMD64', 'WOW64', 'x64_64'];
-        if(arch64.indexOf(platform) !== -1) return 'x64'; else return window.navigator.platform;
     }
 
     render(){
