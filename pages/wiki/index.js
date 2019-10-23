@@ -1,38 +1,41 @@
 import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import fetch from 'isomorphic-unfetch';
 
 import { PageRender } from '../../components';
-import articles from '../../services/Articles/Articles';
-//import userConfig from '../../services/UserConfig';
 
 import topBg from '../../assets/page/title-bg.png';
 import './wiki.css';
 
 export default class Wiki extends React.Component {
   static getInitialProps({query}){
-    //Get content of requested article
-    const reader = require('../../services/MDReader/MDReader');
+    return { query };
+  }
 
-    const userConfig = require('../../services/MDReader/userConfig.js');
-    const file = `articles/${query.article}/${query.version}/article.${query.lang}.md`;
-    
-    const data = reader.convert(file, userConfig);
-    const versions = articles.getVersions(`articles/${query.article}/`);
-    const langs = articles.getLangs(`articles/${query.article}/${query.version}/`);
+  state = {
+    data: {}
+  }
 
-    data.versions = versions;
-    data.langs = langs;
+  async componentDidMount(){
+    //Load Article Body
+    const { article, version, lang } = this.props.query;
+    let res = await fetch(`/api/article/?article=${article}&version=${version}&lang=${lang}`);
+    let data = await res.json();
 
-    return{ data, query }
+    this.setState({data});
   }
 
   render(){
-    const { data, query } = this.props;
+    const query = this.props.query;
+    const { data } = this.state;
+    
+    const loaded = Object.keys(data).length > 0;
+
     return(
       <>
         <Head>
-          <title>{data.title}</title>
+          <title>{loaded && data.title}</title>
         </Head>
         <div id='bg'>
           <Link href="/">
@@ -41,7 +44,7 @@ export default class Wiki extends React.Component {
             </a>
           </Link>
           <img alt='' src={topBg} id='top-bg'/>
-          <PageRender data={data} query={query}/>
+          {loaded && <PageRender data={data} query={query}/>}
         </div>
       </>
     );

@@ -17,7 +17,7 @@ let config = yaml.safeLoad(fs.readFileSync('./config/server.yml', 'utf8'));
 
 //Execute server-side rendering
 setInterval(()=>{
-  console.log('Updating Articles...');
+  console.log('Updating Article List...');
   let updated_data = articles.getArticles('./articles/');
   let updated_content = JSON.stringify(updated_data);
   fs.writeFile('articles-data.js', updated_content, {flag: 'w'}, (err)=>{
@@ -43,6 +43,18 @@ app.prepare().then(()=>{
   //Api for getting static data
   server.get('/api', (req, res) => {
     const data = require('./constants/data');
+    return res.send(data);
+  });
+
+  //Api for getting Article JS
+  server.get('/api/article/', (req, res) => {
+    //Get Query Params
+    const article = req.query.article;
+    const version = req.query.version;
+    const lang = req.query.lang;
+
+    const data = articles.get(article, version, lang);
+
     return res.send(data);
   });
 

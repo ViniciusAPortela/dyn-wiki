@@ -102,6 +102,82 @@ class Article {
 
         return(res);
     }
+
+    /**
+     * Check if a article is saved in cache
+     * @param {String} article - The Article ID
+     * @param {String} version - The Article Version
+     * @param {String} lang - The Article Language (PT, EN, ES, JP, DE ...)
+     * @returns - True/False Result
+     */
+    inCache(article, version, lang){
+        return false;
+    }
+
+    /**
+     * Save a file in cache
+     */
+    cache(){
+
+    }
+
+    /**
+     * Loads a file from cache
+     * @param {String} article - The Article ID
+     * @param {String} version - The Article Version
+     * @param {String} lang - The Article Language (PT, EN, ES, JP, DE ...)
+     */
+    loadFromCache(article, version, lang){
+
+    }
+
+    /**
+     * It's part of process of get(), it's more background service than get()
+     * that is like an interface
+     * @param {String} article - The Article ID
+     * @param {String} version - The Article Version
+     * @param {String} lang - The Article Language (PT, EN, ES, JP, DE ...)
+     */
+    convert(article, version, lang){
+        let file = `articles/${article}/${version}/article.${lang}.md`
+        let userConfig = require('../MDReader/userConfig');
+
+        //First Load File (With MDReader)
+        let data = reader.convert(file, userConfig);
+
+        //Then Add Article Variations
+        data.versions = this.getVersions(`articles/${article}/`);
+        data.langs = this.getLangs(`articles/${article}/${version}/`);
+
+        //Finally Add to Cache for Next Searchs
+        //this.cache();
+
+        return data;
+    }
+
+    /**
+     * Get a specific Article
+     * @param {String} article - The Article ID
+     * @param {String} version - The Article Version
+     * @param {String} lang - The Article Language (PT, EN, ES, JP, DE ...)
+     * @returns - The Article in JSON
+     */
+    get(article, version, lang){
+        const hasInCache = this.inCache(article, version, lang);
+
+        //Check if file already in cache
+        if(hasInCache){
+            //In cache
+            let data = this.loadFromCache(article, version, lang);
+
+            return data;
+        }else{
+            //Not in Cache
+            let data = this.convert(article, version, lang);
+
+            return data;
+        }
+    }
 }
 
 module.exports = new Article;
