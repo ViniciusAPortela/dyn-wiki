@@ -8,19 +8,25 @@ const yaml = require('js-yaml');
 const dev = process.env.NODE_ENV !== 'production'
 
 // If is in the dev mode or production
-// It is like: app = express();
 const app = next({ dev });
-//const handle = app.getRequestHandler();
 
 //Get Server Config
 let config = yaml.safeLoad(fs.readFileSync('./config/server.yml', 'utf8'));
 
-//Execute server-side rendering
+//Execute one time, then repeat after certain time
+
+console.log('Updating Article List...');
+let updated_data = articles.getArticles('./articles/');
+let updated_content = JSON.stringify(updated_data);
+fs.writeFile('./services/Articles/article-list.js', updated_content, {flag: 'w'}, (err)=>{
+  if(err) throw error;
+});
+
 setInterval(()=>{
   console.log('Updating Article List...');
   let updated_data = articles.getArticles('./articles/');
   let updated_content = JSON.stringify(updated_data);
-  fs.writeFile('articles-data.js', updated_content, {flag: 'w'}, (err)=>{
+  fs.writeFile('./services/Articles/article-list.js', updated_content, {flag: 'w'}, (err)=>{
     if(err) throw error;
   });
 }, config.updateArticleList);
@@ -40,13 +46,7 @@ app.prepare().then(()=>{
     return res.send(data);
   });
 
-  //Api for getting static data
-  server.get('/api', (req, res) => {
-    const data = require('./constants/data');
-    return res.send(data);
-  });
-
-  //Api for getting Article JS
+  //Api for getting Article a specific article
   server.get('/api/article/', (req, res) => {
     //Get Query Params
     const article = req.query.article;
@@ -58,7 +58,7 @@ app.prepare().then(()=>{
     return res.send(data);
   });
 
-  //Api for getting image
+  //Api for getting image from articles
   server.get('/articles/:article/images/:img', (req, res) =>{
     res.contentType('image/*');
     let file = `articles/${req.params.article}/images/${req.params.img}`;
@@ -66,7 +66,7 @@ app.prepare().then(()=>{
     return res.send(data);
   });
 
-  //Files to Download
+  //Page for getting files from articles
   server.get('/articles/:article/files/:file', (req, res) =>{
     let file = `articles/${req.params.article}/files/${req.params.file}`;
     const data = fs.readFileSync(file);
@@ -75,7 +75,7 @@ app.prepare().then(()=>{
 
   //Api for getting list of articles
   server.get('/articles', (req, res) => {
-    fs.readFile("articles-data.js", "utf8", function(err, data){
+    fs.readFile("services/Articles/article-list.js", "utf8", function(err, data){
         if(err) throw err;
         res.send(data);
     });
@@ -100,7 +100,6 @@ app.prepare().then(()=>{
   server.all('*', (req, res) => {
     res.status(404);
     return app.render(req, res, '/_error', req.query)
-    //return handle(req, res, req.query);
   });
 
   server.listen(process.env.PORT || 5000, err => {

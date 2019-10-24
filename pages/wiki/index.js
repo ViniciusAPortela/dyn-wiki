@@ -9,9 +9,7 @@ import topBg from '../../assets/page/title-bg.png';
 import './wiki.css';
 
 export default class Wiki extends React.Component {
-  static getInitialProps({query}){
-    return { query };
-  }
+  static getInitialProps({query}) { return { query } };
 
   state = {
     data: {}

@@ -8,6 +8,16 @@ const fs = require('fs');
 class Article {
     cmd = {
         verbose: false,
+        //Default Configuration
+        defaultConfig: {
+            arch: 'x64',
+            os: 'linux',
+            os_version: '5.0.0-31-generic',
+            dist: 'kde_neon',
+            dist_version: '5.16',
+            swap: 10843,
+            swap_type: 'partition',
+        }
     }
 
     /**
@@ -104,6 +114,14 @@ class Article {
     }
 
     /**
+     * Check for all tags inside a Article, this is used for getting all possible
+     * configurations to be saved in cache
+     */
+    checkForTags(){
+        
+    }
+
+    /**
      * Check if a article is saved in cache
      * @param {String} article - The Article ID
      * @param {String} version - The Article Version
@@ -159,7 +177,7 @@ class Article {
      */
     convert(article, version, lang){
         let file = `articles/${article}/${version}/article.${lang}.md`
-        let userConfig = require('../MDReader/userConfig');
+        let userConfig = require('../UserConfig/userConfig.example');
 
         //First Load File (With MDReader)
         let data = reader.convert(file, userConfig);
@@ -186,9 +204,10 @@ class Article {
      * @param {String} article - The Article ID
      * @param {String} version - The Article Version
      * @param {String} lang - The Article Language (PT, EN, ES, JP, DE ...)
+     * @param {String} config - The User System Configuration
      * @returns - The Article in JSON
      */
-    get(article, version, lang){
+    get(article, version, lang, config = this.defaultConfig){
         const hasInCache = this.inCache(article, version, lang);
 
         //Check if file already in cache
