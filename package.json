@@ -1,6 +1,6 @@
 {
   "name": "dyn-wiki",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "server.js",
   "repository": "https://github.com/vinicius-a-portela/dyn-wiki.git",
   "author": "vinicius-a-portela <vinicius.portela.stm@gmail.com>",

@@ -117,9 +117,7 @@ class Article {
      * Check for all tags inside a Article, this is used for getting all possible
      * configurations to be saved in cache
      */
-    checkForTags(){
-        
-    }
+    checkForTags(){}
 
     /**
      * Check if a article is saved in cache
@@ -128,7 +126,7 @@ class Article {
      * @param {String} lang - The Article Language (PT, EN, ES, JP, DE ...)
      * @returns - True/False Result
      */
-    inCache(article, version, lang){
+    isInCache(article, version, lang){
         const inCache = fs.existsSync(`services/Articles/Articles/${article}/${version}/${lang}.json`);
 
         if(inCache) return true; else return false;
@@ -138,20 +136,23 @@ class Article {
      * Save a file in cache
      * @param {Object} data - The Result Object with all Data
      */
-    cache(data){
+    toCache(data){
         //Get Article Metadata
         const { article, version, lang } = data.meta;
 
         const content = JSON.stringify(data);
+        const baseDir = 'services/Articles/Articles'
 
         //Create Dir
-        const hasArticle = fs.existsSync(`services/Articles/Articles/${article}`);
-        const hasVersion = fs.existsSync(`services/Articles/Articles/${article}/${version}`);
+        const hasArticle = fs.existsSync(`${baseDir}/${article}`);
+        const hasVersion = fs.existsSync(`${baseDir}/${article}/${version}`);
         
-        if(!hasArticle) fs.mkdirSync(`services/Articles/Articles/${article}`)
-        if(!hasVersion) fs.mkdirSync(`services/Articles/Articles/${article}/${version}`)
+        if(!hasArticle) fs.mkdirSync(`${baseDir}/${article}`)
+        if(!hasVersion) fs.mkdirSync(`${baseDir}/${article}/${version}`)
 
-        fs.writeFile(`services/Articles/Articles/${article}/${version}/${lang}.json`, content, ()=>{console.log('saved to cache')});
+        fs.writeFile(`${baseDir}/${article}/${version}/${lang}.json`, content, ()=>{
+            console.log('💾 Saved to cache')
+        });
     }
     
     //TODO: Has to import config too, so see if a article is in cache or not
@@ -170,7 +171,6 @@ class Article {
 
     /**
      * It's part of process of get(), it's more background service than get()
-     * that is like an interface
      * @param {String} article - The Article ID
      * @param {String} version - The Article Version
      * @param {String} lang - The Article Language (PT, EN, ES, JP, DE ...)
@@ -194,7 +194,7 @@ class Article {
         data.langs = this.getLangs(`articles/${article}/${version}/`);
 
         //Finally Add to Cache for Next Searchs
-        this.cache(data);
+        this.toCache(data);
 
         return data;
     }
@@ -208,13 +208,14 @@ class Article {
      * @returns - The Article in JSON
      */
     get(article, version, lang, config = this.defaultConfig){
-        const hasInCache = this.inCache(article, version, lang);
+        const hasInCache = this.isInCache(article, version, lang);
+        //const hasInCache = false;
 
         //Check if file already in cache
         if(hasInCache){
             //In cache
             let data = this.loadFromCache(article, version, lang);
-            console.log('already in cache, loading...');
+            console.log('📀 Already in Cache, Loading...');
 
             return data;
         }else{
@@ -223,6 +224,19 @@ class Article {
 
             return data;
         }
+    }
+
+    /**
+     * Update list of articles
+     * Used by the Express Node Server
+     */
+    update(){
+        console.log('🔄 Updating Article List...');
+        let updated_data = this.getArticles('./articles/');
+        let updated_content = JSON.stringify(updated_data);
+        fs.writeFile('./services/Articles/article-list.js', updated_content, {flag: 'w'}, (err)=>{
+        if(err) throw error;
+        });
     }
 }
 

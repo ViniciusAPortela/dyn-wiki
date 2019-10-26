@@ -1,6 +1,5 @@
 const fs = require('fs');
 const regex = require('./regex');
-const React = require('react');
 
 //TODO: Identify Content from different languages
 //TODO: Delete all 'file' param, or unecessary Params
@@ -8,7 +7,8 @@ const React = require('react');
 /**
  *  @class A Custom Markdown Reader.
  *  @author vinicius-a-portela
- *  @version 0.1.0
+ *  @version 0.2.0.alpha_1.unfunctional
+ *  
  *  Reads and Render the MD files of Wiki Pages, also reads the additional stuff 
  *  that isn't in default markdown language
  * 
@@ -26,9 +26,6 @@ class MDReader {
 
     //The information before insert into final result, items here needs reordering
     this.preData = []
-
-    //The Readed File
-    this.file = '';
 
     //The User Configuration
     this.userConfig = {}
@@ -408,6 +405,7 @@ class MDReader {
   }
 
   /**
+   * @deprecated
    * Export the Object to Data.js to be read by the PageRender
    * @param {Object} array - The Array of Objects 
    */
@@ -421,11 +419,11 @@ class MDReader {
 
   /**
    * Converts a Given File to Readable Data for PageRender
-   * @param {string} file - The Markdown File to Read
+   * @param {string} filename - The Markdown File to Read
    * @param {Object} userConfig - The User configuration
    * @returns - An Object With all Content
    */
-  convert(file, userConfig){
+  convert(filename, userConfig){
     //To meansure Process Time
     let start = process.hrtime();
 
@@ -436,23 +434,22 @@ class MDReader {
     //Get the File
     if(!silent) console.log(`🌀 MDReader v0.1.0 🌀`);
     if(!silent) console.log(`⏳ Reading ${file} ...`);
-    this.file = fs.readFileSync(file, 'utf-8');
+    let file = fs.readFileSync(filename, 'utf-8');
     
     //Convert in Array
     if(!silent) console.log(`⏳ Converting to Array ...`);
-    this.toArray(this.file);
+    this.toArray(file);
 
     //Create Data.js File
-    if(!silent) console.log(`⏳ Generating Data.js ...`);
-    this.toFile(this.result);
+    //if(!silent) console.log(`⏳ Generating Data.js ...`);
+    //this.toFile(this.result);
 
     //To meansure Process Time
     let end = process.hrtime(start);
     if(!silent) console.log(`🕓 All work done in ${end[1]/1000000}ms`);
     if(!silent) console.log(`✔  All done! 😃`);
 
-    //Return the Array
-    //It'll be readed by Node Server and
+    //Return the Result Array
     return(this.result);
   }
 

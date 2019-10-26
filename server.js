@@ -13,23 +13,9 @@ const app = next({ dev });
 //Get Server Config
 let config = yaml.safeLoad(fs.readFileSync('./config/server.yml', 'utf8'));
 
-//Execute one time, then repeat after certain time
-
-console.log('Updating Article List...');
-let updated_data = articles.getArticles('./articles/');
-let updated_content = JSON.stringify(updated_data);
-fs.writeFile('./services/Articles/article-list.js', updated_content, {flag: 'w'}, (err)=>{
-  if(err) throw error;
-});
-
-setInterval(()=>{
-  console.log('Updating Article List...');
-  let updated_data = articles.getArticles('./articles/');
-  let updated_content = JSON.stringify(updated_data);
-  fs.writeFile('./services/Articles/article-list.js', updated_content, {flag: 'w'}, (err)=>{
-    if(err) throw error;
-  });
-}, config.updateArticleList);
+//Execute at startup, then repeat after certain time
+articles.update();
+setInterval(() => articles.update(), config.updateArticleList);
 
 app.prepare().then(()=>{
   const server = express();
@@ -46,6 +32,7 @@ app.prepare().then(()=>{
     return res.send(data);
   });
 
+  //TODO: Transform in POST
   //Api for getting Article a specific article
   server.get('/api/article/', (req, res) => {
     //Get Query Params
@@ -104,6 +91,6 @@ app.prepare().then(()=>{
 
   server.listen(process.env.PORT || 5000, err => {
     if(err) throw err;
-    console.log('✔️  Server is Ready an running on port:', process.env.PORT || 5000);
+    console.log('✔️  Server is Ready and Running on Port:', process.env.PORT || 5000);
   })
 })
