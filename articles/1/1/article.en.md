@@ -20,12 +20,3 @@ Change the permissions to allow executing
 
 Finally, execute it:
 <cmd sudo>./xampp-installer.run</cmd>
-
-<scripts>
-	<only32>
-		</file tag='script-file' src='script_x86.sh' name='install_xampp.sh'>
-	</only32>
-	<only64>
-		</file tag='script-file' src='script_64.sh' name='install_xampp.sh'>
-	</only64>
-</scripts>
