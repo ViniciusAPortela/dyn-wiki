@@ -1,10 +1,12 @@
 //REGEX
+//TODO: Organizate and Explain each rege
 module.exports = regex = {
   config: /#!(.*):(?: )?(.*)/gm,
   title: /# (.*)/gm,
   lines: /(.+)+/gm,
   content: /([^\n\t \u0000].*)$/gm,
   tag: {
+    name: /<(?:([^/].*?)\b.*?)>/gm,
     open: /<[^/]+?>/gm,
     close: /<\/.+?>/gm,
     openClose: /<[^/]+?>|<\/.+?>/gm,
@@ -15,7 +17,6 @@ module.exports = regex = {
     [0]: '<(?:(',
     [1]: ')|(?:(',
     [2]: ') (?:.*?)))>(?:\\n*)?([\\s\\S]*?)(?:\\n*)?(?:<\/(?:\\1|\\2)>)',
-
     [3]: '<(\/)?(',
     [4]: ')>',
   }

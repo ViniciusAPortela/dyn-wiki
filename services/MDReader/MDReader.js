@@ -3,6 +3,7 @@ const regex = require('./regex');
 
 //TODO: Identify Content from different languages
 //TODO: Delete all 'file' param, or unecessary Params
+//TODO: Verify function names and usage
 
 /**
  *  @class A Custom Markdown Reader.
@@ -413,6 +414,39 @@ class MDReader {
     let content = `module.exports = ` + JSON.stringify(array);
     fs.writeFileSync('data.js', content);
   }
+
+  /**
+   * Get all tags from a given article
+   * @param {String} file - the file (in string format)
+   */
+  tags(file){
+    regex.tag.name.lastIndex = 0;
+    let ret;
+    let res = [];
+    let tags = require('./tags.config');
+
+    //Search for all tags inside the given file
+    while(ret = regex.tag.name.exec(file)){
+
+      //Tag Verification
+      //Only Condicional tags are importants
+      if(Object.keys(tags).indexOf(ret[1]) !== -1)
+        //Check if Already exists
+          if(res.indexOf(ret[1]) === -1)
+            res.push(ret[1]);
+    }
+
+    return res;
+  }
+
+  /**
+   * Read a file by filename and returns the file in string format
+   * @param {String} filepath  - Path to File
+   * @retuns File in String
+   */
+  read(filepath){
+    return fs.readFileSync(filepath);
+  }
   
   //Just Identify and Erase what is not supported in the user system
   //Then is the Common Process
@@ -486,9 +520,9 @@ class MDReader {
 }
 
 /* TESTING AREA */
-//const reader = new MDReader;
-//reader.convert(process.argv[2], require('./userConfig'));
-//console.log(reader.config('article.md','desc'));
+const reader = new MDReader;
+let file = reader.read('./article.example.md');
+console.log(reader.tags(file));
 /* TESTING AREA */
 
 module.exports = new MDReader;
