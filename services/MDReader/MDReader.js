@@ -8,12 +8,12 @@ const regex = require('./regex');
 /**
  *  @class A Custom Markdown Reader.
  *  @author vinicius-a-portela
- *  @version 0.2.0.alpha_1.unfunctional
+ *  @version 0.2.0.alpha_1
  *  
  *  Reads and Render the MD files of Wiki Pages, also reads the additional stuff 
  *  that isn't in default markdown language
  * 
- *  This class Transform everything in a readable array for the PageRender React Component
+ *  This class Manipulates, Translates and Work around Articles in Markdown
  */
 class MDReader {
 
@@ -416,7 +416,7 @@ class MDReader {
   }
 
   /**
-   * Get all tags from a given article
+   * Get all conditional tags from a given article
    * @param {String} file - the file (in string format)
    */
   tags(file){
@@ -437,6 +437,37 @@ class MDReader {
     }
 
     return res;
+  }
+
+  /**
+   * Part of Complex Way
+   * Check Equal parts to merge for Cache System
+   */
+  mergeTags(){
+
+  }
+
+  /**
+   * Get all possible Variations from Article based on given Tags
+   * @param {Array} tags - Tags from Article
+   */
+  possibleVariations(tags){
+    //Simple way, get all tags and mix
+    //Complex way, read tags configuration and see merging configurations
+    //Two PCs with differents but same effect to some tag
+    let res = []
+
+    // ...
+  }
+
+  /**
+   * Make Recursive Reading
+   * @param {Array} tags - Tags
+   */
+  forEachTag(tags){
+    const len = tags.length()
+
+    // ...
   }
 
   /**
@@ -520,9 +551,9 @@ class MDReader {
 }
 
 /* TESTING AREA */
-const reader = new MDReader;
-let file = reader.read('./article.example.md');
-console.log(reader.tags(file));
+//const reader = new MDReader;
+//let file = reader.read('./article.example.md');
+//console.log(reader.tags(file));
 /* TESTING AREA */
 
 module.exports = new MDReader;
