@@ -144,9 +144,11 @@ class Article {
         const baseDir = 'services/Articles/Articles'
 
         //Create Dir
+        const hasArticleRoot = fs.existsSync(`${baseDir}`);
         const hasArticle = fs.existsSync(`${baseDir}/${article}`);
         const hasVersion = fs.existsSync(`${baseDir}/${article}/${version}`);
         
+        if(!hasArticleRoot) fs.mkdirSync(`${baseDir}`)
         if(!hasArticle) fs.mkdirSync(`${baseDir}/${article}`)
         if(!hasVersion) fs.mkdirSync(`${baseDir}/${article}/${version}`)
 
