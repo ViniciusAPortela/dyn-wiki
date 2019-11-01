@@ -7,7 +7,7 @@ const regex = require('./regex');
 
 /**
  *  @class A Custom Markdown Reader.
- *  @author vinicius-a-portela
+ *  @author vinicius-portela
  *  @version 0.2.0.alpha_1
  *  
  *  Reads and Render the MD files of Wiki Pages, also reads the additional stuff 
@@ -35,28 +35,29 @@ class MDReader {
   /**
    *  Transform the Readed File in an Array
    *  @param {string} file - The MD String File
+   *  @returns The Result Array
    */
   toArray(file){
     //Erase the Array
-    this.result = {};
+    let result = {}
 
     //First Erase all Content that is not Compatible with UserConfig
-    file = this.justUserConfig(file);
+    //file = this.justUserConfig(file);
 
     //Read Configs and Body
-    file = this.getConfigs(file).file;
+    const configsRes = this.getConfigs(file);
+    result = Object.assign(result, configsRes.configs)
+    file = configsRes.file;
 
     //Convert all data in a PreFinal Array
-    this.result['data'] = [];
-    this.getBody(file);
+    result.data = [];
+    const bodyRes = this.getBody(file);
+    result.data = bodyRes.data;
 
     //Order in Correct Way
-    this.orderByIndex();
+    result.data = this.orderByIndex(result.data);
 
-    /* DEBUG */
-    //console.log('Result Array: ');
-    //console.log(this.result);
-    /* DEBUG */
+    return result;
   }
 
   //TODO: Remove this Function
@@ -170,45 +171,52 @@ class MDReader {
    * @param {string} file - The MD String File
    */
   getBody(file){
+    //The body content
+    let res = {
+      file: '', 
+      data: []
+    }
 
     //Get all Title
     let title = this.getByType('title', file);
     if(title.has){
       //Add data to array
-      this.preData = this.preData.concat(title.data);
+      res.data = res.data.concat(title.data);
     }
-    file = title.file;
+    res.file = title.file;
 
     //Get all CMD
     let cmd = this.getByType('cmd', file);
     if(cmd.has){
       //Add data to array
-      this.preData = this.preData.concat(cmd.data);
+      res.data = res.data.concat(cmd.data);
     }
-    file = cmd.file;
+    res.file = cmd.file;
 
     //Get Scripts
     let scripts = this.getByType('scripts', file);
     if(scripts.has){
       //Add data to array
-      this.preData = this.preData.concat(scripts.data);
+      res.data = res.data.concat(scripts.data);
     }
-    file = scripts.file;
+    res.file = scripts.file;
 
     //Get all Image
     let image = this.getByType('image', file);
     if(image.has){
       //Add data to array
-      this.preData = this.preData.concat(image.data);
+      res.data = res.data.concat(image.data);
     }
-    file = image.file;
+    res.file = image.file;
 
     //Get all content (All the rest)
     let content = this.getByType('content', file);
     if(content.has){
       //Add data to array
-      this.preData = this.preData.concat(content.data);
+      res.data = res.data.concat(content.data);
     }
+
+    return res;
   }
 
   /**
@@ -363,11 +371,16 @@ class MDReader {
   /**
    *  Order all elements by Index
    */
-  orderByIndex(){
+  orderByIndex(data){
+    let res = []
+    
+    /* FOR DEBUG */
+    //console.log('NEW: ', data);
+
     //Look for the higher, then start looking from 0 index to higher
     let higher = -1;
     
-    this.preData.map((item)=>{
+    data.map((item)=>{
       if(item.index > higher) higher = item.index;
     })
 
@@ -376,7 +389,7 @@ class MDReader {
     /* FOR DEBUG */
 
     //Look for the lower index
-    var length = this.preData.length;
+    var length = data.length;
 
     for(let i=0 ; i<length ; i++){
       /* FOR DEBUG */
@@ -389,7 +402,7 @@ class MDReader {
       var itemIndex = -1;
 
       //Looks for the Lower in the Array
-      this.preData.map((item, index)=>{
+      data.map((item, index)=>{
         if(item.index<lower) {
           /* FOR DEDBUG */
           //console.log(`achado menor: ${item.index} <- ${lower} (na pos ${index})`);
@@ -405,17 +418,25 @@ class MDReader {
       //this.preData[itemIndex].data = `[${i}][${lower}] `+this.preData[itemIndex].data
       /* FOR DEBUG */
 
-      this.result.data.push(this.preData[itemIndex]);
-      this.preData.splice(itemIndex, 1);
+      res.push(data[itemIndex]);
+      data.splice(itemIndex, 1);
     };
+
+    return res;
   }
 
   /**
    * @deprecated
    * Export the Object to Data.js to be read by the PageRender
+   * @param {String} path - Path to were output the file
    * @param {Object} array - The Array of Objects 
    */
   toFile(array){
+    /* FOR DEBUG */
+    array.langs = ['pt']
+    array.versions = ['1']
+    /* FOR DEBUG */
+
     let content = `module.exports = ` + JSON.stringify(array);
     fs.writeFileSync('data.js', content);
   }
@@ -557,7 +578,8 @@ class MDReader {
 
 /* TESTING AREA */
 const reader = new MDReader;
-console.log(reader.getConfigs(fs.readFileSync('./article.example.md', 'utf-8')).configs);
+const filepath = 'services/MDReader/article.example.md';
+reader.toFile(reader.toArray(fs.readFileSync(filepath, 'utf-8')));
 /* TESTING AREA */
 
 module.exports = new MDReader;
