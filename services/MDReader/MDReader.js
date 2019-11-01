@@ -17,25 +17,19 @@ const regex = require('./regex');
  */
 class MDReader {
 
-  /**
-   * A Custom Markdown Reader
-   * @constructor
-   */
-  constructor(){
-    //The final Result
-    this.result = {};
+  //The final Result
+  result = {}
 
-    //The information before insert into final result, items here needs reordering
-    this.preData = []
+  //The information before insert into final result, items here needs reordering
+  preData = []
 
-    //The User Configuration
-    this.userConfig = {}
+  //The User Configuration
+  userConfig = {}
 
-    //Console Modes
-    this.cmd = {
-      verbose: false,
-      silent: true,
-    }
+  //CLI Modes
+  cmd = {
+    verbose: false,
+    silent: true,
   }
 
   /**
@@ -50,7 +44,7 @@ class MDReader {
     file = this.justUserConfig(file);
 
     //Read Configs and Body
-    file = this.getConfigs(file);
+    file = this.getConfigs(file).file;
 
     //Convert all data in a PreFinal Array
     this.result['data'] = [];
@@ -65,9 +59,11 @@ class MDReader {
     /* DEBUG */
   }
 
+  //TODO: Remove this Function
   /**
    * Get just UserConfig
    * @param {string} file - The Markdown File
+   * @deprecated
    */
   justUserConfig(file){
     //Get all MD Config Tags
@@ -145,18 +141,27 @@ class MDReader {
   /**
    * Get all MD Configurations
    * @param {string} file - The MD String File
-   * @return {string} - The new File (Without Configurations)
+   * @return {Object} - Array of Configurations and File without Configs
    */
   getConfigs(file){
-    let res;
+    let re;
+    let res = {
+      configs: {}, 
+      file: ''
+    };
+
+    //Get Configs by regex
     regex.config.lastIndex = 0;
     do{
-      res = regex.config.exec(file);
-      if(res) this.result[res[1]] = res[2];
-    }while(res);
-    let newFile = file.replace(regex.config, '');
+      re = regex.config.exec(file);
+      //re[1] = key ; re[2] = value
+      if(re) res.configs[re[1]] = re[2];
+    }while(re);
 
-    return newFile;
+    //Return the file without configs
+    res.file = file.replace(regex.config, '');
+
+    return res;
   }
 
 
@@ -551,9 +556,8 @@ class MDReader {
 }
 
 /* TESTING AREA */
-//const reader = new MDReader;
-//let file = reader.read('./article.example.md');
-//console.log(reader.tags(file));
+const reader = new MDReader;
+console.log(reader.getConfigs(fs.readFileSync('./article.example.md', 'utf-8')).configs);
 /* TESTING AREA */
 
 module.exports = new MDReader;

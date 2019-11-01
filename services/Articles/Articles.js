@@ -8,7 +8,8 @@ const fs = require('fs');
 class Article {
     cmd = {
         verbose: false,
-        //Default Configuration
+        // Default Configuration
+        // This is my computer current config :) 
         defaultConfig: {
             arch: 'x64',
             os: 'linux',
@@ -127,7 +128,7 @@ class Article {
      * @returns - True/False Result
      */
     isInCache(article, version, lang){
-        const inCache = fs.existsSync(`services/Articles/Articles/${article}/${version}/${lang}.json`);
+        const inCache = fs.existsSync(`services/Articles/cache/${article}/${version}/${lang}.json`);
 
         if(inCache) return true; else return false;
     }
@@ -141,7 +142,7 @@ class Article {
         const { article, version, lang } = data.meta;
 
         const content = JSON.stringify(data);
-        const baseDir = 'services/Articles/Articles'
+        const baseDir = 'services/Articles/cache'
 
         //Create Dir
         const hasArticleRoot = fs.existsSync(`${baseDir}`);
@@ -167,7 +168,7 @@ class Article {
      * @param {String} lang - The Article Language (PT, EN, ES, JP, DE ...)
      */
     loadFromCache(article, version, lang){
-        const res = fs.readFileSync(`./services/Articles/Articles/${article}/${version}/${lang}.json`);
+        const res = fs.readFileSync(`./services/Articles/cache/${article}/${version}/${lang}.json`);
         return res;
     }
 
