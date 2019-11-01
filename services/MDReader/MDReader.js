@@ -55,7 +55,7 @@ class MDReader {
     result.data  = this.getBody(file);
 
     //Order in Correct Way
-    //result.data = this.orderByIndex(result.data);
+    result.data = this.orderByIndex(result.data);
 
     return result;
   }
@@ -233,7 +233,7 @@ class MDReader {
       }
 
       //Add this Scope to Response
-      res.push({ scope: element.scope, data});
+      res.push({ scope: element.scope, data, index: element.index});
     });
 
     return res;
@@ -430,55 +430,123 @@ class MDReader {
    *  Order all elements by Index
    */
   orderByIndex(data){
+    //The Response
     let res = []
-    
-    /* FOR DEBUG */
-    //console.log('NEW: ', data);
+
+    //First Organizate Index for Root group
+    let root = data.filter(item => { 
+      if(item.scope === 'root') return true; 
+    })[0]
 
     //Look for the higher, then start looking from 0 index to higher
     let higher = -1;
-    
-    data.map((item)=>{
-      if(item.index > higher) higher = item.index;
+    let length = root.data.length;
+
+    //Look for higher
+    for(let i=0 ; i<length ; i++){
+      if(root.data[i].index > higher) higher = root.data[i].index;
+    }
+
+    //For each Item
+    for(let i=0 ; i<length ; i++){
+      let lower = higher+1;
+      let lowerItem = {};
+      let lowerIndex = 0;
+
+      //Look for lower
+      root.data.map((item, index) => {
+        if(item.index < lower) {
+          lower = item.index
+          lowerItem = item;
+          lowerIndex = index;
+        }
+      })
+
+      //Add to Result Array, Also Remove from root.data Array
+      res.push(lowerItem);
+      root.data.splice(lowerIndex, 1);
+    }
+
+    //Organizate others Contents
+    let others = data.filter(item => {
+      if(item.scope !== 'root') return true
     })
 
-    /* FOR DEBUG */
-    //console.log(`higher: ${higher}`);
-    /* FOR DEBUG */
+    //Used before order in final Array
+    let othersRes = []
 
-    //Look for the lower index
-    var length = data.length;
+    //For each Tag
+    others.map(item => {
+      let res = []
 
-    for(let i=0 ; i<length ; i++){
-      /* FOR DEBUG */
-      //console.log('--------------------');
-      //console.log('PEGANDO '+i+' VALOR!');
-      //console.log('AINDA FALTA: '+this.preData.length);
-      /* FOR DEBUG */
+      //Get higher inside Tag (Not global position)
+      let higher = this.getHigher(item.data)
+      let data = item.data
 
-      let lower = higher+1;
-      var itemIndex = -1;
+      for(let i=0 ; i<item.data.length ; i++){
+        let { lower, lowerIndex } = this.getLower(data, higher)
 
-      //Looks for the Lower in the Array
-      data.map((item, index)=>{
-        if(item.index<lower) {
-          /* FOR DEDBUG */
-          //console.log(`achado menor: ${item.index} <- ${lower} (na pos ${index})`);
-          /* FOR DEDBUG */
+        res.push(item.data[lowerIndex])
+        data.splice(lowerIndex, 1)
+      }
 
-          lower = item.index;
-          itemIndex = index;
-        };
-      });
+      othersRes.push({scope: item.scope, data: res, index: item.index})
+    })
 
-      /* FOR DEBUG */
-      //console.log(`SUCESS - ADDED: ${this.preData[itemIndex]}`);
-      //this.preData[itemIndex].data = `[${i}][${lower}] `+this.preData[itemIndex].data
-      /* FOR DEBUG */
+    //Then, put others groups inside the root in correct order
+    console.log(othersRes)
 
-      res.push(data[itemIndex]);
-      data.splice(itemIndex, 1);
-    };
+    othersRes.map(item =>{
+      let index = item.index
+      let lastIndex = -1
+
+      //Look for each until reach higher
+      for(let i=0 ; i<res.length ; i++){
+        if(index<res[i].index) {
+          lastIndex = i
+          break;
+        }
+      }
+
+      res.splice(lastIndex, 0, item)
+    })
+
+    return res
+  }
+
+  /**
+   * Get higher from a Object with Index Key
+   * @param {Object} obj - Object with Index Key
+   * @internal
+   */
+  getHigher(obj){
+    let higher = -1;
+
+    obj.map(item => {
+      if(item.index > higher) higher = item.index
+    })
+
+    return higher;
+  }
+
+  /**
+   * Get lower from a Object with Index Key
+   * @param {Object} obj - Object with Index Key
+   * @param {Number} higher - Higher Index from given Object ( Can get with getHigher(obj) )
+   * @internal
+   */
+  getLower(obj, higher){
+    let res = {
+      lower: higher+1,
+      lowerIndex: 0,
+    }
+    
+    obj.map((item, index) => {
+      if(item.index < res.lower) {
+        res.lower = item.index
+        res.lowerIndex = index
+      }
+    })
 
     return res;
   }
