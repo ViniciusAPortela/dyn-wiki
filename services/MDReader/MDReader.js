@@ -23,8 +23,9 @@ class MDReader {
   //The information before insert into final result, items here needs reordering
   preData = []
 
+  //TODO: Delete this and references
   //The User Configuration
-  userConfig = {}
+  //userConfig = {}
 
   //CLI Modes
   cmd = {
@@ -51,11 +52,10 @@ class MDReader {
 
     //Convert all data in a PreFinal Array
     result.data = [];
-    const bodyRes = this.getBody(file);
-    result.data = bodyRes.data;
+    result.data  = this.getBody(file);
 
     //Order in Correct Way
-    result.data = this.orderByIndex(result.data);
+    //result.data = this.orderByIndex(result.data);
 
     return result;
   }
@@ -139,8 +139,9 @@ class MDReader {
     return file;
   }
 
+  //TODO: Transform getConfigs and getConfig into one unique function
   /**
-   * Get all MD Configurations
+   * Get all Configurations from a MD File
    * @param {string} file - The MD String File
    * @return {Object} - Array of Configurations and File without Configs
    */
@@ -169,52 +170,109 @@ class MDReader {
   /**
    * Get all Body Content from MD
    * @param {string} file - The MD String File
+   * @returns The data from given MD file, in `Array`
+   * @internal
    */
   getBody(file){
-    //The body content
-    let res = {
-      file: '', 
-      data: []
-    }
+    //Response
+    let res = []
 
-    //Get all Title
-    let title = this.getByType('title', file);
-    if(title.has){
-      //Add data to array
-      res.data = res.data.concat(title.data);
-    }
-    res.file = title.file;
+    //First get Objects Scopes
+    //So one Content Can be Inside Root or Inside one Compatibility Tag
+    //Scopes are used for Articles Class to Get Correct Data by the User Configuration
+    
+    //This will result in something like that:
+    // [{scope: only32, data: string}, {scope: only64, data: string}, {scope: root, data: string}]
+    const scopes = this.getScopes(file)
 
-    //Get all CMD
-    let cmd = this.getByType('cmd', file);
-    if(cmd.has){
-      //Add data to array
-      res.data = res.data.concat(cmd.data);
-    }
-    res.file = cmd.file;
+    //Get Content from Scopes
+    scopes.forEach(element => {
+      //Add this Scope to Response
+      let data = [];
 
-    //Get Scripts
-    let scripts = this.getByType('scripts', file);
-    if(scripts.has){
-      //Add data to array
-      res.data = res.data.concat(scripts.data);
-    }
-    res.file = scripts.file;
+      //Get file from Current Scope
+      let file = element.data
 
-    //Get all Image
-    let image = this.getByType('image', file);
-    if(image.has){
-      //Add data to array
-      res.data = res.data.concat(image.data);
-    }
-    res.file = image.file;
+      //Get all Title
+      let title = this.getByType('title', file);
+      if(title.has){
+        //Add data to array
+        data = data.concat(title.data);
+      }
+      file = title.file;
 
-    //Get all content (All the rest)
-    let content = this.getByType('content', file);
-    if(content.has){
-      //Add data to array
-      res.data = res.data.concat(content.data);
-    }
+      //Get all CMD
+      let cmd = this.getByType('cmd', file);
+      if(cmd.has){
+        //Add data to array
+        data = data.concat(cmd.data);
+      }
+      file = cmd.file;
+
+      //Get Scripts
+      let scripts = this.getByType('scripts', file);
+      if(scripts.has){
+        //Add data to array
+        data = data.concat(scripts.data);
+      }
+      file = scripts.file;
+
+      //Get all Image
+      let image = this.getByType('image', file);
+      if(image.has){
+        //Add data to array
+        data = data.concat(image.data);
+      }
+      file = image.file;
+
+      //Get all content (All the rest)
+      let content = this.getByType('content', file);
+      if(content.has){
+        //Add data to array
+        data = data.concat(content.data);
+      }
+
+      //Add this Scope to Response
+      res.push({ scope: element.scope, data});
+    });
+
+    return res;
+  }
+
+  /**
+   * Get Scopes from a file
+   * @param {String} file - The MD in String Format 
+   * @returns the scopes of file in `Array` format
+   * @internal
+   */
+  getScopes(file){
+    //The Response
+    let res = []
+
+    //Look for Compatibility Scopes (only32, only64)
+    //Get Tag configurations from tags.config.js
+    const tagsConf = require('./tags.config');
+
+    //Look for each tag configured in tagsConf
+    Object.keys(tagsConf).map((prop)=>{
+      //Look for this prop inside file (with Regex)
+      let pattern = regex.tag[0] + prop + regex.tag[1] + prop + regex.tag[2];
+      let re = new RegExp(pattern, 'gm');
+      let response;
+
+      //Get all Tags with this prop
+      while(response = re.exec(file)){
+        res.push({scope: response[1], data: response[3], index: response.index})
+        //Transform Current Scope in Blank
+        file = 
+            file.substr(0, response.index) + 
+            `\u0000`.repeat(re.lastIndex-response.index) + 
+            file.substr(response.index + `\u0000`.repeat(re.lastIndex-response.index).length);
+      }
+    })
+
+    //Get all rest (Root Scope (Any Platform))
+    res.push({scope: 'root', data: file})
 
     return res;
   }
@@ -549,7 +607,7 @@ class MDReader {
    * Get all CMD args
    */
   setEnv(args=[], config={}){
-    this.userConfig = config;
+    //this.userConfig = config;
     
     this.cmd.silent = args.includes('-silent');
     this.cmd.verbose = args.includes('-verbose');
