@@ -22,6 +22,7 @@ This exists to prevent outdated articles or making duplicated articles saying th
 As each version can have modification on it's content and instructions ( *not just code* ), each version have to has it's translations ( *probably it'll not change a lot from one version to other, so you can actually just copy the translation from the last article* ).
 
 The result will be something like this:
+
 ![File Structure](https://github.com/vinicius-portela/dyn-wiki/blob/master/docs/images/file_structure.png)
 
 In practice, if you want to create a article just worry to put it in a folder named **1** ( *the article version, in this case the first version* ) with the article language as a suffix ( *if in english (en), then article.en.md* )
