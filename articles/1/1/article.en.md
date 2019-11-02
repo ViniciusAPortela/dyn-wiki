@@ -1,8 +1,6 @@
 #!version: 1.0.0
-#!article_version: 1
 #!title: How to Install Xampp
 #!desc: Learn how to install xampp in your machine
-#!lang: en
 
 # #1 Downloading XAMPP
 Para instalar o xampp, basta baixar seu instalador:

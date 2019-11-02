@@ -1,8 +1,6 @@
 #!version: 1.0.0
-#!article_version: 1
 #!title: Como atualizar o kernel linux
 #!desc: Aprenda como atualizar o kernel do seu linux
-#!lang: pt
 
 # #1 Adicionar Repositório
 
