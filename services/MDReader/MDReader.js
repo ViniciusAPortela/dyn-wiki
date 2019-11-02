@@ -2,8 +2,6 @@ const fs = require('fs');
 const regex = require('./regex');
 
 //TODO: Identify Content from different languages
-//TODO: Delete all 'file' param, or unecessary Params
-//TODO: Verify function names and usage
 
 /**
  *  @class A Custom Markdown Reader.
@@ -17,20 +15,15 @@ const regex = require('./regex');
  */
 class MDReader {
 
-  //The final Result
-  result = {}
-
-  //The information before insert into final result, items here needs reordering
-  preData = []
-
-  //TODO: Delete this and references
-  //The User Configuration
-  //userConfig = {}
-
-  //CLI Modes
-  cmd = {
-    verbose: false,
-    silent: true,
+  /**
+   * Defaut command mode
+   * @returns the default command mode
+   */
+  static defaultCmd(){
+    return {
+      verbose: false,
+      silent: true,
+    }
   }
 
   /**
@@ -38,12 +31,9 @@ class MDReader {
    *  @param {string} file - The MD String File
    *  @returns The Result Array
    */
-  toArray(file){
-    //Erase the Array
+  static toArray(file){
+    //Create final array
     let result = {}
-
-    //First Erase all Content that is not Compatible with UserConfig
-    //file = this.justUserConfig(file);
 
     //Read Configs and Body
     const configsRes = this.getConfigs(file);
@@ -66,7 +56,7 @@ class MDReader {
    * @param {string} file - The MD String File
    * @return {Object} - Array of Configurations and File without Configs
    */
-  getConfigs(file){
+  static getConfigs(file){
     let re;
     let res = {
       configs: {}, 
@@ -94,7 +84,7 @@ class MDReader {
    * @returns The data from given MD file, in `Array`
    * @internal
    */
-  getBody(file){
+  static getBody(file){
     //Response
     let res = []
 
@@ -166,7 +156,7 @@ class MDReader {
    * @returns the scopes of file in `Array` format
    * @internal
    */
-  getScopes(file){
+  static getScopes(file){
     //The Response
     let res = []
 
@@ -207,7 +197,7 @@ class MDReader {
    *  [1] The New File 
    *  [2] The Data to insert into preResult
    */
-  getByType(type, file){
+  static getByType(type, file){
     let res = {
       has: false,
       file: file,
@@ -350,7 +340,7 @@ class MDReader {
   /**
    *  Order all elements by Index
    */
-  orderByIndex(data){
+  static orderByIndex(data){
     //The Response
     let res = []
 
@@ -438,7 +428,7 @@ class MDReader {
    * @returns The higher value from an given Object (by Index Key)
    * @internal
    */
-  getHigher(obj){
+  static getHigher(obj){
     let higher = -1;
 
     obj.map(item => {
@@ -455,7 +445,7 @@ class MDReader {
    * @returns The lower value from an given Object (by Index Key)
    * @internal
    */
-  getLower(obj, higher){
+  static getLower(obj, higher){
     let res = {
       lower: higher+1,
       lowerIndex: 0,
@@ -477,7 +467,7 @@ class MDReader {
    * @param {String} path - Path to were output the file
    * @param {Object} array - The Array of Objects 
    */
-  toFile(array){
+  static toFile(array){
     /* FOR DEBUG */
     array.langs = ['pt']
     array.versions = ['1']
@@ -493,16 +483,15 @@ class MDReader {
   /**
    * Converts a Given File to Readable Data for PageRender
    * @param {string} filename - The Markdown File to Read
-   * @param {Object} userConfig - The User configuration
+   * @param {Object} args - The User configuration
    * @returns - An Object With all Content
    */
-  convert(filename, userConfig){
+  static convert(filename, args=this.defaultCmd()){
     //To meansure Process Time
     let start = process.hrtime();
 
-    //Get console Args and set UserConfig
-    this.setEnv(process.argv.length>2 || ['-silent'], userConfig);
-    const { verbose, silent } = this.cmd;
+    //Get console Args
+    const { silent } = args;
 
     //Get the File
     if(!silent) console.log(`🌀 MDReader v0.1.0 🌀`);
@@ -511,11 +500,7 @@ class MDReader {
     
     //Convert in Array
     if(!silent) console.log(`⏳ Converting to Array ...`);
-    this.toArray(file);
-
-    //Create Data.js File
-    //if(!silent) console.log(`⏳ Generating Data.js ...`);
-    //this.toFile(this.result);
+    let result = this.toArray(file);
 
     //To meansure Process Time
     let end = process.hrtime(start);
@@ -523,18 +508,7 @@ class MDReader {
     if(!silent) console.log(`✔  All done! 😃`);
 
     //Return the Result Array
-    return(this.result);
-  }
-
-  /**
-   * Set the Class Environment
-   * Get all CMD args
-   */
-  setEnv(args=[], config={}){
-    //this.userConfig = config;
-    
-    this.cmd.silent = args.includes('-silent');
-    this.cmd.verbose = args.includes('-verbose');
+    return(result);
   }
 
   /**
@@ -544,8 +518,7 @@ class MDReader {
    * @param {Array} args - The CMD Args (verbose, silent ...)
    * @return - The Value of Choosed Config (If has)
    */
-  config(filename, config, args=[]){
-    this.setEnv(args);
+  static config(filename, config, args=this.defaultCmd()){
     let file = fs.readFileSync(filename, 'utf-8');
 
     let res = '';
@@ -561,10 +534,8 @@ class MDReader {
 //TODO: Check relative path to module
 
 /* TESTING AREA */
-const reader = new MDReader;
 const filepath = 'services/MDReader/article.example.md';
-reader.toFile(reader.toArray(fs.readFileSync(filepath, 'utf-8')));
-//console.log(require('./data'))
+MDReader.toFile(MDReader.toArray(fs.readFileSync(filepath, 'utf-8')));
 /* TESTING AREA */
 
-module.exports = new MDReader;
+module.exports = MDReader;
