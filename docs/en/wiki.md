@@ -32,6 +32,7 @@ articles/*Your_Article_ID*/**1**/article.**en**.md
 To insert **images** and **files**, it can be inserted in article root folder with the name images and files respectively
 
 articles/*Your_Article_ID*/**images**/
+
 articles/*Your_Article_ID*/**files**/
 
 To **acess images** and **files**, see [images](#) and [files](#)
@@ -61,7 +62,7 @@ For the current version (0.2.0), the available configurations are:
 
 To use all potential of DynWiki, the tags are used to encapsulate certain instructions to identify that as a group of person. This means that persons that have *x32 systems* can have trouble downloading *x64 programs*, but instead of saying that, **configure that with tags**, to just show what is compatible with the user computer.
 
-Ok, I but that aren't actualy just compatibility tags, there are aesthetic tags, that will be transformed in a component. For example, \<cmd> tag will be turned in:
+Ok, but that aren't actualy just compatibility tags, there are aesthetic tags, that will be transformed in a component. For example, \<cmd> tag will be turned in:
 
 ![Cmd Tag](https://github.com/vinicius-portela/dyn-wiki/blob/master/docs/images/cmd_tag.png)
 
