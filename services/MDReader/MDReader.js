@@ -421,13 +421,12 @@ class MDReader {
 
       //Look for each until reach higher
       for(let i=0 ; i<res.length ; i++){
-        if(index<res[i].index) {
+        if(index>res[i].index) {
           lastIndex = i
-          break;
-        }
+        }else break;
       }
-
-      res.splice(lastIndex, 0, item)
+      //Add after lastIndex
+      res.splice(lastIndex+1, 0, item)
     })
 
     return res
@@ -565,6 +564,7 @@ class MDReader {
 const reader = new MDReader;
 const filepath = 'services/MDReader/article.example.md';
 reader.toFile(reader.toArray(fs.readFileSync(filepath, 'utf-8')));
+//console.log(require('./data'))
 /* TESTING AREA */
 
 module.exports = new MDReader;
