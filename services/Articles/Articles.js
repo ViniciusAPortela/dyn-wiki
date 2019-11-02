@@ -297,7 +297,6 @@ class Article {
                 //Remove from scope
                 for(let i=0 ;  i<array.length ; i++){
                     let item = array[i]
-                    console.log(i)
                     if(item.hasOwnProperty('scope')){
                         if(item.scope === tag){
                             console.log('equal to '+tag)
@@ -309,7 +308,6 @@ class Article {
                     }
                 }
                 
-                console.log(array)
             }else{
                 //Just Remove
                 array = array.filter(item => {
@@ -326,7 +324,6 @@ class Article {
         arr.data = array
 
         let content = 'module.exports = ' + JSON.stringify(arr)
-        //console.log(content)
         fs.writeFileSync('./data.js', content)
     }
 }
