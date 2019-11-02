@@ -51,6 +51,7 @@ To add a configuration simply put **#!** with the configuration key and it's val
 #!title: How to Update Linux Kernel
 ```
 For the current version (0.2.0), the available configurations are:
+
 |Configuration| Usage |
 |--|--|
 | title | the article title |
@@ -69,6 +70,7 @@ Ok, but that aren't actualy just compatibility tags, there are aesthetic tags, t
 This make wiki have the same apperance in all articles and, at the same time, make the article more readable
 
 All the current supported (0.2.0) tags are:
+
 |Tag| Usage |
 |--|--|
 | cmd | commands (*with copy button*) |
