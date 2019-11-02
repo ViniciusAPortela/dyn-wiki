@@ -60,85 +60,6 @@ class MDReader {
     return result;
   }
 
-  //TODO: Remove this Function
-  /**
-   * Get just UserConfig
-   * @param {string} file - The Markdown File
-   * @deprecated
-   */
-  justUserConfig(file){
-    //Get all MD Config Tags
-    //Read the tags.config.js
-    //Use Content Regex [0][1][2]
-    let tags = require('./tags.config');
-    for(const prop in tags){
-      //First Look for this Tag in Markdown File
-      const { verbose } = this.cmd
-      if(verbose) console.log(`[V] Looking for ${prop}`);
-
-      let regexT = regex.tag[0] + prop + regex.tag[1] + prop + regex.tag[2];
-      let re = new RegExp(regexT, 'gm');
-
-      re.lastIndex = 0;
-      let has = re.test(file);
-      if(verbose) console.log(`[V] ⤷ Has? ${has}`);
-      if(has){
-        //Check if is compatible with user
-        //Get all inside Configs and Compare One-By-One Inside Array Items
-        let ok = false;
-
-        //Get all tag Needed Configuration
-        for(const config in tags[prop]){
-          ok = false;
-          if(verbose) console.log(`[V] Getting [${config}] configuration`);
-          //So, transform in for(); to use break;
-          let index = 0;
-          for(const item in tags[prop][config]){
-            if(verbose) console.log(`[V] Possibility ${index}: ${tags[prop][config][item]}`);
-            if(this.userConfig[config] === tags[prop][config][item]){
-              ok = true;
-              if(verbose) console.log(`[V] ✔️ Is Compatible`);
-              break;
-            }
-          };
-          
-          if(!ok){
-            //NOT COMPATIBLE
-            //Dont read the rest and delete from file
-            if(verbose) console.log(`[V] ❌ Not Compatible`);
-
-            re.lastIndex = 0;
-            let response = '';
-            while(response = re.exec(file)){
-              file = 
-                file.substr(0, response.index) + 
-                `\u0000`.repeat(re.lastIndex-response.index) + 
-                file.substr(response.index + `\u0000`.repeat(re.lastIndex-response.index).length);
-            }
-
-            break;
-          }else{
-            //COMPATIBLE
-            //Mantain inside content but exclude tags
-            const regexT2 = regex.tag[3] + prop + regex.tag[4];
-            let re2 = new RegExp(regexT2, 'gm');
-            
-            re2.lastIndex = 0;
-            let response = '';
-            while(response = re2.exec(file)){
-              file = 
-                file.substr(0, response.index) + 
-                `\u0000`.repeat(re2.lastIndex-response.index) + 
-                file.substr(response.index + `\u0000`.repeat(re2.lastIndex-response.index).length);
-            }
-          }
-        }
-      }
-    };
-
-    return file;
-  }
-
   //TODO: Transform getConfigs and getConfig into one unique function
   /**
    * Get all Configurations from a MD File
@@ -251,7 +172,7 @@ class MDReader {
 
     //Look for Compatibility Scopes (only32, only64)
     //Get Tag configurations from tags.config.js
-    const tagsConf = require('./tags.config');
+    const tagsConf = require('../../tags.config');
 
     //Look for each tag configured in tagsConf
     Object.keys(tagsConf).map((prop)=>{
@@ -494,8 +415,6 @@ class MDReader {
     })
 
     //Then, put others groups inside the root in correct order
-    console.log(othersRes)
-
     othersRes.map(item =>{
       let index = item.index
       let lastIndex = -1
@@ -517,6 +436,7 @@ class MDReader {
   /**
    * Get higher from a Object with Index Key
    * @param {Object} obj - Object with Index Key
+   * @returns The higher value from an given Object (by Index Key)
    * @internal
    */
   getHigher(obj){
@@ -533,6 +453,7 @@ class MDReader {
    * Get lower from a Object with Index Key
    * @param {Object} obj - Object with Index Key
    * @param {Number} higher - Higher Index from given Object ( Can get with getHigher(obj) )
+   * @returns The lower value from an given Object (by Index Key)
    * @internal
    */
   getLower(obj, higher){
@@ -564,71 +485,7 @@ class MDReader {
     /* FOR DEBUG */
 
     let content = `module.exports = ` + JSON.stringify(array);
-    fs.writeFileSync('data.js', content);
-  }
-
-  /**
-   * Get all conditional tags from a given article
-   * @param {String} file - the file (in string format)
-   */
-  tags(file){
-    regex.tag.name.lastIndex = 0;
-    let ret;
-    let res = [];
-    let tags = require('./tags.config');
-
-    //Search for all tags inside the given file
-    while(ret = regex.tag.name.exec(file)){
-
-      //Tag Verification
-      //Only Condicional tags are importants
-      if(Object.keys(tags).indexOf(ret[1]) !== -1)
-        //Check if Already exists
-          if(res.indexOf(ret[1]) === -1)
-            res.push(ret[1]);
-    }
-
-    return res;
-  }
-
-  /**
-   * Part of Complex Way
-   * Check Equal parts to merge for Cache System
-   */
-  mergeTags(){
-
-  }
-
-  /**
-   * Get all possible Variations from Article based on given Tags
-   * @param {Array} tags - Tags from Article
-   */
-  possibleVariations(tags){
-    //Simple way, get all tags and mix
-    //Complex way, read tags configuration and see merging configurations
-    //Two PCs with differents but same effect to some tag
-    let res = []
-
-    // ...
-  }
-
-  /**
-   * Make Recursive Reading
-   * @param {Array} tags - Tags
-   */
-  forEachTag(tags){
-    const len = tags.length()
-
-    // ...
-  }
-
-  /**
-   * Read a file by filename and returns the file in string format
-   * @param {String} filepath  - Path to File
-   * @retuns File in String
-   */
-  read(filepath){
-    return fs.readFileSync(filepath);
+    fs.writeFileSync('services/MDReader/data.js', content);
   }
   
   //Just Identify and Erase what is not supported in the user system
@@ -701,6 +558,8 @@ class MDReader {
   }
 
 }
+
+//TODO: Check relative path to module
 
 /* TESTING AREA */
 const reader = new MDReader;

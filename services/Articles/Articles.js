@@ -241,6 +241,109 @@ class Article {
         if(err) throw error;
         });
     }
+
+    /**
+     * Check if a tag is compatible with user configuration
+     * @param {String} tag 
+     * @param {Object} tagsConfig 
+     */
+    checkCompatibility(tag, tagsConfig, userConfig=this.cmd.defaultConfig){
+        //Check if tag exists in tagsConfig
+        if(tagsConfig.hasOwnProperty(tag)){
+            //For each needed configuration in tagsConfig
+            let keys =  Object.keys(tagsConfig[tag])
+            
+            for(let i=0; i<keys.length ; i++){
+                let item = keys[i]
+                let user = userConfig[item]
+                if (!tagsConfig[tag][item].includes(user))
+                    return false
+            }
+
+            return true
+        }
+    }
+
+    /**
+     * Convert files that aren't in articles/ file structure
+     * @param {Array} arr - Array with all Article Content
+     * @param {Object} config - Configuration of User
+     */
+    convertAlternative(arr, config=this.cmd.defaultConfig){
+        //Get configurations of tags
+        const tags = require('../../tags.config')
+
+        let array = arr.data
+
+        //Get all unique scopes from array
+        let scopes = []
+
+        array.map(item => {
+            if(item.hasOwnProperty('scope'))
+                if(scopes.indexOf(item.scope) === -1)
+                    scopes.push(item.scope)
+        })
+
+        //Check for compatibility
+        scopes.forEach(tag => {
+            let comp = this.checkCompatibility(tag, tags)
+
+            if(comp){
+                //Remove from scope and insert
+
+                //Remove from scope
+                //Get indexes of current tag
+                let indexes = []
+                array.forEach((item, index) => {
+                    if(item.hasOwnProperty('scope')){
+                        if(item.scope === tag)
+                            indexes.push(index)
+                    }
+                })
+
+                //console.log(indexes)
+
+                //For each index, remove this data from scope
+                indexes.forEach((i, i2)=> {
+                    let data = Object.assign([], array) 
+                    let length = array[i].data.length
+
+                    data.splice(i, 1)
+                    for(let index=0 ; index<length ; index++){
+                        data.splice(i, 0, array[i].data[index])
+                    }
+
+                    //Correct the index of next
+                    if(indexes[i2+1])
+                        indexes[i2+1] += (-1 + length)
+            
+                    array = data;
+                })
+            }else{
+                //Just Remove
+
+                array = array.filter(item => {
+                    if(!item.hasOwnProperty('scope')){
+                        return true
+                    }else{
+                        if(item.scope !== tag)
+                            return true
+                    } 
+                })
+            }
+        })
+
+        arr.data = array
+
+        let content = 'module.exports = ' + JSON.stringify(arr)
+        console.log(content)
+        fs.writeFileSync('./data.js', content)
+    }
 }
+
+/* FOR DEBUG */
+const articles = new Article
+articles.convertAlternative(require('../MDReader/data'))
+/* FOR DEBUG */
 
 module.exports = new Article;
