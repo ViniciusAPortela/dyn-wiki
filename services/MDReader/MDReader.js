@@ -8,7 +8,7 @@ const regex = require('./regex');
 /**
  *  @class A Custom Markdown Reader.
  *  @author vinicius-portela
- *  @version 0.2.0.alpha_1
+ *  @version 0.2.0.alpha_2
  *  
  *  Reads and Render the MD files of Wiki Pages, also reads the additional stuff 
  *  that isn't in default markdown language

@@ -3,6 +3,9 @@ const fs = require('fs');
 
 /**
  * @class Article
+ * @author vinicius-portela
+ * @version 0.2.0.alpha_1
+ * 
  * Manipulate article info, directory, etc
  */
 class Article {
@@ -292,36 +295,23 @@ class Article {
                 //Remove from scope and insert
 
                 //Remove from scope
-                //Get indexes of current tag
-                let indexes = []
-                array.forEach((item, index) => {
+                for(let i=0 ;  i<array.length ; i++){
+                    let item = array[i]
+                    console.log(i)
                     if(item.hasOwnProperty('scope')){
-                        if(item.scope === tag)
-                            indexes.push(index)
+                        if(item.scope === tag){
+                            console.log('equal to '+tag)
+                            let content = []
+                            item.data.forEach(item => content.push(item))
+                            
+                            array = array.slice(0, i).concat(content, array.slice(i+1))
+                        }
                     }
-                })
-
-                //console.log(indexes)
-
-                //For each index, remove this data from scope
-                indexes.forEach((i, i2)=> {
-                    let data = Object.assign([], array) 
-                    let length = array[i].data.length
-
-                    data.splice(i, 1)
-                    for(let index=0 ; index<length ; index++){
-                        data.splice(i, 0, array[i].data[index])
-                    }
-
-                    //Correct the index of next
-                    if(indexes[i2+1])
-                        indexes[i2+1] += (-1 + length)
-            
-                    array = data;
-                })
+                }
+                
+                console.log(array)
             }else{
                 //Just Remove
-
                 array = array.filter(item => {
                     if(!item.hasOwnProperty('scope')){
                         return true
@@ -336,7 +326,7 @@ class Article {
         arr.data = array
 
         let content = 'module.exports = ' + JSON.stringify(arr)
-        console.log(content)
+        //console.log(content)
         fs.writeFileSync('./data.js', content)
     }
 }
