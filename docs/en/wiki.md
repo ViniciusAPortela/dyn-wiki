@@ -12,8 +12,9 @@ To start contributing with article to DynWiki project you first need to understa
 
 ### File Structure<a id='file_structure'/>
 First of all, the **File Structure**, there are basic 3 important things to understand:
+
 **1** - Each article has it's unique ID
-The unique ID is used ( *obviously* ) to identificate a article, the ID is a number from **1 to the infinite**, in practice, this number will be gived to you, so don't worry about it.
+The unique ID is used ( *obviously* ) to identificate a article, the ID is a number from **1 to the infinite**. In practice, this number will be gived to you, so don't worry about it.
 
 **2** - Articles are separated in versions 
 This exists to prevent outdated articles or making duplicated articles saying the same thing but updating just a small thing. The versioning also exists to people who uses outdated versions *( for example, of a program )* still having acess to the old article.
@@ -88,5 +89,7 @@ Compatibility tags:
 | onlyLinux | only Linux systems |
 
 ## Contribute with Engine <a id='contribule_engine'/>
+
 We are working for that 👨‍💻
+
 > If you want and understand how the engine actually works you can contribute to documentation
