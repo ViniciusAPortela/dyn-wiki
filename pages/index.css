@@ -1,0 +1,63 @@
+.root-container{
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+.left-container{
+  display: flex;
+  flex-direction: column;
+
+  background-color: #007BDF;
+  color: white;
+
+  padding: 1rem;
+  min-width: 16rem;
+  height: 100%;
+}
+
+.right-container{
+  display: flex;
+  flex-direction: column;
+  padding: 1.4rem;
+}
+
+.dyn-wiki{
+  width: 4.5rem;
+  height: auto;
+}
+
+.category-span{
+  color: #374650;
+  font-family: 'Alef', sans-serif;
+  font-weight: 700;
+  font-size: 1.8rem;
+}
+
+.search{
+  display: flex;
+}
+
+.search-input{
+  width: 100%;
+}
+
+ul{
+  margin-left: -35px;
+}
+
+a{
+  text-decoration: none;
+}
+
+a:visited{
+  color: #EEE
+}
+
+.list-article{
+  line-height: 400%
+}
+
+.list-article li{
+  line-height: 130%
+}

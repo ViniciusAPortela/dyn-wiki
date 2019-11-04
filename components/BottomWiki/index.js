@@ -1,5 +1,4 @@
 import React from 'react';
-import SimpxLogo from '../../assets/page/simpx.png';
 
 import './bottomwiki.css';
 

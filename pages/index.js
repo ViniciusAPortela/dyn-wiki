@@ -1,8 +1,13 @@
-import React from 'react';
-import Link from 'next/link';
+import React from 'react'
+import Link from 'next/link'
 import fetch from 'isomorphic-unfetch'
-import Head from 'next/head';
-import userConfig from '../services/UserConfig';
+import Head from 'next/head'
+import { TextField } from '@material-ui/core'
+
+import userConfig from '../services/UserConfig'
+
+import DynWikiLogo from '../assets/icons/dynwiki.png'
+import './index.css'
 
 export default class Index extends React.Component{
     state = {
@@ -23,7 +28,6 @@ export default class Index extends React.Component{
         res = await fetch('http://'+window.location.hostname+':5000/articles') :
         res = await fetch('http://'+window.location.hostname+'/articles');
 
-        //const res = await fetch('http://'+window.location.hostname+'/articles');
         let data = await res.json();
 
         this.setState({os, lang, arch, data});
@@ -37,35 +41,38 @@ export default class Index extends React.Component{
                 <Head>
                     <title>Dyn-Wiki - A dynamic Wiki for easy reading</title>
                 </Head>
-                <div>
-                    <h1>Dyn-Wiki - A dynamic Wiki for easy reading</h1>
-                    Dados pelo Navegador:<br/>
-                    Sistema Operacional: {this.state.os}<br/>
-                    Idioma: {this.state.lang}<br/>
-                    Arquitetura: {this.state.arch}
-                    <br/><br/>
-                    Artigos:
-                    <ul>
-                    {
-                        data.length !== 0 ? data.map(article =>{
-                            let res = article.article;
-                            return <li>{res}<ul>{article.versions.map(version => {
-                                let res2 = version.version;
-                                return <li>{res2}<ul>{version.langs.map(lang => {
-                                    return(
-                                        <Link href={`/wiki/${res}/${res2}/${lang.abr}`}>
-                                            <a>
-                                                <li>{lang.title} [{lang.abr}]<br/>
-                                                    {lang.desc}
-                                                </li>
-                                            </a>
-                                        </Link>
-                                    );
+                <div className='root-container'>
+                    <div className='left-container'>
+                        <img src={DynWikiLogo} className='dyn-wiki'/>
+                        <div className='search'>
+                            <TextField className='search-input' type="text"/>
+                        </div>
+                        <ul>
+                        {
+                            data.length !== 0 ? data.map(article =>{
+                                let res = article.article;
+                                return <li className='list-article'>Artigo {res}<ul>{article.versions.map(version => {
+                                    let res2 = version.version;
+                                    return <li>Versão {res2}<ul>{version.langs.map(lang => {
+                                        return(
+                                            <Link href={`/wiki/${res}/${res2}/${lang.abr}`}>
+                                                <a>
+                                                    <li>{lang.title} [{lang.abr}]<br/>
+                                                        {lang.desc}
+                                                    </li>
+                                                </a>
+                                            </Link>
+                                        );
+                                    })}</ul></li>
                                 })}</ul></li>
-                            })}</ul></li>
-                        })
-                    : null } 
-                    </ul>
+                            })
+                        : null } 
+                        </ul>
+                    </div>
+                    <div className='right-container'>
+                        <span className='category-span'>Recently Added</span>
+                        <span className='category-span'>Most Viewed</span>
+                    </div>
                 </div>
             </>
         );
