@@ -9,18 +9,25 @@ const fs = require('fs');
  * Manipulate article info, directory, etc
  */
 class Article {
-    cmd = {
-        verbose: false,
-        // Default Configuration
-        // This is my computer current config :) 
-        defaultConfig: {
-            arch: 'x64',
-            os: 'linux',
-            os_version: '5.0.0-31-generic',
-            dist: 'kde_neon',
-            dist_version: '5.16',
-            swap: 10843,
-            swap_type: 'partition',
+
+    /**
+     * Default Command Configurations
+     * @returns Default Configuration
+     */
+    static defaultCmd(){
+        return {
+            verbose: false,
+            // Default Configuration
+            // This is my computer current config :) 
+            defaultConfig: {
+                arch: 'x64',
+                os: 'linux',
+                os_version: '5.0.0-31-generic',
+                dist: 'kde_neon',
+                dist_version: '5.16',
+                swap: 10843,
+                swap_type: 'partition',
+            }
         }
     }
 
@@ -29,7 +36,7 @@ class Article {
      * @param {String} folder - Path to Folder 
      * @return {Array} - List of Versions
      */
-    getVersions(folder){
+    static getVersions(folder){
         let res = [];
 
         let versions = fs.readdirSync(folder);
@@ -54,7 +61,7 @@ class Article {
      * @param {String} folder - Path to Folder
      * @return {Array} - List of Languages
      */
-    getLangs(folder){
+    static getLangs(folder){
         let res = [];
 
         let langs = fs.readdirSync(folder);
@@ -68,10 +75,12 @@ class Article {
 
     /**
      * Get all articles inside a folder
+     * @param {String} folder - folder name from get Articles
+     * @param {Object} cmd - cmd configuration
      * @return Array with all Articles
      */
-    getArticles(folder){
-        const { verbose } = this.cmd;
+    static getArticles(folder, cmd=this.defaultCmd()){
+        const { verbose } = cmd;
         if(verbose) console.log(`[V] Getting Articles of folder '${folder}'`);
         
         let res = [];
@@ -118,19 +127,13 @@ class Article {
     }
 
     /**
-     * Check for all tags inside a Article, this is used for getting all possible
-     * configurations to be saved in cache
-     */
-    checkForTags(){}
-
-    /**
      * Check if a article is saved in cache
      * @param {String} article - The Article ID
      * @param {String} version - The Article Version
      * @param {String} lang - The Article Language (PT, EN, ES, JP, DE ...)
      * @returns - True/False Result
      */
-    isInCache(article, version, lang){
+    static isInCache(article, version, lang){
         const inCache = fs.existsSync(`services/Articles/cache/${article}/${version}/${lang}.json`);
 
         if(inCache) return true; else return false;
@@ -140,14 +143,14 @@ class Article {
      * Save a file in cache
      * @param {Object} data - The Result Object with all Data
      */
-    toCache(data){
+    static toCache(data){
         //Get Article Metadata
         const { article, version, lang } = data.meta;
 
         const content = JSON.stringify(data);
         const baseDir = 'services/Articles/cache'
 
-        //Create Dir
+        //Create Dir if doesn't exists
         const hasArticleRoot = fs.existsSync(`${baseDir}`);
         const hasArticle = fs.existsSync(`${baseDir}/${article}`);
         const hasVersion = fs.existsSync(`${baseDir}/${article}/${version}`);
@@ -160,33 +163,36 @@ class Article {
             console.log('💾 Saved to cache')
         });
     }
-    
-    //TODO: Has to import config too, so see if a article is in cache or not
-    // Because the user can have a different config that doesnt have an article in cache yet
 
     /**
      * Loads a file from cache
      * @param {String} article - The Article ID
      * @param {String} version - The Article Version
      * @param {String} lang - The Article Language (PT, EN, ES, JP, DE ...)
+     * @param {Object} config - The User Configuration
+     * @returns {Object} Object prepared to PageRender
      */
-    loadFromCache(article, version, lang){
-        const res = fs.readFileSync(`./services/Articles/cache/${article}/${version}/${lang}.json`);
-        return res;
+    static loadFromCache(article, version, lang, config){
+        let data = JSON.parse(fs.readFileSync(`./services/Articles/cache/${article}/${version}/${lang}.json`, 'utf-8'));
+        
+        return this.justUserConfig(data, config)
     }
 
     /**
-     * It's part of process of get(), it's more background service than get()
+     * It's part of process of get(), it's more internal service than get()
      * @param {String} article - The Article ID
      * @param {String} version - The Article Version
      * @param {String} lang - The Article Language (PT, EN, ES, JP, DE ...)
+     * @param {Object} config - The user Configuration
+     * @returns Object with all data for PageRender
+     * @internal
      */
-    convert(article, version, lang){
+    static convert(article, version, lang, config){
         let file = `articles/${article}/${version}/article.${lang}.md`
-        let userConfig = require('../UserConfig/userConfig.example');
+        //let userConfig = require('../UserConfig/userConfig.example');
 
         //First Load File (With MDReader)
-        let data = reader.convert(file, userConfig);
+        let data = reader.convert(file, config);
 
         //Add Metadata
         data.meta = {
@@ -202,7 +208,7 @@ class Article {
         //Finally Add to Cache for Next Searchs
         this.toCache(data);
 
-        return data;
+        return this.justUserConfig(data, config);
     }
 
     /**
@@ -213,20 +219,19 @@ class Article {
      * @param {String} config - The User System Configuration
      * @returns - The Article in JSON
      */
-    get(article, version, lang, config = this.defaultConfig){
+    static get(article, version, lang, config = this.defaultCmd().defaultConfig){
         const hasInCache = this.isInCache(article, version, lang);
-        //const hasInCache = false;
 
         //Check if file already in cache
         if(hasInCache){
             //In cache
-            let data = this.loadFromCache(article, version, lang);
+            let data = this.loadFromCache(article, version, lang, config);
             console.log('📀 Already in Cache, Loading...');
 
             return data;
         }else{
             //Not in Cache
-            let data = this.convert(article, version, lang);
+            let data = this.convert(article, version, lang, config);
 
             return data;
         }
@@ -236,7 +241,7 @@ class Article {
      * Update list of articles
      * Used by the Express Node Server
      */
-    update(){
+    static update(){
         console.log('🔄 Updating Article List...');
         let updated_data = this.getArticles('./articles/');
         let updated_content = JSON.stringify(updated_data);
@@ -250,7 +255,7 @@ class Article {
      * @param {String} tag 
      * @param {Object} tagsConfig 
      */
-    checkCompatibility(tag, tagsConfig, userConfig=this.cmd.defaultConfig){
+    static checkCompatibility(tag, tagsConfig, userConfig=this.defaultCmd().defaultConfig){
         //Check if tag exists in tagsConfig
         if(tagsConfig.hasOwnProperty(tag)){
             //For each needed configuration in tagsConfig
@@ -272,7 +277,7 @@ class Article {
      * @param {Array} arr - Array with all Article Content
      * @param {Object} config - Configuration of User
      */
-    convertAlternative(arr, config=this.cmd.defaultConfig){
+    static justUserConfig(arr, config=this.defaultCmd().defaultConfig){
         //Get configurations of tags
         const tags = require('../../tags.config')
 
@@ -289,7 +294,7 @@ class Article {
 
         //Check for compatibility
         scopes.forEach(tag => {
-            let comp = this.checkCompatibility(tag, tags)
+            let comp = this.checkCompatibility(tag, tags, config)
 
             if(comp){
                 //Remove from scope and insert
@@ -297,10 +302,8 @@ class Article {
                 //Remove from scope
                 for(let i=0 ;  i<array.length ; i++){
                     let item = array[i]
-                    console.log(i)
                     if(item.hasOwnProperty('scope')){
                         if(item.scope === tag){
-                            console.log('equal to '+tag)
                             let content = []
                             item.data.forEach(item => content.push(item))
                             
@@ -309,7 +312,6 @@ class Article {
                     }
                 }
                 
-                console.log(array)
             }else{
                 //Just Remove
                 array = array.filter(item => {
@@ -325,15 +327,15 @@ class Article {
 
         arr.data = array
 
-        let content = 'module.exports = ' + JSON.stringify(arr)
-        //console.log(content)
-        fs.writeFileSync('./data.js', content)
+        return arr;
+
+        //let content = 'module.exports = ' + JSON.stringify(arr)
+        //fs.writeFileSync('./data.js', content)
     }
 }
 
 /* FOR DEBUG */
-const articles = new Article
-articles.convertAlternative(require('../MDReader/data'))
+//Article.justUserConfig(require('../MDReader/data'))
 /* FOR DEBUG */
 
-module.exports = new Article;
+module.exports = Article;

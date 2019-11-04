@@ -7,7 +7,7 @@ export default class BottomWiki extends React.Component{
 
   render(){
     return(
-        <img id='bottomwiki' src={SimpxLogo}/>
+        <div id='bottomwiki'/>
       );
   }
 }
