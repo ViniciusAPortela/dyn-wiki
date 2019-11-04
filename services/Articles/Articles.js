@@ -150,7 +150,7 @@ class Article {
         const content = JSON.stringify(data);
         const baseDir = 'services/Articles/cache'
 
-        //Create Dir
+        //Create Dir if doesn't exists
         const hasArticleRoot = fs.existsSync(`${baseDir}`);
         const hasArticle = fs.existsSync(`${baseDir}/${article}`);
         const hasVersion = fs.existsSync(`${baseDir}/${article}/${version}`);
@@ -163,33 +163,36 @@ class Article {
             console.log('💾 Saved to cache')
         });
     }
-    
-    //TODO: Has to import config too, so see if a article is in cache or not
-    // Because the user can have a different config that doesnt have an article in cache yet
 
     /**
      * Loads a file from cache
      * @param {String} article - The Article ID
      * @param {String} version - The Article Version
      * @param {String} lang - The Article Language (PT, EN, ES, JP, DE ...)
+     * @param {Object} config - The User Configuration
+     * @returns {Object} Object prepared to PageRender
      */
-    static loadFromCache(article, version, lang){
-        const res = fs.readFileSync(`./services/Articles/cache/${article}/${version}/${lang}.json`);
-        return res;
+    static loadFromCache(article, version, lang, config){
+        let data = JSON.parse(fs.readFileSync(`./services/Articles/cache/${article}/${version}/${lang}.json`, 'utf-8'));
+        
+        return this.justUserConfig(data, config)
     }
 
     /**
-     * It's part of process of get(), it's more background service than get()
+     * It's part of process of get(), it's more internal service than get()
      * @param {String} article - The Article ID
      * @param {String} version - The Article Version
      * @param {String} lang - The Article Language (PT, EN, ES, JP, DE ...)
+     * @param {Object} config - The user Configuration
+     * @returns Object with all data for PageRender
+     * @internal
      */
-    static convert(article, version, lang){
+    static convert(article, version, lang, config){
         let file = `articles/${article}/${version}/article.${lang}.md`
-        let userConfig = require('../UserConfig/userConfig.example');
+        //let userConfig = require('../UserConfig/userConfig.example');
 
         //First Load File (With MDReader)
-        let data = reader.convert(file, userConfig);
+        let data = reader.convert(file, config);
 
         //Add Metadata
         data.meta = {
@@ -205,7 +208,7 @@ class Article {
         //Finally Add to Cache for Next Searchs
         this.toCache(data);
 
-        return data;
+        return this.justUserConfig(data, config);
     }
 
     /**
@@ -218,18 +221,17 @@ class Article {
      */
     static get(article, version, lang, config = this.defaultCmd().defaultConfig){
         const hasInCache = this.isInCache(article, version, lang);
-        //const hasInCache = false;
 
         //Check if file already in cache
         if(hasInCache){
             //In cache
-            let data = this.loadFromCache(article, version, lang);
+            let data = this.loadFromCache(article, version, lang, config);
             console.log('📀 Already in Cache, Loading...');
 
             return data;
         }else{
             //Not in Cache
-            let data = this.convert(article, version, lang);
+            let data = this.convert(article, version, lang, config);
 
             return data;
         }
@@ -275,7 +277,7 @@ class Article {
      * @param {Array} arr - Array with all Article Content
      * @param {Object} config - Configuration of User
      */
-    static convertAlternative(arr, config=this.defaultCmd().defaultConfig){
+    static justUserConfig(arr, config=this.defaultCmd().defaultConfig){
         //Get configurations of tags
         const tags = require('../../tags.config')
 
@@ -292,7 +294,7 @@ class Article {
 
         //Check for compatibility
         scopes.forEach(tag => {
-            let comp = this.checkCompatibility(tag, tags)
+            let comp = this.checkCompatibility(tag, tags, config)
 
             if(comp){
                 //Remove from scope and insert
@@ -325,13 +327,15 @@ class Article {
 
         arr.data = array
 
-        let content = 'module.exports = ' + JSON.stringify(arr)
-        fs.writeFileSync('./data.js', content)
+        return arr;
+
+        //let content = 'module.exports = ' + JSON.stringify(arr)
+        //fs.writeFileSync('./data.js', content)
     }
 }
 
 /* FOR DEBUG */
-Article.convertAlternative(require('../MDReader/data'))
+//Article.justUserConfig(require('../MDReader/data'))
 /* FOR DEBUG */
 
 module.exports = Article;

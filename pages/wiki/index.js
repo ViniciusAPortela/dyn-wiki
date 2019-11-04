@@ -18,9 +18,9 @@ export default class Wiki extends React.Component {
   async componentDidMount(){
     //Load Article Body
     const { article, version, lang } = this.props.query;
-    //let res = await fetch(`/api/article/?article=${article}&version=${version}&lang=${lang}`);
-    //let data = await res.json();
-    let data = require('../../data')
+    let res = await fetch(`/api/article/?article=${article}&version=${version}&lang=${lang}`);
+    let data = await res.json();
+    //let data = require('../../data')
     console.log(data)
 
     this.setState({data});

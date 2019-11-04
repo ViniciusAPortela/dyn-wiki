@@ -494,10 +494,10 @@ class MDReader {
     const { silent } = args;
 
     //Get the File
+    let file = fs.readFileSync(filename, 'utf-8');
     if(!silent) console.log(`🌀 MDReader v0.1.0 🌀`);
     if(!silent) console.log(`⏳ Reading ${file} ...`);
-    let file = fs.readFileSync(filename, 'utf-8');
-    
+
     //Convert in Array
     if(!silent) console.log(`⏳ Converting to Array ...`);
     let result = this.toArray(file);
@@ -534,8 +534,8 @@ class MDReader {
 //TODO: Check relative path to module
 
 /* TESTING AREA */
-const filepath = 'services/MDReader/article.example.md';
-MDReader.toFile(MDReader.toArray(fs.readFileSync(filepath, 'utf-8')));
+//const filepath = 'services/MDReader/article.example.md';
+//MDReader.toFile(MDReader.toArray(fs.readFileSync(filepath, 'utf-8')));
 /* TESTING AREA */
 
 module.exports = MDReader;
