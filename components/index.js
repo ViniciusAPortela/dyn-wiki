@@ -1,15 +1,16 @@
-import Title from './Title';
-import Flag from './Flag';
-import Content from './Content';
-import CommandLine from './CommandLine';
-import Image from './Image';
-import ScriptList from './ScriptList';
-import ScriptFile from './ScriptFile';
-import TopWiki from './TopWiki';
-import PageRender from './PageRender';
-import Dropdown from './Dropdown';
-import BottomWiki from './BottomWiki';
-import BasicSnackbar from './Snackbar/Basic';
+import Title from './Title'
+import Flag from './Flag'
+import Content from './Content'
+import CommandLine from './CommandLine'
+import Image from './Image'
+import ScriptList from './ScriptList'
+import ScriptFile from './ScriptFile'
+import TopWiki from './TopWiki'
+import PageRender from './PageRender'
+import Dropdown from './Dropdown'
+import BottomWiki from './BottomWiki'
+import BasicSnackbar from './Snackbar/Basic'
+import ArticleView from './ArticleView'
 
 export {
   Title, 
@@ -23,5 +24,6 @@ export {
   PageRender,
   Dropdown,
   BottomWiki,
-  BasicSnackbar
-};
+  BasicSnackbar,
+  ArticleView
+}

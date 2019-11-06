@@ -2,11 +2,13 @@ import React from 'react'
 import Link from 'next/link'
 import fetch from 'isomorphic-unfetch'
 import Head from 'next/head'
-import { TextField } from '@material-ui/core'
+import { TextField, IconButton } from '@material-ui/core'
+import { Search } from '@material-ui/icons'
 
 import userConfig from '../services/UserConfig'
-
 import DynWikiLogo from '../assets/icons/dynwiki.png'
+import { ArticleView } from '../components'
+import { ARTICLES } from '../constants'
 import './index.css'
 
 export default class Index extends React.Component{
@@ -45,9 +47,12 @@ export default class Index extends React.Component{
                     <div className='left-container'>
                         <img src={DynWikiLogo} className='dyn-wiki'/>
                         <div className='search'>
-                            <TextField className='search-input' type="text"/>
+                            <TextField className='search-input' type="text" InputProps={{className: 'input'}}/>
+                            <IconButton>
+                                <Search className='search-button'/>
+                            </IconButton>
                         </div>
-                        <ul>
+                        <ul className='list-root'>
                         {
                             data.length !== 0 ? data.map(article =>{
                                 let res = article.article;
@@ -71,7 +76,32 @@ export default class Index extends React.Component{
                     </div>
                     <div className='right-container'>
                         <span className='category-span'>Recently Added</span>
+                        <ArticleView 
+                            title={ARTICLES[0].title}
+                            desc={ARTICLES[0].desc}
+                            lang={ARTICLES[0].lang}
+                            link={ARTICLES[0].link}
+                        />
+                        <ArticleView 
+                            title={ARTICLES[1].title}
+                            desc={ARTICLES[1].desc}
+                            lang={ARTICLES[1].lang}
+                            link={ARTICLES[1].link}
+                        />
+                        
                         <span className='category-span'>Most Viewed</span>
+                        <ArticleView 
+                                title={ARTICLES[0].title}
+                                desc={ARTICLES[0].desc}
+                                lang={ARTICLES[0].lang}
+                                link={ARTICLES[0].link}
+                            />
+                            <ArticleView 
+                                title={ARTICLES[1].title}
+                                desc={ARTICLES[1].desc}
+                                lang={ARTICLES[1].lang}
+                                link={ARTICLES[1].link}
+                            />
                     </div>
                 </div>
             </>

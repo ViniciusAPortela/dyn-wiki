@@ -1,5 +1,5 @@
-import Data from './data'
+import ARTICLES from './articles'
 
 export {
-  Data,
+  ARTICLES,
 };

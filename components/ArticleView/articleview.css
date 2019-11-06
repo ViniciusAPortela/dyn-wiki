@@ -1,0 +1,62 @@
+.card{
+  margin: 1.2rem 0;
+  width: 100%;
+  align-self: center;
+}
+
+.article-title{
+  font-weight: bold;
+}
+
+.column{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
+  position: relative;
+}
+
+.row{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+}
+
+.article-image{
+  width: 18rem;
+  height: 9rem;
+  margin-right: 2rem;
+  background-color: #d6d6d6;
+}
+
+.article-button{
+  background-color: #007BDF !important;
+  color: white !important;
+  position: absolute !important;
+  right: .5rem;
+  bottom: .5rem;
+  width: 12rem;
+}
+
+/* MOBILE ONLY */
+@media only screen and (max-width: 768px){
+  .row{
+    flex-direction: column;
+  }
+
+  .article-image{
+    width: 100%;
+    height: 9rem;
+    margin-right: 0rem;
+    margin-bottom: 1rem;
+  }
+
+  .article-button{
+    position: relative !important;
+    margin-top: 1rem !important;
+    right: 0rem;
+    bottom: 0rem;
+    width: 100%;
+  }
+}

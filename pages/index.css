@@ -1,18 +1,23 @@
 .root-container{
   display: flex;
   flex-direction: row;
-  height: 100vh;
+  min-height: 100vh;
+  max-width: 100vw;
+  overflow-x: hidden;
+  flex-wrap: wrap;
 }
 
 .left-container{
   display: flex;
   flex-direction: column;
+  position: fixed;
+  overflow-y: auto;
 
   background-color: #007BDF;
   color: white;
 
   padding: 1rem;
-  min-width: 16rem;
+  width: 18rem;
   height: 100%;
 }
 
@@ -20,6 +25,8 @@
   display: flex;
   flex-direction: column;
   padding: 1.4rem;
+  margin-left: 18rem;
+  width: 100%;
 }
 
 .dyn-wiki{
@@ -42,16 +49,27 @@
   width: 100%;
 }
 
+.input{
+  color: white !important;
+  border-color: red !important;
+}
+
+.input:focus{
+  color: white!important;
+  border-color: red !important;
+}
+
+.search-button{
+  color: white
+}
+
 ul{
   margin-left: -35px;
 }
 
 a{
+  color: white;
   text-decoration: none;
-}
-
-a:visited{
-  color: #EEE
 }
 
 .list-article{
@@ -60,4 +78,37 @@ a:visited{
 
 .list-article li{
   line-height: 130%
+}
+
+/* MOBILE ONLY */
+@media only screen and (max-width: 768px){
+  .root-container{
+    flex-direction: column;
+  }
+
+  .left-container{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  
+    background-color: #007BDF;
+    color: white;
+  
+    padding: 1rem;
+    min-width: 100vw;
+    height: 100%;
+  }
+
+  .right-container{
+    margin-left: 0rem;
+  }
+
+  .list-root{
+    display: none;
+  }
+}
+
+a:hover{
+  background: none;
+  color:inherit
 }
