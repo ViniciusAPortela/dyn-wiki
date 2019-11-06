@@ -6,7 +6,7 @@ const regex = require('./regex');
 /**
  *  @class A Custom Markdown Reader.
  *  @author vinicius-portela
- *  @version 0.2.0.alpha_2
+ *  @version 0.2.0
  *  
  *  Reads and Render the MD files of Wiki Pages, also reads the additional stuff 
  *  that isn't in default markdown language
@@ -24,6 +24,71 @@ class MDReader {
       verbose: false,
       silent: true,
     }
+  }
+
+  /**
+   * Converts a Given File to Readable Data for PageRender
+   * @param {string} filename - The Markdown File to Read
+   * @param {Object} args - The User configuration
+   * @returns - An Object With all Content
+   */
+  static convert(filename, args=this.defaultCmd()){
+    //To meansure Process Time
+    let start = process.hrtime();
+
+    //Get console Args
+    const { silent } = args;
+
+    //Get the File
+    let file = fs.readFileSync(filename, 'utf-8');
+    if(!silent) console.log(`🌀 MDReader v0.1.0 🌀`);
+    if(!silent) console.log(`⏳ Reading ${file} ...`);
+
+    //Convert in Array
+    if(!silent) console.log(`⏳ Converting to Array ...`);
+    let result = this.toArray(file);
+
+    //To meansure Process Time
+    let end = process.hrtime(start);
+    if(!silent) console.log(`🕓 All work done in ${end[1]/1000000}ms`);
+    if(!silent) console.log(`✔  All done! 😃`);
+
+    //Return the Result Array
+    return(result);
+  }
+
+  /**
+   * Get a Certain Config from MD File
+   * @param {String} filename - The name of file to Read
+   * @param {String} config - The Configuration Name to Get from MD File
+   * @param {Array} args - The CMD Args (verbose, silent ...)
+   * @return - The Value of Choosed Config (If has)
+   */
+  static config(filename, config, args=this.defaultCmd()){
+    let file = fs.readFileSync(filename, 'utf-8');
+
+    let res = '';
+    regex.config.lastIndex = 0;
+    while(res = regex.config.exec(file)){
+      if(res[1] === config) return res[2];
+    }
+    return false;
+  }
+
+  /**
+   * @deprecated
+   * Export the Object to Data.js to be read by the PageRender
+   * @param {String} path - Path to were output the file
+   * @param {Object} array - The Array of Objects 
+   */
+  static toFile(array){
+    /* FOR DEBUG */
+    array.langs = ['pt']
+    array.versions = ['1']
+    /* FOR DEBUG */
+
+    let content = `module.exports = ` + JSON.stringify(array);
+    fs.writeFileSync('services/MDReader/data.js', content);
   }
 
   /**
@@ -459,74 +524,6 @@ class MDReader {
     })
 
     return res;
-  }
-
-  /**
-   * @deprecated
-   * Export the Object to Data.js to be read by the PageRender
-   * @param {String} path - Path to were output the file
-   * @param {Object} array - The Array of Objects 
-   */
-  static toFile(array){
-    /* FOR DEBUG */
-    array.langs = ['pt']
-    array.versions = ['1']
-    /* FOR DEBUG */
-
-    let content = `module.exports = ` + JSON.stringify(array);
-    fs.writeFileSync('services/MDReader/data.js', content);
-  }
-  
-  //Just Identify and Erase what is not supported in the user system
-  //Then is the Common Process
-
-  /**
-   * Converts a Given File to Readable Data for PageRender
-   * @param {string} filename - The Markdown File to Read
-   * @param {Object} args - The User configuration
-   * @returns - An Object With all Content
-   */
-  static convert(filename, args=this.defaultCmd()){
-    //To meansure Process Time
-    let start = process.hrtime();
-
-    //Get console Args
-    const { silent } = args;
-
-    //Get the File
-    let file = fs.readFileSync(filename, 'utf-8');
-    if(!silent) console.log(`🌀 MDReader v0.1.0 🌀`);
-    if(!silent) console.log(`⏳ Reading ${file} ...`);
-
-    //Convert in Array
-    if(!silent) console.log(`⏳ Converting to Array ...`);
-    let result = this.toArray(file);
-
-    //To meansure Process Time
-    let end = process.hrtime(start);
-    if(!silent) console.log(`🕓 All work done in ${end[1]/1000000}ms`);
-    if(!silent) console.log(`✔  All done! 😃`);
-
-    //Return the Result Array
-    return(result);
-  }
-
-  /**
-   * Get a Certain Config from MD File
-   * @param {String} filename - The name of file to Read
-   * @param {String} config - The Configuration Name to Get from MD File
-   * @param {Array} args - The CMD Args (verbose, silent ...)
-   * @return - The Value of Choosed Config (If has)
-   */
-  static config(filename, config, args=this.defaultCmd()){
-    let file = fs.readFileSync(filename, 'utf-8');
-
-    let res = '';
-    regex.config.lastIndex = 0;
-    while(res = regex.config.exec(file)){
-      if(res[1] === config) return res[2];
-    }
-    return false;
   }
 
 }
