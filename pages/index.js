@@ -44,69 +44,35 @@ export default class Index extends React.Component{
                     <title>Dyn-Wiki - A dynamic Wiki for easy reading</title>
                 </Head>
                 <div className='root-container'>
-                    <div className='left-container'>
-                        <img src={DynWikiLogo} className='dyn-wiki'/>
-                        <div className='search'>
-                            <TextField className='search-input' type="text" InputProps={{className: 'input'}}/>
+                    <div className='top-container'>
+                        <span className='top-dynwiki'>Dyn-Wiki</span>
+                        <div className='top-input'>
+                            <div className='input-container'>
+                                <input type='text' className='top-input-field'/>
+                            </div>
                             <IconButton>
-                                <Search className='search-button'/>
+                                <Search className='input-search'/>
                             </IconButton>
                         </div>
-                        <ul className='list-root'>
-                        {
-                            data.length !== 0 ? data.map(article =>{
-                                let res = article.article;
-                                return <li className='list-article'>Artigo {res}<ul>{article.versions.map(version => {
-                                    let res2 = version.version;
-                                    return <li>Versão {res2}<ul>{version.langs.map(lang => {
-                                        return(
-                                            <Link href={`/wiki/${res}/${res2}/${lang.abr}`}>
-                                                <a>
-                                                    <li>{lang.title} [{lang.abr}]<br/>
-                                                        {lang.desc}
-                                                    </li>
-                                                </a>
-                                            </Link>
-                                        );
-                                    })}</ul></li>
-                                })}</ul></li>
-                            })
-                        : null } 
-                        </ul>
                     </div>
-                    <div className='right-container'>
-                        <span className='category-span'>Recently Added</span>
-                        <ArticleView 
-                            title={ARTICLES[0].title}
-                            desc={ARTICLES[0].desc}
-                            lang={ARTICLES[0].lang}
-                            link={ARTICLES[0].link}
-                            img={ARTICLES[0].article_image}
-                            {...ARTICLES[0]}
-                        />
-                        <ArticleView 
+                    <div className='bottom-container'>
+                        <span className='category-span'>All Articles</span>
+                        <span className='sub-category-span'>C</span>
+                        <ArticleView
                             title={ARTICLES[1].title}
                             desc={ARTICLES[1].desc}
                             lang={ARTICLES[1].lang}
                             link={ARTICLES[1].link}
                             {...ARTICLES[1]}
                         />
-                        
-                        <span className='category-span'>Most Viewed</span>
-                        <ArticleView 
+                        <span className='sub-category-span'>H</span>
+                        <ArticleView
                             title={ARTICLES[0].title}
                             desc={ARTICLES[0].desc}
                             lang={ARTICLES[0].lang}
                             link={ARTICLES[0].link}
                             img={ARTICLES[0].article_image}
                             {...ARTICLES[0]}
-                        />
-                        <ArticleView 
-                            title={ARTICLES[1].title}
-                            desc={ARTICLES[1].desc}
-                            lang={ARTICLES[1].lang}
-                            link={ARTICLES[1].link}
-                            {...ARTICLES[1]}
                         />
                     </div>
                 </div>

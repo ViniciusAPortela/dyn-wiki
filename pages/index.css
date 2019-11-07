@@ -1,83 +1,82 @@
 .root-container{
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   min-height: 100vh;
   max-width: 100vw;
   overflow-x: hidden;
   flex-wrap: wrap;
 }
 
-.left-container{
+.top-container{
   display: flex;
+  align-items: center;
   flex-direction: column;
-  position: fixed;
-  overflow-y: auto;
 
-  background-color: #007BDF;
-  color: white;
-
-  padding: 1rem;
-  width: 18rem;
-  height: 100%;
-}
-
-.right-container{
-  display: flex;
-  flex-direction: column;
-  padding: 1.4rem;
-  margin-left: 18rem;
+  background-color: #2277EF;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   width: 100%;
+  height: 16rem;
+
+  margin-bottom: 1.5rem;
 }
 
-.dyn-wiki{
-  width: 4.5rem;
-  height: auto;
-}
-
-.category-span{
-  color: #374650;
-  font-family: 'Alef', sans-serif;
-  font-weight: 700;
-  font-size: 1.8rem;
-}
-
-.search{
-  display: flex;
-}
-
-.search-input{
-  width: 100%;
-}
-
-.input{
-  color: white !important;
-  border-color: red !important;
-}
-
-.input:focus{
-  color: white!important;
-  border-color: red !important;
-}
-
-.search-button{
+.top-dynwiki{
+  font-family: 'Oleo Script';
+  margin-top: 2rem;
+  font-size: 3.2rem;
   color: white
 }
 
-ul{
-  margin-left: -35px;
+.top-input{
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  height: 3rem;
+  width: 75%;
+  border-radius: .5rem;
+  background-color: #4B8CF2;
+  padding: 0rem 1rem;
 }
 
-a{
+.input-search{
   color: white;
-  text-decoration: none;
 }
 
-.list-article{
-  line-height: 400%
+.input-container{
+  display: flex;
+  flex: 1;
 }
 
-.list-article li{
-  line-height: 130%
+.top-input-field{
+  font-family: 'Roboto';
+  border: none;
+  background: none;
+  width: 100%;
+  color: white;
+  outline: none;
+}
+
+.top-input-field:focus{
+  outline: none;
+}
+
+.bottom-container{
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.category-span{
+  font-family: 'Nobile';
+  font-size: 2rem;
+  color: #313131;
+}
+
+.sub-category-span{
+  margin-top: .8rem;
+  font-family: 'Nobile';
+  font-size: 1.5rem;
+  color: #4d4d4d;
 }
 
 /* MOBILE ONLY */
@@ -106,9 +105,4 @@ a{
   .list-root{
     display: none;
   }
-}
-
-a:hover{
-  background: none;
-  color:inherit
 }
