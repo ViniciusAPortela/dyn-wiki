@@ -74,6 +74,16 @@ module.exports = {
     selfClose: /<\/(?:.*?) (.*?)>/gm,
 
     /**
+     * Get all Images
+     */
+    img: /<\/(?:img) (.*?)>/gm,
+
+    /**
+     * Get all Article Images
+     */
+    articleImage: /<\/(?:articleImage) (.*?)>/gm,
+
+    /**
      * Used to form other regex patterns
      */
     [0]: '<(?:(',

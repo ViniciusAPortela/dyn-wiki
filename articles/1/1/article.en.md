@@ -4,6 +4,8 @@
 #!desc: Learn how to install xampp in your machine
 #!lang: en
 
+</articleImage src='article.png'>
+
 # #1 Downloading XAMPP
 Para instalar o xampp, basta baixar seu instalador:
 

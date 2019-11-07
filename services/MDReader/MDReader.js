@@ -201,6 +201,14 @@ class MDReader {
       }
       file = image.file;
 
+      //Get all ArticleImages
+      let articleImage = this.getByType('articleImage', file);
+      if(articleImage.has){
+        //Add data to array
+        data = data.concat(articleImage.data);
+      }
+      file = articleImage.file;
+
       //Get all content (All the rest)
       let content = this.getByType('content', file);
       if(content.has){
@@ -314,8 +322,8 @@ class MDReader {
     else if(type === 'image'){
       let response = '';
 
-      //Get all Files
-      while(response = regex.tag.selfClose.exec(file)){
+      //Get all Images
+      while(response = regex.tag.img.exec(file)){
         res.has = true;
         //Get tag attributes
         let response2 = '';
@@ -331,8 +339,36 @@ class MDReader {
 
         file = 
           file.substr(0, response.index) + 
-          `\u0000`.repeat(regex.tag.selfClose.lastIndex-response.index) + 
-          file.substr(response.index + `\u0000`.repeat(regex.tag.selfClose.lastIndex-response.index).length);
+          `\u0000`.repeat(regex.tag.img.lastIndex-response.index) + 
+          file.substr(response.index + `\u0000`.repeat(regex.tag.img.lastIndex-response.index).length);
+      }
+
+      //Return the new file
+      res.file = file;
+    }
+
+    else if(type === 'articleImage'){
+      let response = '';
+
+      //Get all Images
+      while(response = regex.tag.articleImage.exec(file)){
+        res.has = true;
+        //Get tag attributes
+        let response2 = '';
+        let attrs = {tag: 'articleImage', index: response.index}
+
+        //For Each Attribute
+        regex.tag.attribute.lastIndex = 0;
+        while(response2 = regex.tag.attribute.exec(response[0])){
+          attrs[response2[1]] = response2[2];
+        }
+        //Add file
+        res.data.push(attrs);
+
+        file = 
+          file.substr(0, response.index) + 
+          `\u0000`.repeat(regex.tag.articleImage.lastIndex-response.index) + 
+          file.substr(response.index + `\u0000`.repeat(regex.tag.articleImage.lastIndex-response.index).length);
       }
 
       //Return the new file
