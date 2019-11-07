@@ -11,7 +11,7 @@ export default class ArticleView extends React.Component{
           <CardContent>
             <div className='row'>
               <div className='article-image'>
-                <img/>
+                {this.props.img && <img className='article-inside-image' src={`/articles/${this.props.article}/images/${this.props.img}`}/>}
               </div>
               <div className='column'>
                 <div>

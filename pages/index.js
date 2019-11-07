@@ -81,27 +81,33 @@ export default class Index extends React.Component{
                             desc={ARTICLES[0].desc}
                             lang={ARTICLES[0].lang}
                             link={ARTICLES[0].link}
+                            img={ARTICLES[0].article_image}
+                            {...ARTICLES[0]}
                         />
                         <ArticleView 
                             title={ARTICLES[1].title}
                             desc={ARTICLES[1].desc}
                             lang={ARTICLES[1].lang}
                             link={ARTICLES[1].link}
+                            {...ARTICLES[1]}
                         />
                         
                         <span className='category-span'>Most Viewed</span>
                         <ArticleView 
-                                title={ARTICLES[0].title}
-                                desc={ARTICLES[0].desc}
-                                lang={ARTICLES[0].lang}
-                                link={ARTICLES[0].link}
-                            />
-                            <ArticleView 
-                                title={ARTICLES[1].title}
-                                desc={ARTICLES[1].desc}
-                                lang={ARTICLES[1].lang}
-                                link={ARTICLES[1].link}
-                            />
+                            title={ARTICLES[0].title}
+                            desc={ARTICLES[0].desc}
+                            lang={ARTICLES[0].lang}
+                            link={ARTICLES[0].link}
+                            img={ARTICLES[0].article_image}
+                            {...ARTICLES[0]}
+                        />
+                        <ArticleView 
+                            title={ARTICLES[1].title}
+                            desc={ARTICLES[1].desc}
+                            lang={ARTICLES[1].lang}
+                            link={ARTICLES[1].link}
+                            {...ARTICLES[1]}
+                        />
                     </div>
                 </div>
             </>
