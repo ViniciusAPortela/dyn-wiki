@@ -1,7 +1,7 @@
 # dyn-wiki
 
 <p align="center">
-  <img src="https://github.com/vinicius-portela/dyn-wiki/blob/master/docs/images/dynwiki.png">
+  <img width='100%' src="https://github.com/vinicius-portela/dyn-wiki/blob/master/docs/images/dynwiki.png">
 </p>
 
 Languages:
