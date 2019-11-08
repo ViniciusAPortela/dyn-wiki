@@ -10,12 +10,12 @@
 
 A forma mais fácil de atualizar o kernel do linux é com o software ukuu, para instalá-lo, basta adicionar o repositório:
 
-<cmd>apt-add-repository ppa:teejee2008/ppa</cmd>
+<cmd sudo='true'>apt-add-repository ppa:teejee2008/ppa</cmd>
 
-<cmd>sudo apt update</cmd>
+<cmd sudo='true'>apt update</cmd>
 
 # #2 Instalar ukuu
-<cmd>apt install ukuu</cmd>
+<cmd sudo='true'>apt install ukuu</cmd>
 
 # #3 Escolher Versão e Instalar
 </img src='ukuu.png'>

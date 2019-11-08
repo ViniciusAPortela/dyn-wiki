@@ -231,7 +231,7 @@ class MDReader {
    */
   static getScopes(file){
     //The Response
-    let res = []
+    let res = [];
 
     //Look for Compatibility Scopes (only32, only64)
     //Get Tag configurations from tags.config.js
@@ -256,7 +256,7 @@ class MDReader {
     })
 
     //Get all rest (Root Scope (Any Platform))
-    res.push({scope: 'root', data: file})
+    res.push({scope: 'root', data: file});
 
     return res;
   }
@@ -306,7 +306,15 @@ class MDReader {
       let re = new RegExp(regT, 'gm');
 
       while(response = re.exec(file)){
-        res.data.push({tag: 'command', sudo: true, data: response[3], index: response.index})
+        //console.log(response);
+        //Get inside attributes and add it
+        let attr;
+        let attrs = {};
+        while(attr = regex.tag.attribute.exec(response[0])){
+          attrs[attr[1]] = attr[2];
+        }
+
+        res.data.push({tag: 'command', data: response[3], index: response.index, ...attrs})
         res.has = true;
 
         file = 
@@ -440,6 +448,8 @@ class MDReader {
 
   /**
    *  Order all elements by Index
+   *  @param {Array} data - Processed Components Unordained
+   *  @internal
    */
   static orderByIndex(data){
     //The Response

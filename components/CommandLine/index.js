@@ -18,10 +18,10 @@ export default class CommandLine extends React.Component{
     return(
       <div className='command-container'>
         <div className='cmd-left'>
-          <span>{this.props.sudo?<span className='cmd-sudo'>sudo</span>:''} {this.props.children}</span>
+          <span>{this.props.sudo && <span className='cmd-sudo'>sudo</span>} {this.props.children}</span>
         </div>
         <div className='cmd-right'>
-          <img className='cmd-copy' src={Copy} onClick={()=>{copyToClip(((this.props.sudo)?'sudo ':null)+this.props.children, this.changeOpen)}}/>
+          <img className='cmd-copy' src={Copy} onClick={()=>{copyToClip(((this.props.sudo)?'sudo ':'')+this.props.children, this.changeOpen)}}/>
         </div>
         <BasicSnackbar content='Copied to Clipboard' opened={this.state.open} changeOpen={this.changeOpen}/>
       </div>
