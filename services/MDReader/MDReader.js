@@ -277,6 +277,7 @@ class MDReader {
       data: []
     }
 
+    //TODO: Identifies sub-titles too
     if(type === 'title'){
       do{
         var response = regex.title.exec(file);
@@ -306,7 +307,6 @@ class MDReader {
       let re = new RegExp(regT, 'gm');
 
       while(response = re.exec(file)){
-        //console.log(response);
         //Get inside attributes and add it
         let attr;
         let attrs = {};
@@ -355,34 +355,6 @@ class MDReader {
       res.file = file;
     }
 
-    else if(type === 'articleImage'){
-      let response = '';
-
-      //Get all Images
-      while(response = regex.tag.articleImage.exec(file)){
-        res.has = true;
-        //Get tag attributes
-        let response2 = '';
-        let attrs = {tag: 'articleImage', index: response.index}
-
-        //For Each Attribute
-        regex.tag.attribute.lastIndex = 0;
-        while(response2 = regex.tag.attribute.exec(response[0])){
-          attrs[response2[1]] = response2[2];
-        }
-        //Add file
-        res.data.push(attrs);
-
-        file = 
-          file.substr(0, response.index) + 
-          `\u0000`.repeat(regex.tag.articleImage.lastIndex-response.index) + 
-          file.substr(response.index + `\u0000`.repeat(regex.tag.articleImage.lastIndex-response.index).length);
-      }
-
-      //Return the new file
-      res.file = file;
-    }
-
     //TODO: It repeats, try to convert in just one function
     //TODO: Wrong Name, It's a File Container
     else if(type === 'scripts'){
@@ -392,11 +364,18 @@ class MDReader {
       let re = new RegExp(regT, 'gm');
 
       while(response = re.exec(file)){
+        //Get inside attributes and add it
+        let attr;
+        let attrs = {};
+        while(attr = regex.tag.attribute.exec(response[0])){
+          attrs[attr[1]] = attr[2];
+        }
+
         //First, get all inside files to put in data array
         let files = this.getByType('file', response[3]);
         if(files.has){
           //Add data to array
-          res.data.push({tag: 'scripts', data: files.data, index: response.index})
+          res.data.push({tag: 'scripts', data: files.data, index: response.index, ...attrs})
           res.has = true;
         }
 
