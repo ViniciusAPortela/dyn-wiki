@@ -1,6 +1,11 @@
 #!version: 1.0.0
 #!title: Como instalar o Xampp
 #!desc: Aprenda como instalar o xampp em sua máquina
+<<<<<<< HEAD
+#!article_image: article.png
+#!lang: pt
+=======
+>>>>>>> master
 
 # #1 Baixando o XAMPP
 Para instalar o xampp, basta baixar seu instalador:
@@ -17,4 +22,4 @@ Mude as permissões para permitir executá-lo:
 <cmd>chmod +x xampp-installer.run</cmd>
 
 E por fim, execute-o:
-<cmd sudo>./xampp-installer.run</cmd>
+<cmd sudo='true'>./xampp-installer.run</cmd>

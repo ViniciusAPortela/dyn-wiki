@@ -38,7 +38,7 @@ export default class Wiki extends React.Component {
         <div id='bg'>
           <Link href="/">
             <a>
-              <span id='project-name'>{'< '}Dyn-Wiki</span>
+              <span id='project-name'>Dyn-Wiki</span>
             </a>
           </Link>
           <img alt='' src={topBg} id='top-bg'/>

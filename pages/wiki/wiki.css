@@ -9,7 +9,7 @@
 }
 
 #project-name{
-  font-family: 'Lobster';
+  font-family: 'Oleo Script';
   color: white;
   font-size: 2rem;
 
@@ -36,8 +36,17 @@
 
   width: 80vw;
   max-width: 60rem;
-  
   padding: 0.9rem;
-  
+  border-bottom-left-radius: .7rem;
+  border-bottom-right-radius: .7rem;
+  z-index: 12;
+
   background-color: white;
+}
+
+/* MOBILE ONLY */
+@media only screen and (max-width: 768px){
+  #page{
+    padding-top: 0rem;
+  }
 }

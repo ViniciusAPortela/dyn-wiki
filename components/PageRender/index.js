@@ -34,7 +34,7 @@ export default class PageRender extends React.Component{
       return <Content>{item.data}</Content>
     }else if(item.tag === 'command'){
       //Renders the CommandLine With/Without the Sudo Preffix
-      return <CommandLine sudo={item.sudo}>{item.data}</CommandLine>
+      return <CommandLine sudo={item.sudo !== undefined ? true : false}>{item.data}</CommandLine>
     }else if(item.tag === 'image'){
       //Renders a Image
       return <Image query={this.props.query} src={item.src}/>

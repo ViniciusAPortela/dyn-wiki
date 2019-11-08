@@ -1,6 +1,8 @@
 
 # 0.2.0
 Improved all Markdown. Changed internal structure and Reading Methods.
+- Transformed all methods in static
+- MDReader now returns array with scopes
 
 # 0.1.0
 Basic Markdown Reading. Supports Already:

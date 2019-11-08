@@ -2,13 +2,11 @@ const fs = require('fs');
 const regex = require('./regex');
 
 //TODO: Identify Content from different languages
-//TODO: Delete all 'file' param, or unecessary Params
-//TODO: Verify function names and usage
 
 /**
  *  @class A Custom Markdown Reader.
- *  @author vinicius-a-portela
- *  @version 0.2.0.alpha_1
+ *  @author vinicius-portela
+ *  @version 0.2.0
  *  
  *  Reads and Render the MD files of Wiki Pages, also reads the additional stuff 
  *  that isn't in default markdown language
@@ -18,192 +16,249 @@ const regex = require('./regex');
 class MDReader {
 
   /**
-   * A Custom Markdown Reader
-   * @constructor
+   * Defaut command mode
+   * @returns the default command mode
    */
-  constructor(){
-    //The final Result
-    this.result = {};
-
-    //The information before insert into final result, items here needs reordering
-    this.preData = []
-
-    //The User Configuration
-    this.userConfig = {}
-
-    //Console Modes
-    this.cmd = {
+  static defaultCmd(){
+    return {
       verbose: false,
       silent: true,
     }
   }
 
   /**
+   * Converts a Given File to Readable Data for PageRender
+   * @param {string} filename - The Markdown File to Read
+   * @param {Object} args - The User configuration
+   * @returns - An Object With all Content
+   */
+  static convert(filename, args=this.defaultCmd()){
+    //To meansure Process Time
+    let start = process.hrtime();
+
+    //Get console Args
+    const { silent } = args;
+
+    //Get the File
+    let file = fs.readFileSync(filename, 'utf-8');
+    if(!silent) console.log(`🌀 MDReader v0.1.0 🌀`);
+    if(!silent) console.log(`⏳ Reading ${file} ...`);
+
+    //Convert in Array
+    if(!silent) console.log(`⏳ Converting to Array ...`);
+    let result = this.toArray(file);
+
+    //To meansure Process Time
+    let end = process.hrtime(start);
+    if(!silent) console.log(`🕓 All work done in ${end[1]/1000000}ms`);
+    if(!silent) console.log(`✔  All done! 😃`);
+
+    //Return the Result Array
+    return(result);
+  }
+
+  /**
+   * Get a Certain Config from MD File
+   * @param {String} filename - The name of file to Read
+   * @param {String} config - The Configuration Name to Get from MD File
+   * @param {Array} args - The CMD Args (verbose, silent ...)
+   * @return - The Value of Choosed Config (If has)
+   */
+  static config(filename, config, args=this.defaultCmd()){
+    let file = fs.readFileSync(filename, 'utf-8');
+
+    let res = '';
+    regex.config.lastIndex = 0;
+    while(res = regex.config.exec(file)){
+      if(res[1] === config) return res[2];
+    }
+    return false;
+  }
+
+  /**
+   * @deprecated
+   * Export the Object to Data.js to be read by the PageRender
+   * @param {String} path - Path to were output the file
+   * @param {Object} array - The Array of Objects 
+   */
+  static toFile(array){
+    /* FOR DEBUG */
+    array.langs = ['pt']
+    array.versions = ['1']
+    /* FOR DEBUG */
+
+    let content = `module.exports = ` + JSON.stringify(array);
+    fs.writeFileSync('services/MDReader/data.js', content);
+  }
+
+  /**
    *  Transform the Readed File in an Array
    *  @param {string} file - The MD String File
+   *  @returns The Result Array
    */
-  toArray(file){
-    //Erase the Array
-    this.result = {};
-
-    //First Erase all Content that is not Compatible with UserConfig
-    file = this.justUserConfig(file);
+  static toArray(file){
+    //Create final array
+    let result = {}
 
     //Read Configs and Body
-    file = this.getConfigs(file);
+    const configsRes = this.getConfigs(file);
+    result = Object.assign(result, configsRes.configs)
+    file = configsRes.file;
 
     //Convert all data in a PreFinal Array
-    this.result['data'] = [];
-    this.getBody(file);
+    result.data = [];
+    result.data  = this.getBody(file);
 
     //Order in Correct Way
-    this.orderByIndex();
+    result.data = this.orderByIndex(result.data);
 
-    /* DEBUG */
-    //console.log('Result Array: ');
-    //console.log(this.result);
-    /* DEBUG */
+    return result;
   }
 
+  //TODO: Transform getConfigs and getConfig into one unique function
   /**
-   * Get just UserConfig
-   * @param {string} file - The Markdown File
+   * Get all Configurations from a MD File
+   * @param {string} file - The MD String File
+   * @return {Object} - Array of Configurations and File without Configs
    */
-  justUserConfig(file){
-    //Get all MD Config Tags
-    //Read the tags.config.js
-    //Use Content Regex [0][1][2]
-    let tags = require('./tags.config');
-    for(const prop in tags){
-      //First Look for this Tag in Markdown File
-      const { verbose } = this.cmd
-      if(verbose) console.log(`[V] Looking for ${prop}`);
-
-      let regexT = regex.tag[0] + prop + regex.tag[1] + prop + regex.tag[2];
-      let re = new RegExp(regexT, 'gm');
-
-      re.lastIndex = 0;
-      let has = re.test(file);
-      if(verbose) console.log(`[V] ⤷ Has? ${has}`);
-      if(has){
-        //Check if is compatible with user
-        //Get all inside Configs and Compare One-By-One Inside Array Items
-        let ok = false;
-
-        //Get all tag Needed Configuration
-        for(const config in tags[prop]){
-          ok = false;
-          if(verbose) console.log(`[V] Getting [${config}] configuration`);
-          //So, transform in for(); to use break;
-          let index = 0;
-          for(const item in tags[prop][config]){
-            if(verbose) console.log(`[V] Possibility ${index}: ${tags[prop][config][item]}`);
-            if(this.userConfig[config] === tags[prop][config][item]){
-              ok = true;
-              if(verbose) console.log(`[V] ✔️ Is Compatible`);
-              break;
-            }
-          };
-          
-          if(!ok){
-            //NOT COMPATIBLE
-            //Dont read the rest and delete from file
-            if(verbose) console.log(`[V] ❌ Not Compatible`);
-
-            re.lastIndex = 0;
-            let response = '';
-            while(response = re.exec(file)){
-              file = 
-                file.substr(0, response.index) + 
-                `\u0000`.repeat(re.lastIndex-response.index) + 
-                file.substr(response.index + `\u0000`.repeat(re.lastIndex-response.index).length);
-            }
-
-            break;
-          }else{
-            //COMPATIBLE
-            //Mantain inside content but exclude tags
-            const regexT2 = regex.tag[3] + prop + regex.tag[4];
-            let re2 = new RegExp(regexT2, 'gm');
-            
-            re2.lastIndex = 0;
-            let response = '';
-            while(response = re2.exec(file)){
-              file = 
-                file.substr(0, response.index) + 
-                `\u0000`.repeat(re2.lastIndex-response.index) + 
-                file.substr(response.index + `\u0000`.repeat(re2.lastIndex-response.index).length);
-            }
-          }
-        }
-      }
+  static getConfigs(file){
+    let re;
+    let res = {
+      configs: {}, 
+      file: ''
     };
 
-    return file;
-  }
-
-  /**
-   * Get all MD Configurations
-   * @param {string} file - The MD String File
-   * @return {string} - The new File (Without Configurations)
-   */
-  getConfigs(file){
-    let res;
+    //Get Configs by regex
     regex.config.lastIndex = 0;
     do{
-      res = regex.config.exec(file);
-      if(res) this.result[res[1]] = res[2];
-    }while(res);
-    let newFile = file.replace(regex.config, '');
+      re = regex.config.exec(file);
+      //re[1] = key ; re[2] = value
+      if(re) res.configs[re[1]] = re[2];
+    }while(re);
 
-    return newFile;
+    //Return the file without configs
+    res.file = file.replace(regex.config, '');
+
+    return res;
   }
 
 
   /**
    * Get all Body Content from MD
    * @param {string} file - The MD String File
+   * @returns The data from given MD file, in `Array`
+   * @internal
    */
-  getBody(file){
+  static getBody(file){
+    //Response
+    let res = []
 
-    //Get all Title
-    let title = this.getByType('title', file);
-    if(title.has){
-      //Add data to array
-      this.preData = this.preData.concat(title.data);
-    }
-    file = title.file;
+    //First get Objects Scopes
+    //So one Content Can be Inside Root or Inside one Compatibility Tag
+    //Scopes are used for Articles Class to Get Correct Data by the User Configuration
+    
+    //This will result in something like that:
+    // [{scope: only32, data: string}, {scope: only64, data: string}, {scope: root, data: string}]
+    const scopes = this.getScopes(file)
 
-    //Get all CMD
-    let cmd = this.getByType('cmd', file);
-    if(cmd.has){
-      //Add data to array
-      this.preData = this.preData.concat(cmd.data);
-    }
-    file = cmd.file;
+    //Get Content from Scopes
+    scopes.forEach(element => {
+      //Add this Scope to Response
+      let data = [];
 
-    //Get Scripts
-    let scripts = this.getByType('scripts', file);
-    if(scripts.has){
-      //Add data to array
-      this.preData = this.preData.concat(scripts.data);
-    }
-    file = scripts.file;
+      //Get file from Current Scope
+      let file = element.data
 
-    //Get all Image
-    let image = this.getByType('image', file);
-    if(image.has){
-      //Add data to array
-      this.preData = this.preData.concat(image.data);
-    }
-    file = image.file;
+      //Get all Title
+      let title = this.getByType('title', file);
+      if(title.has){
+        //Add data to array
+        data = data.concat(title.data);
+      }
+      file = title.file;
 
-    //Get all content (All the rest)
-    let content = this.getByType('content', file);
-    if(content.has){
-      //Add data to array
-      this.preData = this.preData.concat(content.data);
-    }
+      //Get all CMD
+      let cmd = this.getByType('cmd', file);
+      if(cmd.has){
+        //Add data to array
+        data = data.concat(cmd.data);
+      }
+      file = cmd.file;
+
+      //Get Scripts
+      let scripts = this.getByType('scripts', file);
+      if(scripts.has){
+        //Add data to array
+        data = data.concat(scripts.data);
+      }
+      file = scripts.file;
+
+      //Get all Image
+      let image = this.getByType('image', file);
+      if(image.has){
+        //Add data to array
+        data = data.concat(image.data);
+      }
+      file = image.file;
+
+      //Get all ArticleImages
+      let articleImage = this.getByType('articleImage', file);
+      if(articleImage.has){
+        //Add data to array
+        data = data.concat(articleImage.data);
+      }
+      file = articleImage.file;
+
+      //Get all content (All the rest)
+      let content = this.getByType('content', file);
+      if(content.has){
+        //Add data to array
+        data = data.concat(content.data);
+      }
+
+      //Add this Scope to Response
+      res.push({ scope: element.scope, data, index: element.index});
+    });
+
+    return res;
+  }
+
+  /**
+   * Get Scopes from a file
+   * @param {String} file - The MD in String Format 
+   * @returns the scopes of file in `Array` format
+   * @internal
+   */
+  static getScopes(file){
+    //The Response
+    let res = [];
+
+    //Look for Compatibility Scopes (only32, only64)
+    //Get Tag configurations from tags.config.js
+    const tagsConf = require('../../tags.config');
+
+    //Look for each tag configured in tagsConf
+    Object.keys(tagsConf).map((prop)=>{
+      //Look for this prop inside file (with Regex)
+      let pattern = regex.tag[0] + prop + regex.tag[1] + prop + regex.tag[2];
+      let re = new RegExp(pattern, 'gm');
+      let response;
+
+      //Get all Tags with this prop
+      while(response = re.exec(file)){
+        res.push({scope: response[1], data: response[3], index: response.index})
+        //Transform Current Scope in Blank
+        file = 
+            file.substr(0, response.index) + 
+            `\u0000`.repeat(re.lastIndex-response.index) + 
+            file.substr(response.index + `\u0000`.repeat(re.lastIndex-response.index).length);
+      }
+    })
+
+    //Get all rest (Root Scope (Any Platform))
+    res.push({scope: 'root', data: file});
+
+    return res;
   }
 
   /**
@@ -215,13 +270,14 @@ class MDReader {
    *  [1] The New File 
    *  [2] The Data to insert into preResult
    */
-  getByType(type, file){
+  static getByType(type, file){
     let res = {
       has: false,
       file: file,
       data: []
     }
 
+    //TODO: Identifies sub-titles too
     if(type === 'title'){
       do{
         var response = regex.title.exec(file);
@@ -251,7 +307,15 @@ class MDReader {
       let re = new RegExp(regT, 'gm');
 
       while(response = re.exec(file)){
-        res.data.push({tag: 'command', sudo: true, data: response[3], index: response.index})
+        //Get inside attributes and add it
+        let attr;
+        let attrs = {};
+        regex.tag.attribute.lastIndex = 0;
+        while(attr = regex.tag.attribute.exec(response[0])){
+          attrs[attr[1]] = attr[2];
+        }
+
+        res.data.push({tag: 'command', data: response[3], index: response.index, ...attrs})
         res.has = true;
 
         file = 
@@ -267,8 +331,8 @@ class MDReader {
     else if(type === 'image'){
       let response = '';
 
-      //Get all Files
-      while(response = regex.tag.selfClose.exec(file)){
+      //Get all Images
+      while(response = regex.tag.img.exec(file)){
         res.has = true;
         //Get tag attributes
         let response2 = '';
@@ -284,8 +348,8 @@ class MDReader {
 
         file = 
           file.substr(0, response.index) + 
-          `\u0000`.repeat(regex.tag.selfClose.lastIndex-response.index) + 
-          file.substr(response.index + `\u0000`.repeat(regex.tag.selfClose.lastIndex-response.index).length);
+          `\u0000`.repeat(regex.tag.img.lastIndex-response.index) + 
+          file.substr(response.index + `\u0000`.repeat(regex.tag.img.lastIndex-response.index).length);
       }
 
       //Return the new file
@@ -301,11 +365,22 @@ class MDReader {
       let re = new RegExp(regT, 'gm');
 
       while(response = re.exec(file)){
+        //Get inside attributes and add it
+        let attr;
+        let attrs = {};
+
+        let attributes = regex.tag.scriptsAttribute.exec(response[0]);
+
+        regex.tag.attribute.lastIndex = 0;
+        while(attr = regex.tag.attribute.exec(attributes[1])){
+          attrs[attr[1]] = attr[2];
+        }
+
         //First, get all inside files to put in data array
         let files = this.getByType('file', response[3]);
         if(files.has){
           //Add data to array
-          res.data.push({tag: 'scripts', data: files.data, index: response.index})
+          res.data.push({tag: 'scripts', data: files.data, index: response.index, ...attrs})
           res.has = true;
         }
 
@@ -357,203 +432,137 @@ class MDReader {
 
   /**
    *  Order all elements by Index
+   *  @param {Array} data - Processed Components Unordained
+   *  @internal
    */
-  orderByIndex(){
+  static orderByIndex(data){
+    //The Response
+    let res = []
+
+    //First Organizate Index for Root group
+    let root = data.filter(item => { 
+      if(item.scope === 'root') return true; 
+    })[0]
+
     //Look for the higher, then start looking from 0 index to higher
     let higher = -1;
-    
-    this.preData.map((item)=>{
-      if(item.index > higher) higher = item.index;
+    let length = root.data.length;
+
+    //Look for higher
+    for(let i=0 ; i<length ; i++){
+      if(root.data[i].index > higher) higher = root.data[i].index;
+    }
+
+    //For each Item
+    for(let i=0 ; i<length ; i++){
+      let lower = higher+1;
+      let lowerItem = {};
+      let lowerIndex = 0;
+
+      //Look for lower
+      root.data.map((item, index) => {
+        if(item.index < lower) {
+          lower = item.index
+          lowerItem = item;
+          lowerIndex = index;
+        }
+      })
+
+      //Add to Result Array, Also Remove from root.data Array
+      res.push(lowerItem);
+      root.data.splice(lowerIndex, 1);
+    }
+
+    //Organizate others Contents
+    let others = data.filter(item => {
+      if(item.scope !== 'root') return true
     })
 
-    /* FOR DEBUG */
-    //console.log(`higher: ${higher}`);
-    /* FOR DEBUG */
+    //Used before order in final Array
+    let othersRes = []
 
-    //Look for the lower index
-    var length = this.preData.length;
+    //For each Tag
+    others.map(item => {
+      let res = []
 
-    for(let i=0 ; i<length ; i++){
-      /* FOR DEBUG */
-      //console.log('--------------------');
-      //console.log('PEGANDO '+i+' VALOR!');
-      //console.log('AINDA FALTA: '+this.preData.length);
-      /* FOR DEBUG */
+      //Get higher inside Tag (Not global position)
+      let higher = this.getHigher(item.data)
+      let data = item.data
 
-      let lower = higher+1;
-      var itemIndex = -1;
+      for(let i=0 ; i<item.data.length ; i++){
+        let { lower, lowerIndex } = this.getLower(data, higher)
 
-      //Looks for the Lower in the Array
-      this.preData.map((item, index)=>{
-        if(item.index<lower) {
-          /* FOR DEDBUG */
-          //console.log(`achado menor: ${item.index} <- ${lower} (na pos ${index})`);
-          /* FOR DEDBUG */
+        res.push(item.data[lowerIndex])
+        data.splice(lowerIndex, 1)
+      }
 
-          lower = item.index;
-          itemIndex = index;
-        };
-      });
+      othersRes.push({scope: item.scope, data: res, index: item.index})
+    })
 
-      /* FOR DEBUG */
-      //console.log(`SUCESS - ADDED: ${this.preData[itemIndex]}`);
-      //this.preData[itemIndex].data = `[${i}][${lower}] `+this.preData[itemIndex].data
-      /* FOR DEBUG */
+    //Then, put others groups inside the root in correct order
+    othersRes.map(item =>{
+      let index = item.index
+      let lastIndex = -1
 
-      this.result.data.push(this.preData[itemIndex]);
-      this.preData.splice(itemIndex, 1);
-    };
+      //Look for each until reach higher
+      for(let i=0 ; i<res.length ; i++){
+        if(index>res[i].index) {
+          lastIndex = i
+        }else break;
+      }
+      //Add after lastIndex
+      res.splice(lastIndex+1, 0, item)
+    })
+
+    return res
   }
 
   /**
-   * @deprecated
-   * Export the Object to Data.js to be read by the PageRender
-   * @param {Object} array - The Array of Objects 
+   * Get higher from a Object with Index Key
+   * @param {Object} obj - Object with Index Key
+   * @returns The higher value from an given Object (by Index Key)
+   * @internal
    */
-  toFile(array){
-    let content = `module.exports = ` + JSON.stringify(array);
-    fs.writeFileSync('data.js', content);
+  static getHigher(obj){
+    let higher = -1;
+
+    obj.map(item => {
+      if(item.index > higher) higher = item.index
+    })
+
+    return higher;
   }
 
   /**
-   * Get all conditional tags from a given article
-   * @param {String} file - the file (in string format)
+   * Get lower from a Object with Index Key
+   * @param {Object} obj - Object with Index Key
+   * @param {Number} higher - Higher Index from given Object ( Can get with getHigher(obj) )
+   * @returns The lower value from an given Object (by Index Key)
+   * @internal
    */
-  tags(file){
-    regex.tag.name.lastIndex = 0;
-    let ret;
-    let res = [];
-    let tags = require('./tags.config');
-
-    //Search for all tags inside the given file
-    while(ret = regex.tag.name.exec(file)){
-
-      //Tag Verification
-      //Only Condicional tags are importants
-      if(Object.keys(tags).indexOf(ret[1]) !== -1)
-        //Check if Already exists
-          if(res.indexOf(ret[1]) === -1)
-            res.push(ret[1]);
+  static getLower(obj, higher){
+    let res = {
+      lower: higher+1,
+      lowerIndex: 0,
     }
+    
+    obj.map((item, index) => {
+      if(item.index < res.lower) {
+        res.lower = item.index
+        res.lowerIndex = index
+      }
+    })
 
     return res;
   }
 
-  /**
-   * Part of Complex Way
-   * Check Equal parts to merge for Cache System
-   */
-  mergeTags(){
-
-  }
-
-  /**
-   * Get all possible Variations from Article based on given Tags
-   * @param {Array} tags - Tags from Article
-   */
-  possibleVariations(tags){
-    //Simple way, get all tags and mix
-    //Complex way, read tags configuration and see merging configurations
-    //Two PCs with differents but same effect to some tag
-    let res = []
-
-    // ...
-  }
-
-  /**
-   * Make Recursive Reading
-   * @param {Array} tags - Tags
-   */
-  forEachTag(tags){
-    const len = tags.length()
-
-    // ...
-  }
-
-  /**
-   * Read a file by filename and returns the file in string format
-   * @param {String} filepath  - Path to File
-   * @retuns File in String
-   */
-  read(filepath){
-    return fs.readFileSync(filepath);
-  }
-  
-  //Just Identify and Erase what is not supported in the user system
-  //Then is the Common Process
-
-  /**
-   * Converts a Given File to Readable Data for PageRender
-   * @param {string} filename - The Markdown File to Read
-   * @param {Object} userConfig - The User configuration
-   * @returns - An Object With all Content
-   */
-  convert(filename, userConfig){
-    //To meansure Process Time
-    let start = process.hrtime();
-
-    //Get console Args and set UserConfig
-    this.setEnv(process.argv.length>2 || ['-silent'], userConfig);
-    const { verbose, silent } = this.cmd;
-
-    //Get the File
-    if(!silent) console.log(`🌀 MDReader v0.1.0 🌀`);
-    if(!silent) console.log(`⏳ Reading ${file} ...`);
-    let file = fs.readFileSync(filename, 'utf-8');
-    
-    //Convert in Array
-    if(!silent) console.log(`⏳ Converting to Array ...`);
-    this.toArray(file);
-
-    //Create Data.js File
-    //if(!silent) console.log(`⏳ Generating Data.js ...`);
-    //this.toFile(this.result);
-
-    //To meansure Process Time
-    let end = process.hrtime(start);
-    if(!silent) console.log(`🕓 All work done in ${end[1]/1000000}ms`);
-    if(!silent) console.log(`✔  All done! 😃`);
-
-    //Return the Result Array
-    return(this.result);
-  }
-
-  /**
-   * Set the Class Environment
-   * Get all CMD args
-   */
-  setEnv(args=[], config={}){
-    this.userConfig = config;
-    
-    this.cmd.silent = args.includes('-silent');
-    this.cmd.verbose = args.includes('-verbose');
-  }
-
-  /**
-   * Get a Certain Config from MD File
-   * @param {String} filename - The name of file to Read
-   * @param {String} config - The Configuration Name to Get from MD File
-   * @param {Array} args - The CMD Args (verbose, silent ...)
-   * @return - The Value of Choosed Config (If has)
-   */
-  config(filename, config, args=[]){
-    this.setEnv(args);
-    let file = fs.readFileSync(filename, 'utf-8');
-
-    let res = '';
-    regex.config.lastIndex = 0;
-    while(res = regex.config.exec(file)){
-      if(res[1] === config) return res[2];
-    }
-    return false;
-  }
-
 }
 
+//TODO: Check relative path to module
+
 /* TESTING AREA */
-//const reader = new MDReader;
-//let file = reader.read('./article.example.md');
-//console.log(reader.tags(file));
+//const filepath = 'services/MDReader/article.example.md';
+//MDReader.toFile(MDReader.toArray(fs.readFileSync(filepath, 'utf-8')));
 /* TESTING AREA */
 
-module.exports = new MDReader;
+module.exports = MDReader;

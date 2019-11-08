@@ -28,7 +28,7 @@ module.exports = {
             'x86',
             '32',
             'i386'
-        ]
+        ],
     },
 
     onlyLinux: {

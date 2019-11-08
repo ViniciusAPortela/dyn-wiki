@@ -83,6 +83,20 @@ app.prepare().then(()=>{
     });
   });
 
+  //sitemap.xml
+  server.all('/sitemap.xml', (req, res) => {
+    let file = `sitemap.xml`;
+    const data = fs.readFileSync(file);
+    return res.end(data);
+  });
+
+  //robots.txt
+  server.all('/robots.txt', (req, res) => {
+    let file = `robots.txt`;
+    const data = fs.readFileSync(file);
+    return res.end(data);
+  });
+
   //Others (404)
   server.all('*', (req, res) => {
     res.status(404);

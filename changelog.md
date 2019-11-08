@@ -1,6 +1,14 @@
 
 # 0.2.0
 Improved all Dyn-Wiki.
+- Improved Initial Page (Home Page)
+  - Added Side Bar
+  - Added New Articles and Most Viewed Articles
+  - Otimized for Mobile
+- Cache System Finished
+- Internal/Code Improvements
+- Get Properties from Tags
+- Added ArticleImage Tag
 
 # 0.1.0
 Basic Functionalities

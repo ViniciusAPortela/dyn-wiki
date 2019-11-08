@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>http://dynwiki.simpx.net/</loc>
+  </url>
+  <url>
+    <loc>http://dynwiki.simpx.net/wiki/1/1/en</loc>
+  </url>
+  <url>
+    <loc>http://dynwiki.simpx.net/wiki/1/1/pt/</loc>
+  </url>
+  <url>
+    <loc>http://dynwiki.simpx.net/wiki/2/1/pt</loc>
+  </url>
+  <url>
+    <loc>http://dynwiki.simpx.net/wiki/2/1/pt/</loc>
+  </url>
+  <image:image>
+    <image:loc>http://dynwiki.simpx.net/wiki/2/images/ukuu.png</image:loc>
+  </image:image>
+</urlset>
