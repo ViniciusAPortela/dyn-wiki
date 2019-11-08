@@ -19,7 +19,7 @@ Mude as permissões para permitir executá-lo:
 <cmd>chmod +x xampp-installer.run</cmd>
 
 E por fim, execute-o:
-<cmd sudo>./xampp-installer.run</cmd>
+<cmd sudo='true'>./xampp-installer.run</cmd>
 
 </img src='xampp.png'>
 

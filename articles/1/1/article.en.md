@@ -20,4 +20,4 @@ Change the permissions to allow executing
 <cmd>chmod +x xampp-installer.run</cmd>
 
 Finally, execute it:
-<cmd sudo>./xampp-installer.run</cmd>
+<cmd sudo='true'>./xampp-installer.run</cmd>

@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import './articlelist.css';
 import fetch from 'isomorphic-unfetch';
-import {ArticleView} from '../';
+import { ArticleView } from '../';
 
 export default function ArticleList() {
     const [ data, setData ] = useState([]);

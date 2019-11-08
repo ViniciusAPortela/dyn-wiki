@@ -198,7 +198,7 @@ class Article {
         //let userConfig = require('../UserConfig/userConfig.example');
 
         //First Load File (With MDReader)
-        let data = reader.convert(file, config);
+        let data = reader.convert(file);
 
         //Add Metadata
         data.meta = {

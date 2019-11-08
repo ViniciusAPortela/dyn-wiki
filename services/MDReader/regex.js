@@ -57,6 +57,11 @@ module.exports = {
     attribute: /(\S+)=["']?((?:.(?!["']?\s+(?:\S+)=|[>"']))+.)["']?/gm,
 
     /**
+     * Get all attributes from script
+     */
+    scriptsAttribute: /<scripts (.*?)>/gm,
+    
+    /**
      * Get Content from all Tags
      */
     content: /(?:<.*?>)(?:\n*)?(.*)(?:\n*)?(?:<\/.*?>)/,
