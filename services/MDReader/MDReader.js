@@ -310,6 +310,7 @@ class MDReader {
         //Get inside attributes and add it
         let attr;
         let attrs = {};
+        regex.tag.attribute.lastIndex = 0;
         while(attr = regex.tag.attribute.exec(response[0])){
           attrs[attr[1]] = attr[2];
         }
@@ -367,7 +368,11 @@ class MDReader {
         //Get inside attributes and add it
         let attr;
         let attrs = {};
-        while(attr = regex.tag.attribute.exec(response[0])){
+
+        let attributes = regex.tag.scriptsAttribute.exec(response[0]);
+
+        regex.tag.attribute.lastIndex = 0;
+        while(attr = regex.tag.attribute.exec(attributes[1])){
           attrs[attr[1]] = attr[2];
         }
 
