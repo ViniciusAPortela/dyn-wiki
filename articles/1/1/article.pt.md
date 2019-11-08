@@ -1,11 +1,8 @@
 #!version: 1.0.0
 #!title: Como instalar o Xampp
 #!desc: Aprenda como instalar o xampp em sua máquina
-<<<<<<< HEAD
 #!article_image: article.png
 #!lang: pt
-=======
->>>>>>> master
 
 # #1 Baixando o XAMPP
 Para instalar o xampp, basta baixar seu instalador:
