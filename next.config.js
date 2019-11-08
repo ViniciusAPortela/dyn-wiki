@@ -14,7 +14,6 @@ module.exports = withCSS(withImage({
         fs: 'empty'
       }
     }
-
     return config
   }
 }));

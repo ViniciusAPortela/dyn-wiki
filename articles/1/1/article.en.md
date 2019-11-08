@@ -2,6 +2,7 @@
 #!article_version: 1
 #!title: How to Install Xampp
 #!desc: Learn how to install xampp in your machine
+#!article_image: article.png
 #!lang: en
 
 # #1 Downloading XAMPP

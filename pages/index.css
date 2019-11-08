@@ -1,0 +1,108 @@
+.root-container{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 100vw;
+  overflow-x: hidden;
+  flex-wrap: wrap;
+}
+
+.top-container{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  background-color: #2277EF;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  width: 100%;
+  height: 16rem;
+
+  margin-bottom: 1.5rem;
+}
+
+.top-dynwiki{
+  font-family: 'Oleo Script';
+  margin-top: 2rem;
+  font-size: 3.2rem;
+  color: white
+}
+
+.top-input{
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  height: 3rem;
+  width: 75%;
+  border-radius: .5rem;
+  background-color: #4B8CF2;
+  padding: 0rem 1rem;
+}
+
+.input-search{
+  color: white;
+}
+
+.input-container{
+  display: flex;
+  flex: 1;
+}
+
+.top-input-field{
+  font-family: 'Roboto';
+  border: none;
+  background: none;
+  width: 100%;
+  color: white;
+  outline: none;
+}
+
+.top-input-field:focus{
+  outline: none;
+}
+
+.bottom-container{
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.category-span{
+  font-family: 'Nobile';
+  font-size: 2rem;
+  color: #313131;
+}
+
+.sub-category-span{
+  margin-top: .8rem;
+  font-family: 'Nobile';
+  font-size: 1.5rem;
+  color: #4d4d4d;
+}
+
+/* MOBILE ONLY */
+@media only screen and (max-width: 768px){
+  .root-container{
+    flex-direction: column;
+  }
+
+  .left-container{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  
+    background-color: #007BDF;
+    color: white;
+  
+    padding: 1rem;
+    min-width: 100vw;
+    height: 100%;
+  }
+
+  .right-container{
+    margin-left: 0rem;
+  }
+
+  .list-root{
+    display: none;
+  }
+}
