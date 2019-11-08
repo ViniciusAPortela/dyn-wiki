@@ -1,3 +1,4 @@
+
 # dyn-wiki
 
 <p align="center">
@@ -15,7 +16,7 @@ A dynamic-wiki where a unique article can support a wide variety of languages, v
 
 Imaginate that you're looking for a tutorial to of "How to download and install xampp", then when you get inside this tutorial, you pay attention that most of article content is just explanations about what is xampp, why use it, and more, have differents texts explaining the process for the 64 bits and the 32 bits systems.
 
-Thinking about that, the DynWiki has the main porpose to be the most objective and concisive across a world with thousand of informations. It's possible by the objective itself, so the article don't will be too extensive explaining things that doesn't be part of article purpose, but mainly by the **DynWiki Engine that renders just the important to you**.
+Thinking about that, the DynWiki has the main porpose to be the most objective and concisive across a world with thousand of informations. It's possible by the **DynWiki Engine that renders just the important to you**.
 
 ### [📖 Acess Documentation](#docs)
 
@@ -29,7 +30,7 @@ Pensando nisso, o DynWiki tem o propósito de ser o mais objetivo e conciso em m
 
 ### [📖 Acessar Documentação](#docs)
 
-## Documentation <a id='docs'/>
+## 📕Documentation <a id='docs'/>
 
 See more on documentation:
 
@@ -37,3 +38,76 @@ Languages:
 
 > [🇺🇸 EN - English](https://github.com/vinicius-portela/dyn-wiki/blob/master/docs/en/wiki.md)<br/>
 > 🇧🇷 PT - Em andamento  ✏
+
+## 🎯 Roadmap
+
+Labels:
+
+| Icon | Meaning  |
+|--|--|
+|💡| Still a Idea (over revision, can change)|
+|⛏|Work on Progress |
+|🧪| Test Phase / Debug / Snapshot |
+|📌| Important |
+|✔| Done |
+
+>⚠️ Note: This roadmap still under revision and **can change**
+
+> Note: When the launch roadmap were finished, this roadmap will be updated with new objectives
+
+The launch version (1.0.0) need to have:
+
+- [ ⛏ ] MDReader
+	- [ ✔ ] Identifies Configurations
+	- [ ✔ ] Identifies Tags
+	- [ ✔ ] Compatibility Tags
+	- [ ✔ ] Get Content
+	- [ ⛏ ] Identifies Markdown Content
+		- [ ✔ ] Title
+		- [ _ ] SubTitles
+		- [ 💡 ] Italic
+		- [ 💡 ] Bold
+ 		- [ 💡 ] Strikethrough
+		- [ 💡 ] Link
+		- [ 💡 ] Tables
+		- [ 💡 ] Code
+		- [ 💡 ] Checklist
+		- [ 💡 ] Blockquote
+		- [ 💡 ] Image
+		- [ 💡 ] Lists
+		- [ 💡 ] Horizontal Line
+- [ ✔  ] Articles
+	- [ ✔ ] Get List of Articles
+		- [ ✔ ] Get Versions from Article
+		- [ ✔ ] Get Languages from Article
+	- [ ✔ ] Cache System
+- [ ⛏ ] PageRender
+	- [ ✔ ] Transform Array in React
+- [ ⛏ ] Home Page
+	- [ _ ] List of Most Viewed Articles
+	- [ _ ] List of Most Recent Articles
+	- [ ✔  ] List of All Articles
+	- [ _ ] Search Articles
+- [ ✔ ] Tags
+	- [ ✔ ] img
+	- [ ✔ ] fileContainer
+	- [ ✔ ] file
+- [ _ ] Get User Configurations
+	- [ _ ] Get Configurations from Navigator
+	- [ _ ] Get Configurations from Computer (With Standalone Program)
+- [ _ ] Administrator Panel
+	- [ _ ] First Time
+	- [ _ ] Login
+	- [ _ ] Article Editor
+	- [ _ ] Control Articles
+		- [ _ ] Versions
+		- [ _ ] Languages
+- [ _ ] Generate Sitemap Automatically
+
+### Check for the Changelog
+
+↩ [Acess DynWiki Changelog](https://github.com/vinicius-portela/dyn-wiki/blob/master/changelog.md)
+
+↩ [Acess MDReader Changelog](https://github.com/vinicius-portela/dyn-wiki/blob/master/services/MDReader/changelog.md)
+
+↩ Acess Articles Changelog [⛏]
