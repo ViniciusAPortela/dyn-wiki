@@ -4,7 +4,7 @@ const fs = require('fs');
 /**
  * @class Article
  * @author vinicius-portela
- * @version 0.2.0.alpha_1
+ * @version 0.2.0
  * 
  * Manipulate article info, directory, etc
  */
@@ -17,8 +17,7 @@ class Article {
     static defaultCmd(){
         return {
             verbose: false,
-            // Default Configuration
-            // This is my computer current config :) 
+            // Default Configuration, It's temporary, Just for Testing
             defaultConfig: {
                 arch: 'x64',
                 os: 'linux',
@@ -113,12 +112,19 @@ class Article {
 
                 //Separe Languages
                 langs.forEach(lang => {
+                    const file = folder+article+'/'+version+'/'+lang;
                     let curLang = /(?:[.])(.*?)(?:[.])/gm.exec(lang);
 
-                    let title = reader.config(folder+article+'/'+version+'/'+lang, 'title');
-                    let desc = reader.config(folder+article+'/'+version+'/'+lang, 'desc');
+                    let title = reader.config(file, 'title');
+                    let desc = reader.config(file, 'desc');
+                    let img = reader.config(file, 'article_image');
 
-                    res[article_index].versions[version_index].langs.push({abr:curLang[1],title, desc});
+                    res[article_index].versions[version_index].langs.push({
+                        abr:curLang[1],
+                        title, 
+                        desc,
+                        img,
+                    });
                 });
             });
         });
