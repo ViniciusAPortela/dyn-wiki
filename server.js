@@ -22,7 +22,7 @@ app.prepare().then(()=>{
 
   //Root Page
   server.get('/', (req, res) => {
-    return app.render(req, res, '/', req.query)
+    return app.render(req, res, '/index', req.query)
   });
 
   //Favicon

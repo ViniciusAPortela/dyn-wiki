@@ -4,8 +4,8 @@ import Head from 'next/head';
 import { IconButton } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
 
-import userConfig from '../services/UserConfig';
-import { ArticleList } from '../components';
+import userConfig from '../../services/UserConfig';
+import { ArticleList } from '../../components';
 import './index.css';
 
 export default class Index extends React.Component{

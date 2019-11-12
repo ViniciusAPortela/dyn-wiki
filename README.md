@@ -110,4 +110,4 @@ The launch version (1.0.0) need to have:
 
 ↩ [Acess MDReader Changelog](https://github.com/vinicius-portela/dyn-wiki/blob/master/services/MDReader/changelog.md)
 
-↩ Acess Articles Changelog [⛏]
+↩ [Acess Articles Changelog]((https://github.com/vinicius-portela/dyn-wiki/blob/master/services/Articles/changelog.md))

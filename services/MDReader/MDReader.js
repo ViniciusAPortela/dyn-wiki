@@ -248,10 +248,11 @@ class MDReader {
       while(response = re.exec(file)){
         res.push({scope: response[1], data: response[3], index: response.index})
         //Transform Current Scope in Blank
-        file = 
+        /*file = 
             file.substr(0, response.index) + 
             `\u0000`.repeat(re.lastIndex-response.index) + 
-            file.substr(response.index + `\u0000`.repeat(re.lastIndex-response.index).length);
+            file.substr(response.index + `\u0000`.repeat(re.lastIndex-response.index).length);*/
+        file = this.createSpace(response.index, re.lastIndex, file);
       }
     })
 
@@ -287,12 +288,13 @@ class MDReader {
           res.data.push({tag: 'title', data: response[1], index: response.index});
 
           //Delete this from file, but mantain same space (for indexes later)
-          //TODO: create a function to do that
           //TODO: maybe find another way to do that
-          file = 
+          /*file = 
             file.substr(0, response.index) + 
             `\u0000`.repeat(regex.title.lastIndex-response.index) + 
-            file.substr(response.index + `\u0000`.repeat(regex.title.lastIndex-response.index).length);
+            file.substr(response.index + `\u0000`.repeat(regex.title.lastIndex-response.index).length);*/
+          file = this.createSpace(response.index, regex.title.lastIndex, file);
+          //console.log(file.length, 'FILE: \n' ,file);
         }
       }while(response);
 
@@ -318,10 +320,11 @@ class MDReader {
         res.data.push({tag: 'command', data: response[3], index: response.index, ...attrs})
         res.has = true;
 
-        file = 
+        /*file = 
           file.substr(0, response.index) + 
           `\u0000`.repeat(re.lastIndex-response.index) + 
-          file.substr(response.index + `\u0000`.repeat(re.lastIndex-response.index).length);
+          file.substr(response.index + `\u0000`.repeat(re.lastIndex-response.index).length);*/
+        file = this.createSpace(response.index, re.lastIndex, file);
       }
 
       //Return the new file
@@ -346,10 +349,11 @@ class MDReader {
         //Add file
         res.data.push(attrs);
 
-        file = 
+        /*file = 
           file.substr(0, response.index) + 
           `\u0000`.repeat(regex.tag.img.lastIndex-response.index) + 
-          file.substr(response.index + `\u0000`.repeat(regex.tag.img.lastIndex-response.index).length);
+          file.substr(response.index + `\u0000`.repeat(regex.tag.img.lastIndex-response.index).length);*/
+        file = this.createSpace(response.index, regex.tag.img.lastIndex, file);
       }
 
       //Return the new file
@@ -371,9 +375,11 @@ class MDReader {
 
         let attributes = regex.tag.scriptsAttribute.exec(response[0]);
 
-        regex.tag.attribute.lastIndex = 0;
-        while(attr = regex.tag.attribute.exec(attributes[1])){
-          attrs[attr[1]] = attr[2];
+        if(attributes){
+          regex.tag.attribute.lastIndex = 0;
+          while(attr = regex.tag.attribute.exec(attributes[1])){
+            attrs[attr[1]] = attr[2];
+          }
         }
 
         //First, get all inside files to put in data array
@@ -384,10 +390,11 @@ class MDReader {
           res.has = true;
         }
 
-        file = 
+        /*file = 
           file.substr(0, response.index) + 
           `\u0000`.repeat(re.lastIndex-response.index) + 
-          file.substr(response.index + `\u0000`.repeat(re.lastIndex-response.index).length);
+          file.substr(response.index + `\u0000`.repeat(re.lastIndex-response.index).length);*/
+        file = this.createSpace(response.index, re.lastIndex, file);
       }
 
       //Return the new file
@@ -554,6 +561,22 @@ class MDReader {
     })
 
     return res;
+  }
+
+  /**
+   * A function 
+   * @param {Number} start - Index of Start
+   * @param {Number} end - Index of End
+   * @param {String} file - The file to put Space
+   * @returns The file with White Space
+   * @internal
+   */
+  static createSpace(start, end, file){
+    let length = end - start;
+
+    return file.substr(0, start) +
+          `\u0000`.repeat(length) + 
+          file.substr(start + `\u0000`.repeat(length).length);
   }
 
 }

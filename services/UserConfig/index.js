@@ -1,5 +1,7 @@
 /**
- * @class - UserConfig - Manipulate all user configurations
+ * @class UserConfig
+ * 
+ * Manipulate all user configurations
  */
 class UserConfig {
 
